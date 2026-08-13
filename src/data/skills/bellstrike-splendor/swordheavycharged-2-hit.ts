@@ -19,7 +19,7 @@ export const swordHeavyCharged2Hit = defineSkill({
       attributeFixed: 197,
     }),
     hit(1, {
-      frame: 17,
+      frame: 58,
       physMultiplier: 1.5679,
       attributeMultiplier: 2.3518,
       physFixed: 433,
