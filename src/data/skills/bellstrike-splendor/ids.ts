@@ -1,8 +1,4 @@
-
-// Every string value is byte-identical to reference/classes/skills/bellstrike-rainbow/*.json
-// and reference/classes/debuffsLibrary.json's bellstrikeSplendor entries — these
-// tables pin those strings, they do not invent them.
-
+// Sourced from reference/classes/skills/bellstrike-rainbow/*.json (as of 2026-08-12).
 export const CLASS_ID = "bellstrikeSplendor"
 
 export const SKILL = {

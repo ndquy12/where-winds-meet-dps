@@ -3,11 +3,10 @@ import { mountainsMightBuffDef } from "../../src/data/skills/bellstrike-splendor
 import { CAST } from "../../src/data/skills/ids"
 
 describe("Mountain's Might", () => {
-  it("triggers off every SpearQ variant", () => {
+  it("triggers off every SpearQ variant bellstrikeSplendor carries", () => {
     expect(mountainsMightBuffDef.triggeredBy).toEqual([
       CAST.spearQ,
       CAST.spearQ0HitCancel,
-      CAST.spearQ5HitCancel,
       CAST.spearQPrepull,
     ])
   })
@@ -18,7 +17,9 @@ describe("Mountain's Might", () => {
   })
 
   it("grants a flat +0.015 directAffinityRate, unaffected by resistance conversion", () => {
-    expect(mountainsMightBuffDef.effects).toEqual([{ kind: "stat", statKey: "directAffinityRate", amount: 0.015 }])
+    expect(mountainsMightBuffDef.effects).toEqual([
+      { kind: "stat", statKey: "directAffinityRate", amount: 0.015 },
+    ])
   })
 
   it("is gated behind its own enabled param", () => {

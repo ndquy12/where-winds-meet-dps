@@ -51,7 +51,7 @@ describe("bellstrikeSplendor class definition", () => {
     const splendor = classDefinition("bellstrikeSplendor")!
     expect(splendor.weapons).toEqual(["Sword", "Spear"])
     expect(splendor.critBoostWeaponTypes).toEqual([])
-    expect(splendor.dingYinTags).toEqual(["Bleed Boost"])
+    expect(splendor.dingYinTags).toEqual(["Sword Charge Boost"])
   })
 
   it("mirrors bellstrikeUmbra's mind group, flagged unsourced", () => {

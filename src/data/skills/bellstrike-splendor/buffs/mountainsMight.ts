@@ -7,7 +7,7 @@ export const mountainsMightBuffDef = defineClassBuff({
   id: BUFF.mountainsMight,
   name: "Mountain's Might",
   requires: { param: PARAM.mountainsMight },
-  triggeredBy: [CAST.spearQ, CAST.spearQ0HitCancel, CAST.spearQ5HitCancel, CAST.spearQPrepull],
+  triggeredBy: [CAST.spearQ, CAST.spearQ0HitCancel, CAST.spearQPrepull],
   duration: 8,
   buffAppliesOnCastEnd: true,
   effects: [stat("directAffinityRate", 0.015)],

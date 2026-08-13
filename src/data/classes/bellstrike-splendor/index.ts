@@ -15,7 +15,7 @@ export const bellstrikeSplendor = defineClass({
   attributeMultiplier: 51.5,
   classMindGroup: "swordHorizon",
   allowedMindMethods: ["wolfchasersArt", "insightfulStrike", "moraleChant", "bitterSeason"],
-  dingYinTags: ["Bleed Boost"],
+  dingYinTags: ["Sword Charge Boost"],
   weapons: ["Sword", "Spear"],
   critBoostWeaponTypes: [],
   skills: withUniversalSkills(CLASS_ID, "Bellstrike", SKILLS),
