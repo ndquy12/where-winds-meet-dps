@@ -5,6 +5,8 @@ import { DEBUFFS } from "../../skills/bellstrike-splendor/debuffs"
 import { qiImbalance } from "../../skills/bellstrike-splendor/buffs/qiImbalance"
 import { swordQiAffinityEnhancement } from "../../skills/bellstrike-splendor/buffs/swordQiAffinityEnhancement"
 import { affinityDamageUpSpear } from "../../skills/bellstrike-splendor/buffs/affinityDamageUpSpear"
+import { swordSlashBonus } from "../../skills/bellstrike-splendor/buffs/swordSlashBonus"
+import { qiStruggleEnhancement } from "../../skills/bellstrike-splendor/buffs/qiStruggleEnhancement"
 import { rotationPoolFor } from "../../../definitions/rotations/registry"
 import { BELLSTRIKE_SPLENDOR_POOL } from "./retunementPool"
 
@@ -30,7 +32,13 @@ export const bellstrikeSplendor = defineClass({
   debuffs: DEBUFFS,
   ...rotationPoolFor(CLASS_ID),
   retunementPool: BELLSTRIKE_SPLENDOR_POOL,
-  classBuffDefs: [qiImbalance, swordQiAffinityEnhancement, affinityDamageUpSpear],
+  classBuffDefs: [
+    qiImbalance,
+    swordQiAffinityEnhancement,
+    affinityDamageUpSpear,
+    swordSlashBonus,
+    qiStruggleEnhancement,
+  ],
   gateBuffs: [],
   mechanics: [],
   skillBehaviors: [],

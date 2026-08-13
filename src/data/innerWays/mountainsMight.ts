@@ -11,7 +11,7 @@ export const mountainsMight = defineInnerWay({
   panelStats: {
     "bellstrike.min": 10,
     "bellstrike.max": 20,
-    "bellstrike.penetration": 6,
+    "bellstrike.penetration": 0.06,
   },
   buffDefs: [longWind],
 })

@@ -15,7 +15,7 @@ export const battleAnthemChargedBonus = defineClassBuff({
   triggeredBy: [],
   alwaysActive: true,
   duration: 9999,
-  summary: "allDamageBoost +25%, max endurance bonus +10%",
+  summary: "allDamageBoost +15%, current endurance (max 10%)",
   effects: (ctx) => {
     if (ctx.event.kind !== "damage" || !matchesScope(ctx.event.tags, SCOPE)) return []
     return [stat("allDamageBoost", 0.25)]

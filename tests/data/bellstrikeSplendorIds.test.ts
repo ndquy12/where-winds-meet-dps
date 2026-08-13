@@ -44,7 +44,7 @@ describe("bellstrike-splendor new CAST/ATTUNE ids", () => {
   })
 
   it("pins the new attune tag this class introduces", () => {
-    expect(ATTUNE.swordHeavyCharged).toBe("attune:swordHeavyCharged")
+    expect(ATTUNE.swordCharged).toBe("attune:swordCharged")
   })
 })
 

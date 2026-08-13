@@ -74,6 +74,8 @@ describe("bellstrikeSplendor class definition", () => {
       "qiImbalance",
       "swordQiAffinityEnhancement",
       "affinityDamageUpSpear",
+      "swordSlashBonus",
+      "qiStruggleEnhancement",
     ])
   })
 

@@ -19,6 +19,7 @@ export const BUFF = {
   ironGuards: "ironGuards",
   mountainSplitter: "mountainSplitter",
   qiImbalance: "qiImbalance",
+  qiStruggleEnhancement: "qiStruggleEnhancement",
   shatteredRidgeDeflect: "shatteredRidgeDeflect",
   stonesplitStrengthSkillCritDamage: "stonesplitStrengthSkillCritDamage",
   swordMorphChargedBonus: "swordMorphChargedBonus",
@@ -38,6 +39,7 @@ export const BUFF = {
   revelryScript: "revelryScript",
   soulShaken: "soulShaken",
   surgingWaves: "surgingWaves",
+  swordSlashBonus: "swordSlashBonus",
   vulnerabilityTeammate: "vulnerabilityTeammate",
   wineGu: "wineGu",
 } as const

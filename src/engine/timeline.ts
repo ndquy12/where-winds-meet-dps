@@ -407,7 +407,6 @@ export function simulateTimeline(inputs: Inputs): Result {
       const site = buffEngine.calculateDamageEffects(skill, frame / FPS, scoped)
       if (site.effects.length > 0) {
         for (const e of site.effects) effects.push(e)
-        console.log("🚀 ~ resolveState ~ effects:", effects)
         sig +=
           `#${skill.id}#` +
           site.effects

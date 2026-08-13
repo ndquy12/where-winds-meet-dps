@@ -365,7 +365,7 @@
               "amount": 0.075
             }
           ],
-          "summary": "affinityDmg +10%, directAffinity +8%"
+          "summary": "affinityDmg +10%, directAffinity +7.5%"
         },
         {
           "id": "mirage",
@@ -25464,7 +25464,7 @@
               "amount": 0.075
             }
           ],
-          "summary": "affinityDmg +10%, directAffinity +8%"
+          "summary": "affinityDmg +10%, directAffinity +7.5%"
         },
         {
           "id": "mirage",
@@ -25833,7 +25833,7 @@
           "bellstrikeSplendor-swordspecial-deflect",
           "bellstrikeSplendor-toad-cancel"
         ],
-        "digest": "46a17b52b276ed20e0347c86ada4348e2988b8629d6b34fe6a4b813149644368"
+        "digest": "c1002f12edac90b2bf66fa2fa0a70cf20f793ea61e525155152cb672c358dc1a"
       },
       "debuffs": {
         "count": 5,
@@ -25936,7 +25936,7 @@
           "duration": 9999,
           "maxStacks": null,
           "effects": "[fn]",
-          "summary": "allDamageBoost +30% (Charged skill)"
+          "summary": "allDamageBoost +30%"
         },
         {
           "id": "revelryScript",
@@ -26092,7 +26092,7 @@
               "amount": 0.075
             }
           ],
-          "summary": "affinityDmg +10%, directAffinity +8%"
+          "summary": "affinityDmg +10%, directAffinity +7.5%"
         },
         {
           "id": "mirage",
@@ -26358,6 +26358,66 @@
           "maxStacks": null,
           "effects": "[fn]",
           "summary": "affinityDamageBoost +18% while Long Wind is active"
+        },
+        {
+          "id": "swordSlashBonus",
+          "name": "Sword Slash Bonus",
+          "classBuff": true,
+          "requires": null,
+          "affects": null,
+          "affectsProperty": null,
+          "affectsWeaponTypes": null,
+          "excludes": null,
+          "triggeredBy": [
+            "cast:swordHeavyCharged",
+            "cast:swordHeavyCharged2Hit",
+            "cast:swordHeavyChargedPrepull",
+            "cast:energySurge",
+            "cast:swordSpecial",
+            "cast:swordSpecial2nd",
+            "cast:swordSpecialDeflect"
+          ],
+          "alwaysActive": false,
+          "buffAppliesOnCastEnd": false,
+          "cooldown": null,
+          "rateLimit": null,
+          "stackRateLimit": null,
+          "stacksPerHit": true,
+          "seedAtStart": false,
+          "refreshOnAnyCast": false,
+          "requiresBuffActive": null,
+          "activeAfterBuffEnds": null,
+          "hasStacksFn": false,
+          "duration": 8,
+          "maxStacks": 3,
+          "effects": "[fn]",
+          "summary": "+10.0% all/stack"
+        },
+        {
+          "id": "qiStruggleEnhancement",
+          "name": "Qi Struggle Enhancement",
+          "classBuff": true,
+          "requires": null,
+          "affects": ["prop:isCharged", "attune:swordSpecial"],
+          "affectsProperty": null,
+          "affectsWeaponTypes": null,
+          "excludes": null,
+          "triggeredBy": [],
+          "alwaysActive": true,
+          "buffAppliesOnCastEnd": false,
+          "cooldown": null,
+          "rateLimit": null,
+          "stackRateLimit": null,
+          "stacksPerHit": false,
+          "seedAtStart": false,
+          "refreshOnAnyCast": false,
+          "requiresBuffActive": null,
+          "activeAfterBuffEnds": null,
+          "hasStacksFn": false,
+          "duration": 9999,
+          "maxStacks": null,
+          "effects": "[fn]",
+          "summary": "allDamageBoost +20% (Sword Special/Sword Charge)"
         }
       ],
       "group": [
@@ -26390,7 +26450,7 @@
       ]
     },
     "dynamic": {
-      "digest": "763b1c2032f55708afd721d6a367ca59cb760f8f0fd64e26e4372f2339946447"
+      "digest": "4266762b0809a1ffe5efb50415f0d0a14c97ef208d28835c1b14b434a028d8ea"
     }
   }
 }

@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest"
 import { longWind } from "../../src/data/innerWays/mountainsMightBuffs/longWind"
 import { qiImbalance } from "../../src/data/skills/bellstrike-splendor/buffs/qiImbalance"
-import { CAST } from "../../src/data/skills/ids"
+import { swordSlashBonus } from "../../src/data/skills/bellstrike-splendor/buffs/swordSlashBonus"
+import { qiStruggleEnhancement } from "../../src/data/skills/bellstrike-splendor/buffs/qiStruggleEnhancement"
+import { ATTUNE, CAST, PROP } from "../../src/data/skills/ids"
 import type { EffectContext } from "../../src/engine/effects/context"
 
 describe("Mountain's Might", () => {
@@ -61,5 +63,103 @@ describe("Qi Imbalance", () => {
   it("grants no bonus on non-damage events even during the qi break window", () => {
     if (typeof qiImbalance.effects !== "function") throw new Error("expected a closure")
     expect(qiImbalance.effects({ ...baseContext, phase: "exhausted", event: { kind: "display" } })).toEqual([])
+  })
+})
+
+describe("Sword Slash Bonus", () => {
+  it("triggers off every charged and Sword Special variant, lasting 8 seconds, up to 3 stacks", () => {
+    expect(swordSlashBonus.triggeredBy).toEqual([
+      CAST.swordHeavyCharged,
+      CAST.swordHeavyCharged2Hit,
+      CAST.swordHeavyChargedPrepull,
+      CAST.energySurge,
+      CAST.swordSpecial,
+      CAST.swordSpecial2nd,
+      CAST.swordSpecialDeflect,
+    ])
+    expect(swordSlashBonus.duration).toBe(8)
+    expect(swordSlashBonus.maxStacks).toBe(3)
+    expect(swordSlashBonus.stacksPerHit).toBe(true)
+  })
+
+  it("grants no bonus at 0 stacks", () => {
+    if (typeof swordSlashBonus.effects !== "function") throw new Error("expected a closure")
+    const baseContext: EffectContext = {
+      timeSec: 0,
+      phase: "normal",
+      build: { classId: "bellstrikeSplendor", spec: undefined, armorSet: undefined, param: () => false, paramTier: () => 0, paramValue: () => 0 },
+      target: { isTrainingDummy: false },
+      status: { isActive: () => false, stacks: () => 0, appliedAt: () => null, expiresAt: () => null },
+      self: { stacks: 0 },
+      event: { kind: "damage", castTag: CAST.swordSpecial, tags: new Set() },
+    }
+    expect(swordSlashBonus.effects(baseContext)).toEqual([])
+  })
+
+  it("grants +10% allDamageBoost per stack, up to 3 stacks", () => {
+    if (typeof swordSlashBonus.effects !== "function") throw new Error("expected a closure")
+    const baseContext: EffectContext = {
+      timeSec: 0,
+      phase: "normal",
+      build: { classId: "bellstrikeSplendor", spec: undefined, armorSet: undefined, param: () => false, paramTier: () => 0, paramValue: () => 0 },
+      target: { isTrainingDummy: false },
+      status: { isActive: () => false, stacks: () => 0, appliedAt: () => null, expiresAt: () => null },
+      self: { stacks: 1 },
+      event: { kind: "damage", castTag: CAST.swordSpecial, tags: new Set() },
+    }
+    expect(swordSlashBonus.effects(baseContext)).toEqual([{ kind: "stat", statKey: "allDamageBoost", amount: 0.1 }])
+    const tripleStack = swordSlashBonus.effects({ ...baseContext, self: { stacks: 3 } })
+    expect(tripleStack).toHaveLength(1)
+    expect(tripleStack[0].statKey).toBe("allDamageBoost")
+    expect(tripleStack[0].amount).toBeCloseTo(0.3)
+  })
+})
+
+describe("Qi Struggle Enhancement", () => {
+  const baseContext: EffectContext = {
+    timeSec: 0,
+    phase: "normal",
+    build: { classId: "bellstrikeSplendor", spec: undefined, armorSet: undefined, param: () => false, paramTier: () => 0, paramValue: () => 0 },
+    target: { isTrainingDummy: false },
+    status: { isActive: () => false, stacks: () => 0, appliedAt: () => null, expiresAt: () => null },
+    self: { stacks: 0 },
+    event: { kind: "damage", castTag: CAST.swordSpecial, tags: new Set([ATTUNE.swordSpecial]) },
+  }
+
+  it("is always active and scoped to isCharged and Sword Special skills", () => {
+    expect(qiStruggleEnhancement.alwaysActive).toBe(true)
+    expect(qiStruggleEnhancement.affects).toEqual([PROP.isCharged, ATTUNE.swordSpecial])
+  })
+
+  it("grants +20% allDamageBoost on a Sword Special hit", () => {
+    if (typeof qiStruggleEnhancement.effects !== "function") throw new Error("expected a closure")
+    expect(qiStruggleEnhancement.effects(baseContext)).toEqual([
+      { kind: "stat", statKey: "allDamageBoost", amount: 0.2 },
+    ])
+  })
+
+  it("grants +20% allDamageBoost on an isCharged hit", () => {
+    if (typeof qiStruggleEnhancement.effects !== "function") throw new Error("expected a closure")
+    expect(
+      qiStruggleEnhancement.effects({
+        ...baseContext,
+        event: { kind: "damage", castTag: CAST.swordHeavyCharged, tags: new Set([PROP.isCharged]) },
+      }),
+    ).toEqual([{ kind: "stat", statKey: "allDamageBoost", amount: 0.2 }])
+  })
+
+  it("grants no bonus on a hit outside both scopes", () => {
+    if (typeof qiStruggleEnhancement.effects !== "function") throw new Error("expected a closure")
+    expect(
+      qiStruggleEnhancement.effects({
+        ...baseContext,
+        event: { kind: "damage", castTag: CAST.swordQ, tags: new Set() },
+      }),
+    ).toEqual([])
+  })
+
+  it("grants no bonus on non-damage events", () => {
+    if (typeof qiStruggleEnhancement.effects !== "function") throw new Error("expected a closure")
+    expect(qiStruggleEnhancement.effects({ ...baseContext, event: { kind: "display" } })).toEqual([])
   })
 })

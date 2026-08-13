@@ -157,7 +157,6 @@ export const ATTUNE = {
   spearQ: "attune:spearQ",
   spearSpecial: "attune:spearSpecial",
   swordCharged: "attune:swordCharged",
-  swordHeavyCharged: "attune:swordHeavyCharged",
   swordQ: "attune:swordQ",
   swordSpecial: "attune:swordSpecial",
 } as const

@@ -40,6 +40,6 @@ export const jadeware = defineBuff({
   // (`directAffinity 0.075` → "+8%"), not the `StatKey`-derived generic form —
   // pin the Skill Editor text to that exact string rather than letting it
   // drift with a future `StatKey` rename.
-  summary: "affinityDmg +10%, directAffinity +8%",
+  summary: "affinityDmg +10%, directAffinity +7.5%",
   effects: [stat("affinityDamageBoost", 0.1), stat("directAffinityRate", 0.075)],
 })

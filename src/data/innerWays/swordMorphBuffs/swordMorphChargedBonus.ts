@@ -15,7 +15,7 @@ export const swordMorphChargedBonus = defineClassBuff({
   triggeredBy: [],
   alwaysActive: true,
   duration: 9999,
-  summary: "allDamageBoost +30% (Charged skill)",
+  summary: "allDamageBoost +30%",
   effects: (ctx) => {
     if (ctx.event.kind !== "damage" || !matchesScope(ctx.event.tags, SCOPE)) return []
     return [stat("allDamageBoost", 0.3)]
