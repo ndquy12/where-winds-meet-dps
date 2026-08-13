@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { CLASS_ID, SKILL, DEBUFF } from "../../src/data/skills/bellstrike-splendor/ids"
 import { CAST, ATTUNE } from "../../src/data/skills/ids"
+import { BUFF, PARAM } from "../../src/data/skills/buffs/ids"
 
 describe("bellstrike-splendor ids", () => {
   it("pins the class id", () => {
@@ -42,5 +43,12 @@ describe("bellstrike-splendor new CAST/ATTUNE ids", () => {
 
   it("pins the new attune tag this class introduces", () => {
     expect(ATTUNE.swordHeavyCharged).toBe("attune:swordHeavyCharged")
+  })
+})
+
+describe("bellstrike-splendor buff/param ids", () => {
+  it("pins the Mountain's Might buff and param ids", () => {
+    expect(BUFF.mountainsMight).toBe("mountainsMight")
+    expect(PARAM.mountainsMight).toBe("mountainsMight")
   })
 })
