@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { CLASS_ID, SKILL, DEBUFF } from "../../src/data/skills/bellstrike-splendor/ids"
+import { CAST, ATTUNE } from "../../src/data/skills/ids"
 
 describe("bellstrike-splendor ids", () => {
   it("pins the class id", () => {
@@ -29,8 +30,6 @@ describe("bellstrike-splendor ids", () => {
     expect(DEBUFF.bitterSeasonTick).toBe("debuff-bellstrikeSplendor-bitter-season-tick")
   })
 })
-
-import { CAST, ATTUNE } from "../../src/data/skills/ids"
 
 describe("bellstrike-splendor new CAST/ATTUNE ids", () => {
   it("pins the five new cast tags this class introduces", () => {
