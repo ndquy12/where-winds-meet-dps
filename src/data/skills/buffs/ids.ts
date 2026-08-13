@@ -3,6 +3,9 @@
 // `activeAfterBuffEnds.buffId` reference becomes a build error instead of a
 // silently-never-firing buff.
 export const BUFF = {
+  affinityDamageUpSpear: "affinityDamageUpSpear",
+  battleAnthemChargedBonus: "battleAnthemChargedBonus",
+  battleAnthemEnduranceConsume: "battleAnthemEnduranceConsume",
   bellstrikeUmbraBleedPen: "bellstrikeUmbraBleedPen",
   bellstrikeUmbraBleedingDamage: "bellstrikeUmbraBleedingDamage",
   burningHeartIPConsume: "burningHeartIPConsume",
@@ -15,8 +18,11 @@ export const BUFF = {
   innerPassion: "innerPassion",
   ironGuards: "ironGuards",
   mountainSplitter: "mountainSplitter",
+  qiImbalance: "qiImbalance",
   shatteredRidgeDeflect: "shatteredRidgeDeflect",
   stonesplitStrengthSkillCritDamage: "stonesplitStrengthSkillCritDamage",
+  swordMorphChargedBonus: "swordMorphChargedBonus",
+  swordQiAffinityEnhancement: "swordQiAffinityEnhancement",
   throatPierced: "throatPierced",
   dragonHeadLowHp: "dragonHeadLowHp",
   fluteBoost: "fluteBoost",
@@ -42,6 +48,7 @@ export const BUFF = {
 export const PARAM = {
   allySurgingWaves: "allySurgingWaves",
   artOfResistance: "artOfResistance",
+  battleAnthem: "battleAnthem",
   dragonHeadLowHpMaxBonus: "dragonHeadLowHpMaxBonus",
   fluteBoostValue: "fluteBoostValue",
   frostCladNight: "frostCladNight",
@@ -52,6 +59,7 @@ export const PARAM = {
   starsAlignActive: "starsAlignActive",
   steadfastDevotion: "steadfastDevotion",
   swordHorizon: "swordHorizon",
+  swordMorph: "swordMorph",
   throatPierced: "throatPierced",
   wolfchasersArt: "wolfchasersArt",
 } as const

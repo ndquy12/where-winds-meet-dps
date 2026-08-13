@@ -78,9 +78,7 @@
           "requires": {
             "param": "swordHorizon"
           },
-          "affects": [
-            "role:bleedDetonation"
-          ],
+          "affects": ["role:bleedDetonation"],
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
@@ -118,12 +116,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:spearQ",
-            "cast:spearQ0HitCancel",
-            "cast:spearQ5HitCancel",
-            "cast:spearQPrepull"
-          ],
+          "triggeredBy": ["cast:spearQ", "cast:spearQ0HitCancel", "cast:spearQ5HitCancel", "cast:spearQPrepull"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": true,
           "cooldown": null,
@@ -158,12 +151,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:spearQ",
-            "cast:spearQ0HitCancel",
-            "cast:spearQ5HitCancel",
-            "cast:spearQPrepull"
-          ],
+          "triggeredBy": ["cast:spearQ", "cast:spearQ0HitCancel", "cast:spearQ5HitCancel", "cast:spearQPrepull"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": true,
           "cooldown": null,
@@ -194,9 +182,7 @@
             "param": "wolfchasersArt",
             "minTier": 6
           },
-          "affects": [
-            "type:sustain"
-          ],
+          "affects": ["type:sustain"],
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
@@ -268,11 +254,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:fluteOfTheTidesCancel",
-            "cast:fluteOfTheTidesFull",
-            "cast:fluteOfTheTidesPrepull"
-          ],
+          "triggeredBy": ["cast:fluteOfTheTidesCancel", "cast:fluteOfTheTidesFull", "cast:fluteOfTheTidesPrepull"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": false,
           "cooldown": null,
@@ -394,9 +376,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:ghostlySteps"
-          ],
+          "triggeredBy": ["cast:ghostlySteps"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": false,
           "cooldown": null,
@@ -422,10 +402,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:perfectDodge",
-            "cast:perfectDodgeFull"
-          ],
+          "triggeredBy": ["cast:perfectDodge", "cast:perfectDodgeFull"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": false,
           "cooldown": null,
@@ -522,15 +499,11 @@
           "name": "Surging Waves",
           "classBuff": false,
           "requires": null,
-          "affects": [
-            "role:dragonHead"
-          ],
+          "affects": ["role:dragonHead"],
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:dragonHeadPlus"
-          ],
+          "triggeredBy": ["cast:dragonHeadPlus"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": false,
           "cooldown": null,
@@ -554,9 +527,7 @@
           "requires": {
             "param": "dragonHeadLowHpMaxBonus"
           },
-          "affects": [
-            "role:dragonHeadPlus"
-          ],
+          "affects": ["role:dragonHeadPlus"],
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
@@ -590,10 +561,7 @@
           "requires": {
             "param": "swordHorizon"
           },
-          "affects": [
-            "role:bleedTick",
-            "role:bleedDetonation"
-          ],
+          "affects": ["role:bleedTick", "role:bleedDetonation"],
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
@@ -659,9 +627,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:healerBuff"
-          ],
+          "triggeredBy": ["cast:healerBuff"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": true,
           "cooldown": null,
@@ -25075,9 +25041,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:snowpartingSpecial"
-          ],
+          "triggeredBy": ["cast:snowpartingSpecial"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": true,
           "cooldown": null,
@@ -25101,9 +25065,7 @@
           "requires": {
             "param": "frostCladNight"
           },
-          "affects": [
-            "role:snowpartingVC"
-          ],
+          "affects": ["role:snowpartingVC"],
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
@@ -25132,9 +25094,7 @@
             "param": "frostCladNight",
             "minTier": 6
           },
-          "affects": [
-            "role:snowpartingVC"
-          ],
+          "affects": ["role:snowpartingVC"],
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
@@ -25163,9 +25123,7 @@
             "param": "frostCladNight",
             "minTier": 4
           },
-          "affects": [
-            "role:snowpartingVC"
-          ],
+          "affects": ["role:snowpartingVC"],
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
@@ -25231,19 +25189,11 @@
             "param": "steadfastDevotion",
             "minTier": 3
           },
-          "affects": [
-            "role:phalanxCharged",
-            "role:anxiSoldierMoDown",
-            "role:anxiSoldierMoJump"
-          ],
+          "affects": ["role:phalanxCharged", "role:anxiSoldierMoDown", "role:anxiSoldierMoJump"],
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:anxiSoldierMoDown",
-            "cast:anxiSoldierMoJump",
-            "cast:anxiSoldierMoSweep"
-          ],
+          "triggeredBy": ["cast:anxiSoldierMoDown", "cast:anxiSoldierMoJump", "cast:anxiSoldierMoSweep"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": false,
           "cooldown": 15,
@@ -25272,10 +25222,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:phalanxChargedS3",
-            "cast:phalanxChargedS3InnerPassion"
-          ],
+          "triggeredBy": ["cast:phalanxChargedS3", "cast:phalanxChargedS3InnerPassion"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": true,
           "cooldown": null,
@@ -25406,11 +25353,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:fluteOfTheTidesCancel",
-            "cast:fluteOfTheTidesFull",
-            "cast:fluteOfTheTidesPrepull"
-          ],
+          "triggeredBy": ["cast:fluteOfTheTidesCancel", "cast:fluteOfTheTidesFull", "cast:fluteOfTheTidesPrepull"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": false,
           "cooldown": null,
@@ -25532,9 +25475,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:ghostlySteps"
-          ],
+          "triggeredBy": ["cast:ghostlySteps"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": false,
           "cooldown": null,
@@ -25560,10 +25501,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:perfectDodge",
-            "cast:perfectDodgeFull"
-          ],
+          "triggeredBy": ["cast:perfectDodge", "cast:perfectDodgeFull"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": false,
           "cooldown": null,
@@ -25660,15 +25598,11 @@
           "name": "Surging Waves",
           "classBuff": false,
           "requires": null,
-          "affects": [
-            "role:dragonHead"
-          ],
+          "affects": ["role:dragonHead"],
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:dragonHeadPlus"
-          ],
+          "triggeredBy": ["cast:dragonHeadPlus"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": false,
           "cooldown": null,
@@ -25692,9 +25626,7 @@
           "requires": {
             "param": "dragonHeadLowHpMaxBonus"
           },
-          "affects": [
-            "role:dragonHeadPlus"
-          ],
+          "affects": ["role:dragonHeadPlus"],
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
@@ -25730,10 +25662,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:phalanxSpecial",
-            "cast:phalanxSpecialPrepull"
-          ],
+          "triggeredBy": ["cast:phalanxSpecial", "cast:phalanxSpecialPrepull"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": false,
           "cooldown": 20,
@@ -25837,9 +25766,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:healerBuff"
-          ],
+          "triggeredBy": ["cast:healerBuff"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": true,
           "cooldown": null,
@@ -25921,48 +25848,81 @@
       },
       "buffs": [
         {
-          "id": "concentration",
-          "name": "Concentration",
+          "id": "battleAnthemChargedBonus",
+          "name": "Battle Anthem",
           "classBuff": true,
           "requires": {
-            "param": "insightfulStrike"
+            "param": "battleAnthem"
           },
           "affects": null,
-          "affectsProperty": null,
+          "affectsProperty": "isCharged",
           "affectsWeaponTypes": null,
           "excludes": null,
           "triggeredBy": [],
-          "alwaysActive": false,
+          "alwaysActive": true,
           "buffAppliesOnCastEnd": false,
           "cooldown": null,
           "rateLimit": null,
           "stackRateLimit": null,
           "stacksPerHit": false,
-          "seedAtStart": true,
-          "refreshOnAnyCast": true,
+          "seedAtStart": false,
+          "refreshOnAnyCast": false,
+          "requiresBuffActive": null,
+          "activeAfterBuffEnds": null,
+          "hasStacksFn": false,
+          "duration": 9999,
+          "maxStacks": null,
+          "effects": "[fn]",
+          "summary": "allDamageBoost +25%, max endurance bonus +10%"
+        },
+        {
+          "id": "mountainsMight",
+          "name": "Long Wind",
+          "classBuff": true,
+          "requires": {
+            "param": "mountainsMight"
+          },
+          "affects": null,
+          "affectsProperty": null,
+          "affectsWeaponTypes": null,
+          "excludes": null,
+          "triggeredBy": ["cast:spearQ", "cast:spearQ0HitCancel", "cast:spearQPrepull"],
+          "alwaysActive": false,
+          "buffAppliesOnCastEnd": true,
+          "cooldown": null,
+          "rateLimit": null,
+          "stackRateLimit": null,
+          "stacksPerHit": false,
+          "seedAtStart": false,
+          "refreshOnAnyCast": false,
           "requiresBuffActive": null,
           "activeAfterBuffEnds": null,
           "hasStacksFn": false,
           "duration": 10,
           "maxStacks": null,
-          "effects": "[fn]",
-          "summary": "affinityDmg +10%, directAffinity +3%"
+          "effects": [
+            {
+              "kind": "stat",
+              "statKey": "directAffinityRate",
+              "amount": 0.03
+            }
+          ],
+          "summary": null
         },
         {
-          "id": "buff-bellstrikeUmbra-zenith-bar",
-          "name": "Zenith Bar",
+          "id": "swordMorphChargedBonus",
+          "name": "Sword Morph T6",
           "classBuff": true,
           "requires": {
-            "param": "swordHorizon"
+            "param": "swordMorph",
+            "minTier": 6
           },
-          "affects": [
-            "role:bleedDetonation"
-          ],
-          "affectsProperty": null,
+          "affects": null,
+          "affectsProperty": "isCharged",
           "affectsWeaponTypes": null,
           "excludes": null,
           "triggeredBy": [],
-          "alwaysActive": false,
+          "alwaysActive": true,
           "buffAppliesOnCastEnd": false,
           "cooldown": null,
           "rateLimit": null,
@@ -25973,134 +25933,10 @@
           "requiresBuffActive": null,
           "activeAfterBuffEnds": null,
           "hasStacksFn": false,
-          "duration": 999,
+          "duration": 9999,
           "maxStacks": null,
-          "effects": [
-            {
-              "kind": "stat",
-              "statKey": "allDamageBoost",
-              "amount": 0.15
-            }
-          ],
-          "summary": null
-        },
-        {
-          "id": "potentRiverFlow",
-          "name": "Potent River Flow",
-          "classBuff": true,
-          "requires": {
-            "param": "wolfchasersArt"
-          },
-          "affects": null,
-          "affectsProperty": null,
-          "affectsWeaponTypes": null,
-          "excludes": null,
-          "triggeredBy": [
-            "cast:spearQ",
-            "cast:spearQ0HitCancel",
-            "cast:spearQ5HitCancel",
-            "cast:spearQPrepull"
-          ],
-          "alwaysActive": false,
-          "buffAppliesOnCastEnd": true,
-          "cooldown": null,
-          "rateLimit": null,
-          "stackRateLimit": null,
-          "stacksPerHit": false,
-          "seedAtStart": false,
-          "refreshOnAnyCast": false,
-          "requiresBuffActive": null,
-          "activeAfterBuffEnds": null,
-          "hasStacksFn": false,
-          "duration": 15,
-          "maxStacks": null,
-          "effects": [
-            {
-              "kind": "stat",
-              "statKey": "allDamageBoost",
-              "amount": 0.25
-            }
-          ],
-          "summary": null
-        },
-        {
-          "id": "wineGu",
-          "name": "Wine Gu",
-          "classBuff": true,
-          "requires": {
-            "param": "wolfchasersArt",
-            "minTier": 6
-          },
-          "affects": null,
-          "affectsProperty": null,
-          "affectsWeaponTypes": null,
-          "excludes": null,
-          "triggeredBy": [
-            "cast:spearQ",
-            "cast:spearQ0HitCancel",
-            "cast:spearQ5HitCancel",
-            "cast:spearQPrepull"
-          ],
-          "alwaysActive": false,
-          "buffAppliesOnCastEnd": true,
-          "cooldown": null,
-          "rateLimit": null,
-          "stackRateLimit": null,
-          "stacksPerHit": false,
-          "seedAtStart": false,
-          "refreshOnAnyCast": false,
-          "requiresBuffActive": null,
-          "activeAfterBuffEnds": null,
-          "hasStacksFn": false,
-          "duration": 15,
-          "maxStacks": null,
-          "effects": [
-            {
-              "kind": "stat",
-              "statKey": "allDamageBoost",
-              "amount": 0.05
-            }
-          ],
-          "summary": null
-        },
-        {
-          "id": "soulShaken",
-          "name": "Soul Shaken",
-          "classBuff": true,
-          "requires": {
-            "param": "wolfchasersArt",
-            "minTier": 6
-          },
-          "affects": [
-            "type:sustain"
-          ],
-          "affectsProperty": null,
-          "affectsWeaponTypes": null,
-          "excludes": null,
-          "triggeredBy": [
-            "cast:spearQ",
-            "cast:spearQ0HitCancel",
-            "cast:spearQ5HitCancel",
-            "cast:spearQPrepull",
-            "cast:spearHeavy",
-            "cast:spearHeavy1Hit",
-            "cast:spearHeavy1HitPrepull"
-          ],
-          "alwaysActive": false,
-          "buffAppliesOnCastEnd": false,
-          "cooldown": null,
-          "rateLimit": null,
-          "stackRateLimit": null,
-          "stacksPerHit": true,
-          "seedAtStart": false,
-          "refreshOnAnyCast": false,
-          "requiresBuffActive": null,
-          "activeAfterBuffEnds": null,
-          "hasStacksFn": false,
-          "duration": 15,
-          "maxStacks": 5,
           "effects": "[fn]",
-          "summary": "+10.0% all/stack"
+          "summary": "allDamageBoost +30% (Charged skill)"
         },
         {
           "id": "revelryScript",
@@ -26145,11 +25981,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:fluteOfTheTidesCancel",
-            "cast:fluteOfTheTidesFull",
-            "cast:fluteOfTheTidesPrepull"
-          ],
+          "triggeredBy": ["cast:fluteOfTheTidesCancel", "cast:fluteOfTheTidesFull", "cast:fluteOfTheTidesPrepull"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": false,
           "cooldown": null,
@@ -26271,9 +26103,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:ghostlySteps"
-          ],
+          "triggeredBy": ["cast:ghostlySteps"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": false,
           "cooldown": null,
@@ -26299,10 +26129,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:perfectDodge",
-            "cast:perfectDodgeFull"
-          ],
+          "triggeredBy": ["cast:perfectDodge", "cast:perfectDodgeFull"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": false,
           "cooldown": null,
@@ -26399,15 +26226,11 @@
           "name": "Surging Waves",
           "classBuff": false,
           "requires": null,
-          "affects": [
-            "role:dragonHead"
-          ],
+          "affects": ["role:dragonHead"],
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:dragonHeadPlus"
-          ],
+          "triggeredBy": ["cast:dragonHeadPlus"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": false,
           "cooldown": null,
@@ -26431,9 +26254,7 @@
           "requires": {
             "param": "dragonHeadLowHpMaxBonus"
           },
-          "affects": [
-            "role:dragonHeadPlus"
-          ],
+          "affects": ["role:dragonHeadPlus"],
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
@@ -26461,21 +26282,15 @@
           "summary": null
         },
         {
-          "id": "mountainsMight",
-          "name": "Mountain's Might",
+          "id": "qiImbalance",
+          "name": "Qi Imbalance",
           "classBuff": true,
-          "requires": {
-            "param": "mountainsMight"
-          },
+          "requires": null,
           "affects": null,
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:spearQ",
-            "cast:spearQ0HitCancel",
-            "cast:spearQPrepull"
-          ],
+          "triggeredBy": ["cast:spearQ", "cast:swordQ"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": true,
           "cooldown": null,
@@ -26487,16 +26302,62 @@
           "requiresBuffActive": null,
           "activeAfterBuffEnds": null,
           "hasStacksFn": false,
-          "duration": 8,
+          "duration": 15,
           "maxStacks": null,
-          "effects": [
-            {
-              "kind": "stat",
-              "statKey": "directAffinityRate",
-              "amount": 0.015
-            }
-          ],
-          "summary": null
+          "effects": "[fn]",
+          "summary": "allDamageBoost +8%, attributeDamageBoost +8% during the qi break window"
+        },
+        {
+          "id": "swordQiAffinityEnhancement",
+          "name": "Sword Qi Affinity Enhancement",
+          "classBuff": true,
+          "requires": null,
+          "affects": null,
+          "affectsProperty": "isCharged",
+          "affectsWeaponTypes": null,
+          "excludes": null,
+          "triggeredBy": [],
+          "alwaysActive": true,
+          "buffAppliesOnCastEnd": false,
+          "cooldown": null,
+          "rateLimit": null,
+          "stackRateLimit": null,
+          "stacksPerHit": false,
+          "seedAtStart": false,
+          "refreshOnAnyCast": false,
+          "requiresBuffActive": null,
+          "activeAfterBuffEnds": null,
+          "hasStacksFn": false,
+          "duration": 9999,
+          "maxStacks": null,
+          "effects": "[fn]",
+          "summary": "affinityDamageBoost +18% while Qi Imbalance is active"
+        },
+        {
+          "id": "affinityDamageUpSpear",
+          "name": "Affinity DMG UP (Spear)",
+          "classBuff": true,
+          "requires": null,
+          "affects": null,
+          "affectsProperty": null,
+          "affectsWeaponTypes": ["Spear"],
+          "excludes": null,
+          "triggeredBy": [],
+          "alwaysActive": true,
+          "buffAppliesOnCastEnd": false,
+          "cooldown": null,
+          "rateLimit": null,
+          "stackRateLimit": null,
+          "stacksPerHit": false,
+          "seedAtStart": false,
+          "refreshOnAnyCast": false,
+          "requiresBuffActive": null,
+          "activeAfterBuffEnds": null,
+          "hasStacksFn": false,
+          "duration": 9999,
+          "maxStacks": null,
+          "effects": "[fn]",
+          "summary": "affinityDamageBoost +18% while Long Wind is active"
         }
       ],
       "group": [
@@ -26509,9 +26370,7 @@
           "affectsProperty": null,
           "affectsWeaponTypes": null,
           "excludes": null,
-          "triggeredBy": [
-            "cast:healerBuff"
-          ],
+          "triggeredBy": ["cast:healerBuff"],
           "alwaysActive": false,
           "buffAppliesOnCastEnd": true,
           "cooldown": null,
@@ -26531,7 +26390,7 @@
       ]
     },
     "dynamic": {
-      "digest": "efd1208ab5421a57bd59f800b4eab67acd375be8395e1a95bf926ffb831a9b7e"
+      "digest": "763b1c2032f55708afd721d6a367ca59cb760f8f0fd64e26e4372f2339946447"
     }
   }
 }

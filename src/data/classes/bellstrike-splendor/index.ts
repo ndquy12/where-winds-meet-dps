@@ -2,7 +2,9 @@ import { defineClass } from "../../../definitions/classes/classDef"
 import { CLASS_ID, SKILLS } from "../../skills/bellstrike-splendor"
 import { withUniversalSkills } from "../../../definitions/skills/universalSkills"
 import { DEBUFFS } from "../../skills/bellstrike-splendor/debuffs"
-import { mountainsMightBuffDef } from "../../skills/bellstrike-splendor/buffs/mountainsMight"
+import { qiImbalance } from "../../skills/bellstrike-splendor/buffs/qiImbalance"
+import { swordQiAffinityEnhancement } from "../../skills/bellstrike-splendor/buffs/swordQiAffinityEnhancement"
+import { affinityDamageUpSpear } from "../../skills/bellstrike-splendor/buffs/affinityDamageUpSpear"
 import { rotationPoolFor } from "../../../definitions/rotations/registry"
 import { BELLSTRIKE_SPLENDOR_POOL } from "./retunementPool"
 
@@ -13,8 +15,14 @@ export const bellstrikeSplendor = defineClass({
   spec: "bellstrike_splendor",
   primaryAttribute: "Bellstrike",
   attributeMultiplier: 51.5,
-  classMindGroup: "swordHorizon",
-  allowedMindMethods: ["wolfchasersArt", "insightfulStrike", "moraleChant", "bitterSeason"],
+  classMindGroup: "swordMorph",
+  allowedMindMethods: [
+    "mountainsMight",
+    "battleAnthem",
+    "insightfulStrike",
+    "moraleChant",
+    "bitterSeason",
+  ],
   dingYinTags: ["Sword Charge Boost"],
   weapons: ["Sword", "Spear"],
   critBoostWeaponTypes: [],
@@ -22,7 +30,7 @@ export const bellstrikeSplendor = defineClass({
   debuffs: DEBUFFS,
   ...rotationPoolFor(CLASS_ID),
   retunementPool: BELLSTRIKE_SPLENDOR_POOL,
-  classBuffDefs: [mountainsMightBuffDef],
+  classBuffDefs: [qiImbalance, swordQiAffinityEnhancement, affinityDamageUpSpear],
   gateBuffs: [],
   mechanics: [],
   skillBehaviors: [],

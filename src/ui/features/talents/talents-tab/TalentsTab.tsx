@@ -68,6 +68,7 @@ const SOURCE_LABEL: Record<ScalingSource, string> = {
   power: "Power",
   agility: "Agility",
   momentum: "Momentum",
+  affinityRate: "Affinity Rate",
   "phys.min": "Min Phys",
   "phys.max": "Max Phys",
   "phys.penetration": "Phys Penetration",

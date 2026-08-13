@@ -54,22 +54,27 @@ describe("bellstrikeSplendor class definition", () => {
     expect(splendor.dingYinTags).toEqual(["Sword Charge Boost"])
   })
 
-  it("mirrors bellstrikeUmbra's mind group, flagged unsourced", () => {
+  it("locks Sword Morph as its primary inner way", () => {
     const splendor = classDefinition("bellstrikeSplendor")!
-    expect(splendor.classMindGroup).toBe("swordHorizon")
+    expect(splendor.classMindGroup).toBe("swordMorph")
     expect(splendor.allowedMindMethods).toEqual([
-      "wolfchasersArt",
+      "mountainsMight",
+      "battleAnthem",
       "insightfulStrike",
       "moraleChant",
       "bitterSeason",
     ])
   })
 
-  it("carries 12 own skills plus the universal pool, 5 debuffs, and Mountain's Might", () => {
+  it("carries 12 own skills plus the universal pool, 5 debuffs, and its class buffs", () => {
     const splendor = classDefinition("bellstrikeSplendor")!
     expect(splendor.skills.length).toBeGreaterThanOrEqual(12)
     expect(splendor.debuffs).toHaveLength(5)
-    expect(splendor.classBuffDefs.map((module) => module.id)).toEqual(["mountainsMight"])
+    expect(splendor.classBuffDefs.map((module) => module.id)).toEqual([
+      "qiImbalance",
+      "swordQiAffinityEnhancement",
+      "affinityDamageUpSpear",
+    ])
   })
 
   it("has its own retunement pool and a resolvable default rotation", () => {
