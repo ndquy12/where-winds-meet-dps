@@ -33,12 +33,14 @@ describe("bellstrike-splendor ids", () => {
 })
 
 describe("bellstrike-splendor new CAST/ATTUNE ids", () => {
-  it("pins the five new cast tags this class introduces", () => {
+  it("pins the seven new cast tags this class introduces", () => {
     expect(CAST.energySurge).toBe("cast:energySurge")
     expect(CAST.swordHeavyCharged).toBe("cast:swordHeavyCharged")
     expect(CAST.swordHeavyChargedPrepull).toBe("cast:swordHeavyChargedPrepull")
     expect(CAST.swordHeavyCharged2Hit).toBe("cast:swordHeavyCharged2Hit")
     expect(CAST.swordSpecialDeflect).toBe("cast:swordSpecialDeflect")
+    expect(CAST.swordSpecial).toBe("cast:swordSpecial")
+    expect(CAST.swordSpecial2nd).toBe("cast:swordSpecial2nd")
   })
 
   it("pins the new attune tag this class introduces", () => {

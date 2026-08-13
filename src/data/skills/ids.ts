@@ -96,6 +96,8 @@ export const CAST = {
   swordQ2nd: "cast:swordQ2nd",
   swordRChargeFollowUp: "cast:swordRChargeFollowUp",
   swordRChargeFollowUp1HitCancel: "cast:swordRChargeFollowUp1HitCancel",
+  swordSpecial: "cast:swordSpecial",
+  swordSpecial2nd: "cast:swordSpecial2nd",
   swordSpecial3Hit: "cast:swordSpecial3Hit",
   swordSpecial4Hit: "cast:swordSpecial4Hit",
   swordSpecialDeflect: "cast:swordSpecialDeflect",
