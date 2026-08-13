@@ -29,3 +29,19 @@ describe("bellstrike-splendor ids", () => {
     expect(DEBUFF.bitterSeasonTick).toBe("debuff-bellstrikeSplendor-bitter-season-tick")
   })
 })
+
+import { CAST, ATTUNE } from "../../src/data/skills/ids"
+
+describe("bellstrike-splendor new CAST/ATTUNE ids", () => {
+  it("pins the five new cast tags this class introduces", () => {
+    expect(CAST.energySurge).toBe("cast:energySurge")
+    expect(CAST.swordHeavyCharged).toBe("cast:swordHeavyCharged")
+    expect(CAST.swordHeavyChargedPrepull).toBe("cast:swordHeavyChargedPrepull")
+    expect(CAST.swordHeavyCharged2Hit).toBe("cast:swordHeavyCharged2Hit")
+    expect(CAST.swordSpecialDeflect).toBe("cast:swordSpecialDeflect")
+  })
+
+  it("pins the new attune tag this class introduces", () => {
+    expect(ATTUNE.swordHeavyCharged).toBe("attune:swordHeavyCharged")
+  })
+})
