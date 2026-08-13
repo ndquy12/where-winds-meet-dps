@@ -1,9 +1,12 @@
 {
-  "id": "bellstrikeRainbow-swordspecial",
-  "classId": "bellstrikeRainbow",
+  "id": "bellstrikeSplendor-swordspecial",
+  "classId": "bellstrikeSplendor",
   "name": "SwordSpecial",
   "abilityTag": "SwordSpecial",
-  "tags": ["weapon:Sword", "attune:swordSpecial"],
+  "tags": [
+    "weapon:Sword",
+    "attune:swordSpecial"
+  ],
   "skillType": "weapon",
   "weaponOrAttribute": "Sword",
   "attributeAttack": "Bellstrike",

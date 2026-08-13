@@ -20,7 +20,7 @@ Strength (`stonesplitStrength`, spec `stonesplit_strength`) are validated** — 
 holds a measured build exactly. Rely on nothing either reports beyond what its
 anchor pins.
 
-The remaining classes — Bellstrike Rainbow, Silkbind Jade, and the other
+The remaining classes — Bellstrike Splendor, Silkbind Jade, and the other
 Stonesplit and Bamboocut specs — are **not registered**. Their imported data
 lives under `reference/classes/`, unimported by the app and the tests. Treat
 everything there as provisional.

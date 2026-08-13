@@ -5,7 +5,7 @@ import type { Migration, RawProfilesBlob } from "./types"
 type Rec = Record<string, unknown>
 
 export const LEGACY_CLASS_IDS: Record<string, string> = {
-  mingJinHong: "bellstrikeRainbow",
+  mingJinHong: "bellstrikeSplendor",
   mingJinYing: "bellstrikeUmbra",
   qianSiYu: "silkbindJade",
   lieShiWei: "stonesplitPower",

@@ -1,8 +1,8 @@
 {
-  "bellstrikeRainbow": [
+  "bellstrikeSplendor": [
     {
-      "id": "debuff-bellstrikeRainbow-toad-poison",
-      "classId": "bellstrikeRainbow",
+      "id": "debuff-bellstrikeSplendor-toad-poison",
+      "classId": "bellstrikeSplendor",
       "name": "Toad Poison",
       "activation": "triggered",
       "durationFrames": 601,
@@ -25,8 +25,8 @@
       "updatedAt": "2026-07-19T00:00:00.000Z"
     },
     {
-      "id": "debuff-bellstrikeRainbow-combustion",
-      "classId": "bellstrikeRainbow",
+      "id": "debuff-bellstrikeSplendor-combustion",
+      "classId": "bellstrikeSplendor",
       "name": "Combustion",
       "activation": "triggered",
       "durationFrames": 481,
@@ -49,8 +49,8 @@
       "updatedAt": "2026-07-19T00:00:00.000Z"
     },
     {
-      "id": "debuff-bellstrikeRainbow-flute-ripple",
-      "classId": "bellstrikeRainbow",
+      "id": "debuff-bellstrikeSplendor-flute-ripple",
+      "classId": "bellstrikeSplendor",
       "name": "Flute Ripple",
       "activation": "triggered",
       "durationFrames": 751,
@@ -73,8 +73,8 @@
       "updatedAt": "2026-07-19T00:00:00.000Z"
     },
     {
-      "id": "debuff-bellstrikeRainbow-bleed-tick",
-      "classId": "bellstrikeRainbow",
+      "id": "debuff-bellstrikeSplendor-bleed-tick",
+      "classId": "bellstrikeSplendor",
       "name": "Bleed Tick",
       "activation": "triggered",
       "durationFrames": 601,
@@ -97,8 +97,8 @@
       "updatedAt": "2026-07-19T00:00:00.000Z"
     },
     {
-      "id": "debuff-bellstrikeRainbow-bitter-season-tick",
-      "classId": "bellstrikeRainbow",
+      "id": "debuff-bellstrikeSplendor-bitter-season-tick",
+      "classId": "bellstrikeSplendor",
       "name": "Bitter Season Tick",
       "activation": "triggered",
       "durationFrames": 300,
@@ -239,7 +239,13 @@
         "weaponOrAttribute": "Sword",
         "count": 1,
         "perStackShapes": null,
-        "perStackMultipliers": [2, 2.5, 3, 4, 5]
+        "perStackMultipliers": [
+          2,
+          2.5,
+          3,
+          4,
+          5
+        ]
       },
       "maxStacks": 5,
       "stackScaling": "perStack",

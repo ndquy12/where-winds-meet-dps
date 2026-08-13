@@ -40,7 +40,7 @@ const KNOWN_UNCARRIED = new Set(["role:fireOil", "role:fivefoldBleed"])
 // `jadeware` and `rainwhisperShield` are set/global buffs
 // whose trigger list spans every class's own "Q" cast so the buff still
 // fires however a future class equips the set; `soulShaken` /
-// `potentRiverFlow` / `wineGu` carry Bellstrike Rainbow's Spear Q variants
+// `potentRiverFlow` / `wineGu` carry Bellstrike Splendor's Spear Q variants
 // alongside Umbra's; `healerBuff`'s own cast belonged to Silkbind Jade.
 // Listed rather than hidden, same reasoning as `KNOWN_UNCARRIED` above.
 const KNOWN_UNCARRIED_TRIGGERS = new Set([
