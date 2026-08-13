@@ -9,7 +9,7 @@ export const battleAnthem = defineInnerWay({
   selectableTiers: [6, 5],
   buffParam: PARAM.battleAnthem,
   panelStats: {
-    affinityRate: 0.04,
+    affinityRate: 0.039,
     affinityDamageBoost: 0.052,
   },
   buffDefs: [battleAnthemChargedBonus],

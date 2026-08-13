@@ -14,7 +14,7 @@ export const swordQiAffinityEnhancement = defineClassBuff({
   triggeredBy: [],
   alwaysActive: true,
   duration: 9999,
-  summary: "affinityDamageBoost +18% while Qi Imbalance is active",
+  summary: "affinityDamageBoost up to +18% (at 1500 Max Phys) against targets with Qi <40% or in Qi Imbalance",
   effects: (ctx) => {
     if (ctx.event.kind !== "damage" || !matchesScope(ctx.event.tags, SCOPE)) return []
     if (!ctx.status.isActive(BUFF.qiImbalance)) return []

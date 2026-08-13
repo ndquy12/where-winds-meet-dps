@@ -9,8 +9,8 @@ export const mountainsMight = defineInnerWay({
   selectableTiers: [6, 5],
   buffParam: PARAM.mountainsMight,
   panelStats: {
-    "bellstrike.min": 10,
-    "bellstrike.max": 20,
+    "bellstrike.min": 12.7,
+    "bellstrike.max": 25.3,
     "bellstrike.penetration": 0.06,
   },
   buffDefs: [longWind],

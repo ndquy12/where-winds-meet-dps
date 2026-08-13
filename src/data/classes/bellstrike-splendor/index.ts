@@ -9,6 +9,7 @@ import { swordSlashBonus } from "../../skills/bellstrike-splendor/buffs/swordSla
 import { qiStruggleEnhancement } from "../../skills/bellstrike-splendor/buffs/qiStruggleEnhancement"
 import { rotationPoolFor } from "../../../definitions/rotations/registry"
 import { BELLSTRIKE_SPLENDOR_POOL } from "./retunementPool"
+import { BELLSTRIKE_SPLENDOR_GRADUATION_BUILD } from "./graduationBuild"
 
 export const bellstrikeSplendor = defineClass({
   id: CLASS_ID,
@@ -44,4 +45,5 @@ export const bellstrikeSplendor = defineClass({
   skillBehaviors: [],
   displayGates: [],
   poisonExtensions: [],
+  graduationBuild: BELLSTRIKE_SPLENDOR_GRADUATION_BUILD
 })
