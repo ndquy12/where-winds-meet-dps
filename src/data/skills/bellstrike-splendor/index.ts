@@ -1,0 +1,30 @@
+import type { Skill } from "../../../engine/skill"
+import { spearQ } from "./spearq"
+import { spearQPrepull } from "./spearq-prepull"
+import { spearQ0HitCancel } from "./spearq-0-hit-cancel"
+import { swordQ } from "./swordq"
+import { swordQ2nd } from "./swordq-2nd"
+import { swordSpecial } from "./swordspecial"
+import { swordSpecial2nd } from "./swordspecial-2nd"
+import { swordSpecialDeflect } from "./swordspecial-deflect"
+import { swordHeavyCharged } from "./swordheavycharged"
+import { swordHeavyChargedPrepull } from "./swordheavycharged-prepull"
+import { swordHeavyCharged2Hit } from "./swordheavycharged-2-hit"
+import { energySurge } from "./energysurge"
+
+export { CLASS_ID } from "./ids"
+
+export const SKILLS: Skill[] = [
+  spearQ,
+  spearQPrepull,
+  spearQ0HitCancel,
+  swordQ,
+  swordQ2nd,
+  swordSpecial,
+  swordSpecial2nd,
+  swordSpecialDeflect,
+  swordHeavyCharged,
+  swordHeavyChargedPrepull,
+  swordHeavyCharged2Hit,
+  energySurge,
+]
