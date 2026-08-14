@@ -70,6 +70,10 @@ export const CAST = {
   swordChargeStage13Hit: "cast:swordChargeStage13Hit",
   swordChargeStage14Hit: "cast:swordChargeStage14Hit",
   swordChargeStage15Hit: "cast:swordChargeStage15Hit",
+  swordHeavyCharged: "cast:swordHeavyCharged",
+  swordHeavyCharged2Hit: "cast:swordHeavyCharged2Hit",
+  swordHeavyChargedPrepull: "cast:swordHeavyChargedPrepull",
+  swordHeavyChargedStart: "cast:swordHeavyChargedStart",
   swordMartialQ: "cast:swordMartialQ",
   swordMartialQQ: "cast:swordMartialQQ",
   swordMartialQQ1HitCancel: "cast:swordMartialQQ1HitCancel",
@@ -77,8 +81,11 @@ export const CAST = {
   swordMartialQQQ: "cast:swordMartialQQQ",
   swordRChargeFollowUp: "cast:swordRChargeFollowUp",
   swordRChargeFollowUp1HitCancel: "cast:swordRChargeFollowUp1HitCancel",
+  swordSpecial: "cast:swordSpecial",
+  swordSpecial2nd: "cast:swordSpecial2nd",
   swordSpecial3Hit: "cast:swordSpecial3Hit",
   swordSpecial4Hit: "cast:swordSpecial4Hit",
+  swordSpecialDeflect: "cast:swordSpecialDeflect",
   toadCancel: "cast:toadCancel",
 } as const
 

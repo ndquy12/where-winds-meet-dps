@@ -1,0 +1,73 @@
+{
+  "v": 10,
+  "profile": {
+    "id": "pr-splendor-seed-1",
+    "name": "Main",
+    "inputs": {
+      "classId": "bellstrikeSplendor",
+      "breakthrough": 16,
+      "allDamageBoost": 0,
+      "mindMethods": [
+        {
+          "name": "Sword Horizon",
+          "stacks": "tier 6"
+        },
+        {
+          "name": "Wolfchaser's Art",
+          "stacks": "tier 6"
+        },
+        {
+          "name": "Insightful Strike",
+          "stacks": "tier 6"
+        },
+        {
+          "name": "Morale Chant",
+          "stacks": "tier 6"
+        }
+      ],
+      "food": true,
+      "tianGongElement": "fire",
+      "set": "Hawking",
+      "shareDebuff5HenZhi": false,
+      "shareEasyHurt": false,
+      "bowSet": "affinity",
+      "arsenal": "bellstrike",
+      "dummyMode": false,
+      "rotation": null,
+      "activeCustomRotation": null,
+      "inventory": [],
+      "equipped": {
+        "leftWeapon": null,
+        "rightWeapon": null,
+        "disc": null,
+        "pendant": null,
+        "helm": null,
+        "armor": null,
+        "greaves": null,
+        "bracer": null
+      },
+      "martialArtsTalents": [],
+      "oddities": {
+        "Qinghe": [],
+        "Kaifeng": [],
+        "Hexi": [],
+        "Kaifeng Palace": [],
+        "Hidden Mountain: Suixiang": []
+      },
+      "combatSettings": {
+        "qiBreak": {
+          "enabled": true,
+          "startSec": 29,
+          "durationSec": 10
+        },
+        "dragonsBreath": false,
+        "healerBuff": false,
+        "breakExtension": false,
+        "revelryScript": false,
+        "dragonHeadFullStacks": false,
+        "dragonHeadLowHpMaxBonus": false
+      },
+      "selectedBuiltinRotationId": "builtin-bellstrikeSplendor-reduced"
+    }
+  }
+}

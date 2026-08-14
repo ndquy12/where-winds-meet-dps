@@ -446,25 +446,25 @@ self.onmessage = (e: MessageEvent<WorkerRequest>) => {
   const req = e.data
   if (req.kind === "dpsDeltas") {
     const res = computeDpsDeltas(req)
-    ;(self as unknown as Worker).postMessage({ kind: "dpsDeltas", ...res })
+      ; (self as unknown as Worker).postMessage({ kind: "dpsDeltas", ...res })
   } else if (req.kind === "retunement") {
     const res = computeRetunement(req)
-    ;(self as unknown as Worker).postMessage({ kind: "retunement", ...res })
+      ; (self as unknown as Worker).postMessage({ kind: "retunement", ...res })
   } else if (req.kind === "reattunement") {
     const res = computeReattunement(req)
-    ;(self as unknown as Worker).postMessage({ kind: "reattunement", ...res })
+      ; (self as unknown as Worker).postMessage({ kind: "reattunement", ...res })
   } else if (req.kind === "wordMax") {
     const res = computeWordMax(req)
-    ;(self as unknown as Worker).postMessage({ kind: "wordMax", ...res })
+      ; (self as unknown as Worker).postMessage({ kind: "wordMax", ...res })
   } else if (req.kind === "ranking") {
     const res = computeRankingRequest(req)
-    ;(self as unknown as Worker).postMessage({ kind: "ranking", ...res })
+      ; (self as unknown as Worker).postMessage({ kind: "ranking", ...res })
   } else if (req.kind === "setTiles") {
     const res = computeSetTiles(req)
-    ;(self as unknown as Worker).postMessage({ kind: "setTiles", ...res })
+      ; (self as unknown as Worker).postMessage({ kind: "setTiles", ...res })
   } else {
     const res = computeGraduation(req)
-    ;(self as unknown as Worker).postMessage({ kind: "graduation", ...res })
+      ; (self as unknown as Worker).postMessage({ kind: "graduation", ...res })
   }
 }
 

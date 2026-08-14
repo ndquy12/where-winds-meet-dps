@@ -1,9 +1,9 @@
 [
   {
-    "id": "bellstrikeRainbow",
-    "cn": "Bellstrike Rainbow",
-    "en": "Bellstrike Rainbow",
-    "displayName": "Bellstrike Rainbow",
+    "id": "bellstrikeSplendor",
+    "cn": "Bellstrike Splendor",
+    "en": "Bellstrike Splendor",
+    "displayName": "Bellstrike Splendor",
     "primaryAttribute": "Bellstrike",
     "attributeMultiplier": 51.5,
     "permanentBuffs": [

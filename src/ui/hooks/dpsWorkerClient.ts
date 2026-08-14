@@ -24,7 +24,6 @@ interface KindState {
 const stateByKind = new Map<RequestKind, KindState>()
 const pool: Worker[] = []
 const workerByKind = new Map<RequestKind, Worker>()
-let lastAssignedReqId = 0
 
 function stateFor(kind: RequestKind): KindState {
   const existing = stateByKind.get(kind)
@@ -66,7 +65,23 @@ function setPending(state: KindState, isPending: boolean): void {
   for (const listener of state.pendingListeners) listener()
 }
 
+const responseCache = new Map<string, WorkerResponse>()
+const pendingCacheKeys = new Map<number, string>()
+
+function getCacheKey(request: WorkerRequest): string {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { reqId, ...rest } = request
+  return JSON.stringify(rest)
+}
+
 function deliver(response: WorkerResponse): void {
+  const cacheKey = pendingCacheKeys.get(response.reqId)
+  if (cacheKey) {
+    pendingCacheKeys.delete(response.reqId)
+    // Don't save the reqId in the cached response so it matches the requested state exactly
+    responseCache.set(cacheKey, response)
+  }
+
   const state = stateFor(response.kind)
   if (response.reqId === state.latestReqId) setPending(state, false)
   if (response.reqId <= state.lastDeliveredReqId) return
@@ -77,13 +92,25 @@ function deliver(response: WorkerResponse): void {
 function abandonRequests(state: KindState): void {
   if (state.debounceHandle !== null) clearTimeout(state.debounceHandle)
   state.debounceHandle = null
+  if (state.queued) pendingCacheKeys.delete(state.queued.reqId)
   state.queued = null
   state.lastDeliveredReqId = state.latestReqId
   setPending(state, false)
 }
 
-export function postToDpsWorker(unsent: UnsentRequest): void {
-  const request = { ...unsent, reqId: ++lastAssignedReqId } as WorkerRequest
+export function postToDpsWorker(request: WorkerRequest): void {
+  const cacheKey = getCacheKey(request)
+  const cached = responseCache.get(cacheKey)
+  if (cached) {
+    // Deliver immediately from cache
+    const state = stateFor(request.kind)
+    state.latestReqId = request.reqId
+    deliver({ ...cached, reqId: request.reqId })
+    return
+  }
+
+  pendingCacheKeys.set(request.reqId, cacheKey)
+
   const state = stateFor(request.kind)
   state.queued = request
   state.latestReqId = request.reqId

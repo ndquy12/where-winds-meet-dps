@@ -1,9 +1,12 @@
 {
-  "id": "bellstrikeRainbow-swordspecial-2nd",
-  "classId": "bellstrikeRainbow",
-  "name": "SwordSpecial[2nd]",
-  "abilityTag": "SwordSpecial[2nd]",
-  "tags": ["weapon:Sword", "attune:swordSpecial"],
+  "id": "bellstrikeSplendor-swordspecial",
+  "classId": "bellstrikeSplendor",
+  "name": "SwordSpecial",
+  "abilityTag": "SwordSpecial",
+  "tags": [
+    "weapon:Sword",
+    "attune:swordSpecial"
+  ],
   "skillType": "weapon",
   "weaponOrAttribute": "Sword",
   "attributeAttack": "Bellstrike",
@@ -13,8 +16,8 @@
       "frame": 0,
       "physMultiplier": 1.767,
       "attributeMultiplier": 2.6505,
-      "physFixed": 356,
-      "attributeFixed": 202,
+      "physFixed": 409,
+      "attributeFixed": 228,
       "extraCritDamage": 0,
       "triggers": []
     }
@@ -24,5 +27,5 @@
   "createdAt": "2026-07-19T00:00:00.000Z",
   "updatedAt": "2026-07-19T00:00:00.000Z",
   "universal": false,
-  "castTag": "cast:swordSpecial2nd"
+  "castTag": "cast:swordSpecial"
 }

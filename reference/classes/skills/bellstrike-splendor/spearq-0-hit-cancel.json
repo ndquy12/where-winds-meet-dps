@@ -1,9 +1,12 @@
 {
-  "id": "bellstrikeRainbow-spearq-0-hit-cancel",
-  "classId": "bellstrikeRainbow",
+  "id": "bellstrikeSplendor-spearq-0-hit-cancel",
+  "classId": "bellstrikeSplendor",
   "name": "SpearQ 0-Hit Cancel",
   "abilityTag": "SpearQ 0-Hit Cancel",
-  "tags": ["weapon:Spear", "attune:spearQ"],
+  "tags": [
+    "weapon:Spear",
+    "attune:spearQ"
+  ],
   "skillType": "weapon",
   "weaponOrAttribute": "Spear",
   "attributeAttack": "Bellstrike",

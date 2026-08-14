@@ -1,9 +1,14 @@
 {
-  "id": "bellstrikeRainbow-energysurge",
-  "classId": "bellstrikeRainbow",
+  "id": "bellstrikeSplendor-energysurge",
+  "classId": "bellstrikeSplendor",
   "name": "EnergySurge",
   "abilityTag": "EnergySurge",
-  "tags": ["prop:isCharged", "weapon:Sword", "attack:heavy", "attune:swordCharged"],
+  "tags": [
+    "prop:isCharged",
+    "weapon:Sword",
+    "attack:heavy",
+    "attune:swordCharged"
+  ],
   "skillType": "weapon",
   "weaponOrAttribute": "Sword",
   "attributeAttack": "Bellstrike",

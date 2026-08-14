@@ -1,9 +1,12 @@
 {
-  "id": "bellstrikeRainbow-swordspecial-deflect",
-  "classId": "bellstrikeRainbow",
+  "id": "bellstrikeSplendor-swordspecial-deflect",
+  "classId": "bellstrikeSplendor",
   "name": "SwordSpecial[Deflect]",
   "abilityTag": "SwordSpecial[Deflect]",
-  "tags": ["weapon:Sword", "attune:swordSpecial"],
+  "tags": [
+    "weapon:Sword",
+    "attune:swordSpecial"
+  ],
   "skillType": "weapon",
   "weaponOrAttribute": "Sword",
   "attributeAttack": "Bellstrike",

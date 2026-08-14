@@ -2786,5 +2786,57 @@
       }
     ],
     "defaultRotationId": "builtin-stonesplitStrength-tilla-dummy-rotation"
+  },
+  "bellstrikeSplendor": {
+    "rotations": [
+      {
+        "id": "builtin-bellstrikeSplendor-reduced",
+        "name": "Reduced (sourced skills only)",
+        "classId": "bellstrikeSplendor",
+        "steps": [
+          {
+            "id": "br-bellstrikeSplendor-reduced-0",
+            "skillId": "bellstrikeSplendor-spearq-prepull",
+            "hitCount": 1,
+            "prePull": true
+          },
+          {
+            "id": "br-bellstrikeSplendor-reduced-1",
+            "skillId": "bellstrikeSplendor-swordheavycharged-prepull",
+            "hitCount": 3,
+            "prePull": true
+          },
+          {
+            "id": "br-bellstrikeSplendor-reduced-2",
+            "skillId": "bellstrikeSplendor-swordq",
+            "hitCount": 1,
+            "prePull": false
+          },
+          {
+            "id": "br-bellstrikeSplendor-reduced-3",
+            "skillId": "bellstrikeSplendor-energysurge",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "br-bellstrikeSplendor-reduced-4",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "br-bellstrikeSplendor-reduced-5",
+            "skillId": "bellstrikeSplendor-spearq",
+            "hitCount": 1,
+            "prePull": false
+          }
+        ],
+        "permanentBuffIds": [],
+        "prePullHitsCount": false,
+        "createdAt": "2026-08-12T00:00:00.000Z",
+        "updatedAt": "2026-08-12T00:00:00.000Z"
+      }
+    ],
+    "defaultRotationId": "builtin-bellstrikeSplendor-reduced"
   }
 }

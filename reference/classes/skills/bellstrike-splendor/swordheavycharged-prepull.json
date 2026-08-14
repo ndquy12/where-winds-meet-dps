@@ -1,9 +1,14 @@
 {
-  "id": "bellstrikeRainbow-swordheavycharged-prepull",
-  "classId": "bellstrikeRainbow",
+  "id": "bellstrikeSplendor-swordheavycharged-prepull",
+  "classId": "bellstrikeSplendor",
   "name": "SwordHeavyCharged[Prepull]",
   "abilityTag": "SwordHeavyCharged[Prepull]",
-  "tags": ["prop:isCharged", "weapon:Sword", "attack:heavy", "attune:swordCharged"],
+  "tags": [
+    "prop:isCharged",
+    "weapon:Sword",
+    "attack:heavy",
+    "attune:swordCharged"
+  ],
   "skillType": "weapon",
   "weaponOrAttribute": "Sword",
   "attributeAttack": "Bellstrike",

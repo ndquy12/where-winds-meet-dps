@@ -1,9 +1,14 @@
 import { useMemo } from "react"
 import type { Inputs, MartialArtsTalent, ScalingSource, TalentStat } from "../../../../engine/types"
 import { alwaysActiveClassBuffs, type ClassBuffRow } from "../../../../engine/buffs/catalog"
+import { catalogBuffDefs } from "../../../../engine/buffs/data"
 import { useI18n } from "../../../../i18n/i18nContext"
 import { buildScalingSources } from "../../../../definitions/baseStats"
 import { withDerivedStats, equippedPiecesFor } from "../../../../engine/derivedInputs"
+import { innerWayDefinition, slotInnerWayId } from "../../../../definitions/innerWays/registry"
+import { tierFromStacks } from "../../../../definitions/innerWays/innerWayDef"
+import { STAT_DEF_BY_KEY, type StatKey } from "../../../../engine/statRegistry"
+import { SET_BY_ID } from "../../../../definitions/sets/registry"
 import styles from "./TalentsTab.module.scss"
 
 interface Props {
@@ -68,6 +73,7 @@ const SOURCE_LABEL: Record<ScalingSource, string> = {
   power: "Power",
   agility: "Agility",
   momentum: "Momentum",
+  affinityRate: "Affinity Rate",
   "phys.min": "Min Phys",
   "phys.max": "Max Phys",
   "phys.penetration": "Phys Penetration",
@@ -114,80 +120,164 @@ interface WeaponColumnConfig {
   cards: TalentCardConfig[]
 }
 
+const BELLSTRIKE_COLUMNS: WeaponColumnConfig[] = [
+  {
+    weapon: "Strategic Sword",
+    cards: [
+      {
+        name: "Affinity Rate UP",
+        lines: [{ kind: "talent", skill: "Affinity Rate UP" }],
+      },
+      {
+        name: "Bleed penetration Enhancement",
+        lines: [
+          {
+            kind: "mechanic",
+            id: "bellstrikeUmbraBleedPen",
+            note: "Scales with Max Phys (full at 1500)",
+          },
+        ],
+      },
+      {
+        name: "Bellstrike Attribute UP",
+        lines: [
+          {
+            kind: "talentFlatText",
+            skills: ["Sword Bellstrike Attack Min", "Sword Bellstrike Attack Max"],
+            text: "+98 Min / +196 Max Bellstrike Attack (always)",
+          },
+          { kind: "talent", skill: "Bellstrike Penetration Scale" },
+        ],
+      },
+      {
+        name: "Attr. Attack DMG UP",
+        lines: [
+          {
+            kind: "static",
+            text: "Bellstrike Attack deals 50% bonus damage.",
+            subNote:
+              "Already applied in the damage formula (elevated attribute multiplier) — not a stat this tab contributes.",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    weapon: "Nameless Spear",
+    cards: [
+      {
+        name: "Physical Attack UP",
+        lines: [{ kind: "talent", skill: "Physical Attack UP" }],
+      },
+      {
+        name: "Damage Over Time",
+        lines: [
+          {
+            kind: "mechanic",
+            id: "bellstrikeUmbraBleedingDamage",
+            note: "Affinity DMG 18% on 1500 Max Physical",
+          },
+        ],
+      },
+      {
+        name: "Bellstrike Attribute UP",
+        lines: [
+          {
+            kind: "talentFlatText",
+            skills: ["Spear Bellstrike Attack Min", "Spear Bellstrike Attack Max"],
+            text: "+98 Min / +196 Max Bellstrike Attack (always)",
+          },
+          { kind: "talent", skill: "Attribute Damage Scale", label: "Attribute Damage Boost" },
+        ],
+      },
+    ],
+  },
+]
+
+const BELLSTRIKE_SPLENDOR_COLUMNS: WeaponColumnConfig[] = [
+  {
+    weapon: "Nameless Sword",
+    cards: [
+      {
+        name: "Qi Struggle Enhancement",
+        lines: [{ kind: "mechanic", id: "qiStruggleEnhancement" }],
+      },
+      {
+        name: "Physical Attack UP",
+        lines: [{ kind: "talent", skill: "Physical Attack UP" }],
+      },
+      {
+        name: "Sword Qi Affinity Enhancement",
+        lines: [{ kind: "mechanic", id: "swordQiAffinityEnhancement" }],
+      },
+      {
+        name: "Bellstrike Attribute UP",
+        lines: [
+          {
+            kind: "talentFlatText",
+            skills: ["Min Bellstrike Attack", "Max Bellstrike Attack"],
+            text: "+98 Min / +196 Max Bellstrike Attack (always)",
+          },
+          { kind: "talent", skill: "Bellstrike Penetration Scale" },
+        ],
+      },
+      {
+        name: "Attr. Attack DMG UP",
+        lines: [
+          {
+            kind: "static",
+            text: "Bellstrike Attack deals 50% bonus damage.",
+            subNote:
+              "Already applied in the damage formula (elevated attribute multiplier) — not a stat this tab contributes.",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    weapon: "Nameless Spear",
+    cards: [
+      {
+        name: "Max Endurance UP",
+        lines: [{ kind: "talent", skill: "Max Endurance UP" }],
+      },
+      {
+        name: "Affinity Rate UP",
+        lines: [{ kind: "talent", skill: "Affinity Rate UP" }],
+      },
+      {
+        name: "Affinity DMG UP",
+        lines: [{ kind: "mechanic", id: "affinityDamageUpSpear" }],
+      },
+      {
+        name: "Bellstrike Attribute UP",
+        lines: [
+          {
+            kind: "talentFlatText",
+            skills: ["Min Bellstrike Attack", "Max Bellstrike Attack"],
+            text: "+98 Min / +196 Max Bellstrike Attack (always)",
+          },
+          { kind: "talent", skill: "Bellstrike Attribute UP" },
+        ],
+      },
+      {
+        name: "Attr. Attack DMG UP",
+        lines: [
+          {
+            kind: "static",
+            text: "Bellstrike Attack deals 50% bonus damage.",
+            subNote:
+              "Already applied in the damage formula (elevated attribute multiplier) — not a stat this tab contributes.",
+          },
+        ],
+      },
+    ],
+  },
+]
+
 const CLASS_TALENT_COLUMNS: Record<string, WeaponColumnConfig[]> = {
-  bellstrikeUmbra: [
-    {
-      weapon: "Strategic Sword",
-      cards: [
-        {
-          name: "Affinity Rate UP",
-          lines: [{ kind: "talent", skill: "Affinity Rate UP" }],
-        },
-        {
-          name: "Bleed penetration Enhancement",
-          lines: [
-            {
-              kind: "mechanic",
-              id: "bellstrikeUmbraBleedPen",
-              note: "Scales with Max Phys (full at 1500)",
-            },
-          ],
-        },
-        {
-          name: "Bellstrike Attribute UP",
-          lines: [
-            {
-              kind: "talentFlatText",
-              skills: ["Sword Bellstrike Attack Min", "Sword Bellstrike Attack Max"],
-              text: "+98 Min / +196 Max Bellstrike Attack (always)",
-            },
-            { kind: "talent", skill: "Bellstrike Penetration Scale" },
-          ],
-        },
-        {
-          name: "Attr. Attack DMG UP",
-          lines: [
-            {
-              kind: "static",
-              text: "Bellstrike Attack deals 50% bonus damage.",
-              subNote:
-                "Already applied in the damage formula (elevated attribute multiplier) — not a stat this tab contributes.",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      weapon: "Heavenquaker Spear",
-      cards: [
-        {
-          name: "Physical Attack UP",
-          lines: [{ kind: "talent", skill: "Physical Attack UP" }],
-        },
-        {
-          name: "Damage Over Time",
-          lines: [
-            {
-              kind: "mechanic",
-              id: "bellstrikeUmbraBleedingDamage",
-              note: "Affinity DMG 18% on 1500 Max Physical",
-            },
-          ],
-        },
-        {
-          name: "Bellstrike Attribute UP",
-          lines: [
-            {
-              kind: "talentFlatText",
-              skills: ["Spear Bellstrike Attack Min", "Spear Bellstrike Attack Max"],
-              text: "+98 Min / +196 Max Bellstrike Attack (always)",
-            },
-            { kind: "talent", skill: "Attribute Damage Scale", label: "Attribute Damage Boost" },
-          ],
-        },
-      ],
-    },
-  ],
+  bellstrikeUmbra: BELLSTRIKE_COLUMNS,
+  bellstrikeSplendor: BELLSTRIKE_SPLENDOR_COLUMNS,
 }
 
 export function TalentsTab({ inputs }: Props) {
@@ -208,6 +298,222 @@ export function TalentsTab({ inputs }: Props) {
     () => new Map(classBuffs.map((buff) => [buff.id, buff] as const)),
     [classBuffs],
   )
+
+  type InnerWayLine = { effect: string; subNote?: string }
+
+  const activeInnerWays = useMemo(() => {
+    const formatStat = (key: string, val: number): string => {
+      const statDef = STAT_DEF_BY_KEY[key as StatKey]
+      const label = statDef?.label ?? key
+      const formatted =
+        statDef?.unit === "flat" ? `${Math.round(val)}` : `${(val * 100).toFixed(1)}%`
+      return `${label} +${formatted}`
+    }
+
+    const formatEffect = (statKey: string, amount: number): string => {
+      const statDef = STAT_DEF_BY_KEY[statKey]
+      const label = statDef?.label ?? statKey
+      const sign = amount >= 0 ? "+" : ""
+      const formatted =
+        statDef?.unit === "flat"
+          ? `${sign}${Math.round(amount)}`
+          : `${sign}${(amount * 100).toFixed(1)}%`
+      return `${label} ${formatted}`
+    }
+
+    return inputs.mindMethods
+      .map((slot) => {
+        const id = slotInnerWayId(slot)
+        const def = id ? innerWayDefinition(id) : undefined
+        if (!def) return null
+
+        const tier = tierFromStacks(slot.stacks)
+        const lines: InnerWayLine[] = []
+
+        // Panel stats (always active, no tier gate)
+        if (def.panelStats) {
+          for (const [key, val] of Object.entries(def.panelStats)) {
+            if (!val) continue
+            lines.push({ effect: formatStat(key, val), subNote: "Always active" })
+          }
+        }
+
+        // Tier-gated panel stats
+        if (def.tiers) {
+          for (const [tierStr, tierDef] of Object.entries(def.tiers)) {
+            if (!tierDef.panelStats) continue
+            const reqTier = Number(tierStr)
+            const active = tier >= reqTier
+            for (const [key, val] of Object.entries(tierDef.panelStats)) {
+              if (!val) continue
+              lines.push({
+                effect: formatStat(key, val),
+                subNote: active ? `From tier ${reqTier}` : `Requires tier ${reqTier} (inactive)`,
+              })
+            }
+          }
+        }
+
+        // Mechanics
+        if (def.mechanics) {
+          for (const { mechanic } of def.mechanics) {
+            const row = mechanic.catalogRow
+            if (!row) continue
+            const parts = row.effects().map((e) => formatEffect(e.statKey, e.amount))
+            lines.push({
+              effect: parts.length > 0 ? parts.join(", ") : "(dynamic)",
+              subNote: `Mechanic: ${row.name}`,
+            })
+          }
+        }
+
+        // Buff defs & gate buffs
+        const allBuffDefs = [...(def.buffDefs ?? []), ...(def.gateBuffs ?? [])]
+        for (const buff of allBuffDefs) {
+          let effect: string
+          if ("summary" in buff && buff.summary) {
+            // BuffModule with a summary string (required when effects is a function)
+            effect = buff.summary
+          } else if (Array.isArray(buff.effects)) {
+            // Static effects array — BuffModule or InnerWayGateBuff
+            const parts = (buff.effects as { statKey?: string; amount?: number }[])
+              .filter((e) => e.statKey)
+              .map((e) => formatEffect(e.statKey ?? "", e.amount ?? 0))
+            effect = parts.join(", ") || "(dynamic)"
+          } else {
+            effect = "(dynamic)"
+          }
+          const requires = "requires" in buff ? buff.requires : undefined
+          const subNote = requires?.minTier
+            ? `${buff.name} · Requires tier ${requires.minTier}+`
+            : buff.name
+          lines.push({ effect, subNote })
+        }
+
+        // Scalars
+        if (!def.scalars?.minTier || tier >= def.scalars.minTier) {
+          const s = def.scalars
+          if (s?.allDamageBonus)
+            lines.push({ effect: `All Damage +${(s.allDamageBonus * 100).toFixed(1)}%` })
+          if (s?.generalDamageBoost)
+            lines.push({ effect: `General Damage +${(s.generalDamageBoost * 100).toFixed(1)}%` })
+          if (s?.chargeBonus)
+            lines.push({ effect: `Charge Bonus +${(s.chargeBonus * 100).toFixed(1)}%` })
+          if (s?.dotDamageBoost)
+            lines.push({ effect: `DoT Damage +${(s.dotDamageBoost * 100).toFixed(1)}%` })
+          if (s?.targetDefenseMultiplier !== undefined)
+            lines.push({ effect: `Target Defense x${s.targetDefenseMultiplier.toFixed(2)}` })
+        }
+
+        return { def, tier, lines }
+      })
+      .filter((x): x is NonNullable<typeof x> => x !== null)
+  }, [inputs.mindMethods])
+
+  const setBuff = useMemo(() => {
+    if (!inputs.set) return null
+    const def = SET_BY_ID[inputs.set]
+    if (!def) return null
+
+    const lines: { effect: string; subNote?: string }[] = []
+
+    // 2-piece panel bonus — panelBonus.stat is NOT a StatKey (uses different names)
+    if (def.panelBonus) {
+      const PANEL_STAT: Record<string, { label: string; unit: "fraction" | "flat" }> = {
+        affinityRate: { label: "Affinity Rate", unit: "fraction" },
+        critRate: { label: "Crit Rate", unit: "fraction" },
+        precisionRate: { label: "Precision Rate", unit: "fraction" },
+        maxPhys: { label: "Max Phys", unit: "flat" },
+        minPhys: { label: "Min Phys", unit: "flat" },
+      }
+      const mapping = PANEL_STAT[def.panelBonus.stat]
+      const label = mapping?.label ?? def.panelBonus.stat
+      const formatted =
+        mapping?.unit === "flat"
+          ? `+${Math.round(def.panelBonus.value)}`
+          : `+${(def.panelBonus.value * 100).toFixed(1)}%`
+      lines.push({ effect: `${label} ${formatted}`, subNote: "2-piece bonus" })
+    }
+
+    // 4-piece formula bonuses (filter out zeros — some sets have placeholder 0 values)
+    if (def.formulaBonus) {
+      const FORMULA_LABELS: Record<string, string> = {
+        physBoost: "Physical Damage Boost",
+        affinityDamage: "Affinity Damage",
+        critDamage: "Crit Damage",
+        directCrit: "Direct Crit Rate",
+        lowQiDirectAffinityRate: "Direct Affinity Rate (Low Qi)",
+        lowQiBambooDamage: "Bamboocut Damage (Low Qi)",
+        generalDamageBoost: "General Damage Boost",
+      }
+      for (const [key, val] of Object.entries(def.formulaBonus)) {
+        if (!val) continue
+        const label = FORMULA_LABELS[key] ?? key
+        lines.push({ effect: `${label} +${(val * 100).toFixed(1)}%`, subNote: "4-piece bonus" })
+      }
+    }
+
+    // 4-piece mechanics
+    if (def.mechanics) {
+      for (const { mechanic } of def.mechanics) {
+        const row = mechanic.catalogRow
+        if (row) {
+          const parts = row.effects().map((e) => {
+            const statDef = STAT_DEF_BY_KEY[e.statKey]
+            const label = statDef?.label ?? e.statKey
+            const sign = e.amount >= 0 ? "+" : ""
+            const formatted =
+              statDef?.unit === "flat"
+                ? `${sign}${Math.round(e.amount)}`
+                : `${sign}${(e.amount * 100).toFixed(1)}%`
+            return `${label} ${formatted}`
+          })
+          lines.push({
+            effect: parts.length > 0 ? parts.join(", ") : "(dynamic)",
+            subNote: `4-piece · ${row.name}`,
+          })
+        } else {
+          // Mechanic has no catalogRow (e.g. Hawking ramp) — show generic note
+          lines.push({
+            effect: "(dynamic — see rotation timeline)",
+            subNote: `4-piece · mechanic`,
+          })
+        }
+      }
+    }
+
+    // 4-piece set-gated buffs (like Jadeware and Shattered Ridge deflect)
+    if (def.siteKey) {
+      const setGatedBuffs = catalogBuffDefs(inputs.classId).filter(
+        (b) => b.requires?.set === def.siteKey,
+      )
+      for (const buff of setGatedBuffs) {
+        let effect: string
+        if ("summary" in buff && buff.summary) {
+          effect = buff.summary
+        } else if (Array.isArray(buff.effects)) {
+          const parts = (buff.effects as { statKey?: string; amount?: number }[])
+            .filter((e) => e.statKey)
+            .map((e) => {
+              const statDef = STAT_DEF_BY_KEY[e.statKey as StatKey]
+              const label = statDef?.label ?? e.statKey
+              const sign = (e.amount ?? 0) >= 0 ? "+" : ""
+              const formatted =
+                statDef?.unit === "flat"
+                  ? `${sign}${Math.round(e.amount ?? 0)}`
+                  : `${sign}${((e.amount ?? 0) * 100).toFixed(1)}%`
+              return `${label} ${formatted}`
+            })
+          effect = parts.join(", ") || "(dynamic)"
+        } else {
+          effect = "(dynamic)"
+        }
+        lines.push({ effect, subNote: `4-piece · ${buff.name}` })
+      }
+    }
+
+    return { def, lines }
+  }, [inputs.set, inputs.classId])
 
   const columns = CLASS_TALENT_COLUMNS[inputs.classId]
 
@@ -315,10 +621,38 @@ export function TalentsTab({ inputs }: Props) {
   return (
     <div className="panel">
       <div>
-        <div className="toolbar">
-          <span className="toolbar-label">{t("Stat Buffs")}</span>
-          <span className={styles.classBuffsNote}>{t("Always on (class-tied)")}</span>
-        </div>
+        {setBuff && (
+          <div
+            className={styles.classBuffs}
+            style={{ marginTop: 0, borderTop: "none", paddingTop: 0 }}
+          >
+            <div className="toolbar">
+              <span className="toolbar-label">{t("Set Buff")}</span>
+              <span className={styles.classBuffsNote}>{t(setBuff.def.name)}</span>
+            </div>
+            <div className={styles.classBuffsList}>
+              <div className={styles.classBuffRow}>
+                <div className={styles.classBuffHead}>
+                  <span className={styles.classBuffName}>{t(setBuff.def.name)}</span>
+                </div>
+                {setBuff.lines.map((line, i) => (
+                  <div key={i} className={styles.classBuffLine}>
+                    <div className={styles.classBuffHead}>
+                      <span className={styles.classBuffEffect}>{line.effect}</span>
+                    </div>
+                    {line.subNote && <div className={styles.classBuffAffects}>{line.subNote}</div>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className={setBuff ? styles.classBuffs : undefined}>
+          <div className="toolbar">
+            <span className="toolbar-label">{t("Stat Buffs")}</span>
+            <span className={styles.classBuffsNote}>{t("Always on (class-tied)")}</span>
+          </div>
 
         {columns ? (
           <div
@@ -358,8 +692,11 @@ export function TalentsTab({ inputs }: Props) {
                 })}
               </div>
             )}
+          </>
+        )}
+        </div>
 
-            {classBuffs.length > 0 && (
+        {classBuffs.length > 0 && (
               <div className={styles.classBuffs}>
                 <div className="toolbar">
                   <span className="toolbar-label">{t("Class Buffs")}</span>
@@ -380,7 +717,39 @@ export function TalentsTab({ inputs }: Props) {
                 </div>
               </div>
             )}
-          </>
+
+        {activeInnerWays.length > 0 && (
+          <div className={styles.classBuffs}>
+            <div className="toolbar">
+              <span className="toolbar-label">{t("Inner Ways Buffs")}</span>
+              <span className={styles.classBuffsNote}>{t("Always on (slotted)")}</span>
+            </div>
+            <div
+              className={styles.classBuffsColumns}
+              style={{ gridTemplateColumns: "repeat(2, minmax(0, 1fr))" }}
+            >
+              {activeInnerWays.map(({ def, tier, lines }) => (
+                <div key={def.id} className={styles.classBuffRow}>
+                  <div className={styles.classBuffHead}>
+                    <span className={styles.classBuffName}>{t(def.name)}</span>
+                    <span className={styles.classBuffCurrent}>
+                      {t("Tier")} {tier}
+                    </span>
+                  </div>
+                  {lines.map((line, i) => (
+                    <div key={i} className={styles.classBuffLine}>
+                      <div className={styles.classBuffHead}>
+                        <span className={styles.classBuffEffect}>{line.effect}</span>
+                      </div>
+                      {line.subNote && (
+                        <div className={styles.classBuffAffects}>{line.subNote}</div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
         )}
       </div>
     </div>

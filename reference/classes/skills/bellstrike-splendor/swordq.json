@@ -1,9 +1,12 @@
 {
-  "id": "bellstrikeRainbow-swordq-2nd",
-  "classId": "bellstrikeRainbow",
-  "name": "SwordQ[2nd]",
-  "abilityTag": "SwordQ[2nd]",
-  "tags": ["weapon:Sword", "attune:swordQ"],
+  "id": "bellstrikeSplendor-swordq",
+  "classId": "bellstrikeSplendor",
+  "name": "SwordQ",
+  "abilityTag": "SwordQ",
+  "tags": [
+    "weapon:Sword",
+    "attune:swordQ"
+  ],
   "skillType": "weapon",
   "weaponOrAttribute": "Sword",
   "attributeAttack": "Bellstrike",
@@ -24,5 +27,5 @@
   "createdAt": "2026-07-19T00:00:00.000Z",
   "updatedAt": "2026-07-19T00:00:00.000Z",
   "universal": false,
-  "castTag": "cast:swordQ2nd"
+  "castTag": "cast:swordQ"
 }

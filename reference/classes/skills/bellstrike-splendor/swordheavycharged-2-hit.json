@@ -1,9 +1,14 @@
 {
-  "id": "bellstrikeRainbow-swordheavycharged-2-hit",
-  "classId": "bellstrikeRainbow",
+  "id": "bellstrikeSplendor-swordheavycharged-2-hit",
+  "classId": "bellstrikeSplendor",
   "name": "SwordHeavyCharged 2 Hit",
   "abilityTag": "SwordHeavyCharged 2 Hit",
-  "tags": ["prop:isCharged", "weapon:Sword", "attack:heavy", "attune:swordCharged"],
+  "tags": [
+    "prop:isCharged",
+    "weapon:Sword",
+    "attack:heavy",
+    "attune:swordCharged"
+  ],
   "skillType": "weapon",
   "weaponOrAttribute": "Sword",
   "attributeAttack": "Bellstrike",

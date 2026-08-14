@@ -64,6 +64,7 @@ export const AFFIX_ID_TO_STAT_LINE: Readonly<Record<string, string>> = {
   "279903": "attunement:snowpartingVariedCombo",
   "279904": "attunement:phalanxbaneQ",
   "279905": "attunement:phalanxChargeDamage",
+  "280002": "attunement:swordCharged",
   "280101": "attunement:swordQ",
   "280102": "attunement:swordSpecial",
   "280103": "attunement:bleedingDamage",
