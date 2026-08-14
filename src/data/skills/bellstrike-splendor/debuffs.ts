@@ -77,31 +77,6 @@ const fluteRipple = defineDebuff({
   updatedAt: "2026-07-19T00:00:00.000Z",
 })
 
-const bleedTick = defineDebuff({
-  id: DEBUFF.bleedTick,
-  classId: CLASS_ID,
-  name: "Bleed Tick",
-  activation: "triggered",
-  durationFrames: 601,
-  effects: [],
-  dot: {
-    tickIntervalFrames: 60,
-    physMultiplier: 0.07,
-    physFixed: 0,
-    attributeMultiplier: 0.105,
-    attributeFixed: 0,
-    attributeAttack: "Bellstrike",
-    skillType: "sustain",
-    weaponOrAttribute: "Sword",
-    count: 1,
-    perStackShapes: null,
-  },
-  maxStacks: 5,
-  stackScaling: "perStack",
-  createdAt: "2026-07-19T00:00:00.000Z",
-  updatedAt: "2026-07-19T00:00:00.000Z",
-})
-
 const bitterSeasonTick = defineDebuff({
   id: DEBUFF.bitterSeasonTick,
   classId: CLASS_ID,
@@ -128,4 +103,4 @@ const bitterSeasonTick = defineDebuff({
   updatedAt: "2026-08-06T00:00:00.000Z",
 })
 
-export const DEBUFFS: Debuff[] = [toadPoison, combustion, fluteRipple, bleedTick, bitterSeasonTick]
+export const DEBUFFS: Debuff[] = [toadPoison, combustion, fluteRipple, bitterSeasonTick]

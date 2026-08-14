@@ -11,7 +11,6 @@ export const qiImbalance = defineClassBuff({
   buffAppliesOnCastEnd: true,
   summary: "allDamageBoost +8%, attributeDamageBoost +8% during the qi break window",
   effects: (ctx) => {
-    if (ctx.event.kind !== "damage" || ctx.phase !== "exhausted") return []
-    return [stat("allDamageBoost", 0.08), stat("attributeDamageBoost", 0.08)]
+    return ctx.self.reachesEvent ? [stat("allDamageBoost", 0.08), stat("attributeDamageBoost", 0.08)] : []
   },
 })
