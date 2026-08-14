@@ -26,7 +26,7 @@ export const bellstrikeSplendor = defineClass({
     "moraleChant",
     "bitterSeason",
   ],
-  dingYinTags: ["Sword Charge Boost"],
+  classSpecificAttunements: ["swordCharged"],
   weapons: ["Sword", "Spear"],
   critBoostWeaponTypes: [],
   skills: withUniversalSkills(CLASS_ID, "Bellstrike", SKILLS),
