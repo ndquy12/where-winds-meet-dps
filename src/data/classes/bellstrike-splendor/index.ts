@@ -10,6 +10,8 @@ import { qiStruggleEnhancement } from "../../skills/bellstrike-splendor/buffs/qi
 import { rotationPoolFor } from "../../../definitions/rotations/registry"
 import { BELLSTRIKE_SPLENDOR_POOL } from "./retunementPool"
 import { BELLSTRIKE_SPLENDOR_GRADUATION_BUILD } from "./graduationBuild"
+import { swordHeavyChargedBehavior } from "./behaviors"
+import { SKILL } from "../../skills/bellstrike-splendor/ids"
 
 export const bellstrikeSplendor = defineClass({
   id: CLASS_ID,
@@ -42,7 +44,11 @@ export const bellstrikeSplendor = defineClass({
   ],
   gateBuffs: [],
   mechanics: [],
-  skillBehaviors: [],
+  skillBehaviors: [
+    { skillId: SKILL.swordHeavyCharged, factory: swordHeavyChargedBehavior },
+    { skillId: SKILL.swordHeavyChargedStart, factory: swordHeavyChargedBehavior },
+    { skillId: SKILL.swordHeavyCharged2Hit, factory: swordHeavyChargedBehavior },
+  ],
   displayGates: [],
   poisonExtensions: [],
   graduationBuild: BELLSTRIKE_SPLENDOR_GRADUATION_BUILD

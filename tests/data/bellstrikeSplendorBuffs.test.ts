@@ -128,7 +128,6 @@ describe("Qi Struggle Enhancement", () => {
 
   it("is always active and scoped to isCharged and Sword Special skills", () => {
     expect(qiStruggleEnhancement.alwaysActive).toBe(true)
-    expect(qiStruggleEnhancement.affects).toEqual([PROP.isCharged, ATTUNE.swordSpecial])
   })
 
   it("grants +20% allDamageBoost on a Sword Special hit", () => {

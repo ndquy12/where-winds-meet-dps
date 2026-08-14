@@ -6,7 +6,7 @@ import type { ArtBonusField, Effect } from "./effect"
 // the exhaustiveness this buys is fake.
 export interface EffectSink {
   stat(statKey: StatKey, amount: number): void
-  forceOutcome(outcome: "crit" | "affinity"): void
+  forceOutcome(outcome: "precision" | "crit" | "affinity"): void
   applyBuff(id: string, stacks: number | undefined, durationSec: number | undefined): void
   consumeStacks(id: string, count: number): void
   artBonus(field: ArtBonusField, amount: number): void

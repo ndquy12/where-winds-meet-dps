@@ -9,6 +9,7 @@ import { stat } from "../../../../engine/effects/effect"
 export const affinityDamageUpNameless = defineClassBuff({
   id: BUFF.affinityDamageUpNameless,
   name: "Affinity DMG UP",
+  affectsAll: true,
   alwaysActive: true,
   duration: 9999,
   summary: "affinityDamageBoost +18% while Long Wind is active",

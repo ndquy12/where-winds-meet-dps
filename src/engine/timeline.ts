@@ -375,6 +375,7 @@ export function simulateTimeline(inputs: Inputs): Result {
   interface ResolveOverride {
     extraEffects?: BuffStatEffect[]
     forceGuaranteedAffinity?: boolean
+    forceGuaranteedPrecision?: boolean
   }
   const stateMemo = new Map<string, Resolved>()
   function resolveState(
@@ -544,12 +545,15 @@ export function simulateTimeline(inputs: Inputs): Result {
     const hitInput = hitInputAt(skill, hit, frame)
     const extraEffects: BuffStatEffect[] = []
     let forceGuaranteedAffinity = false
+    let forceGuaranteedPrecision = false
+    
     // `onHit`/`claimStatEffects` run BEFORE the formula context is built, so
     // only the effect kinds that can change that context are live here.
     const hitSink: EffectSink = {
       stat: (statKey, amount) => extraEffects.push({ statKey, amount }),
       forceOutcome: (outcome) => {
         if (outcome === "affinity") forceGuaranteedAffinity = true
+        if (outcome === "precision") forceGuaranteedPrecision = true
       },
       setStatus: (id, stacks, permanent, durationFrames) => {
         const status = statusById.get(id)
@@ -573,8 +577,8 @@ export function simulateTimeline(inputs: Inputs): Result {
     const qiPhase = buffEngine?.qiPhase(frame / FPS) ?? "normal"
     for (const effect of behavior.claimStatEffects(hitInput, qiPhase)) applyEffect(hitSink, effect)
     const resolveOverride: ResolveOverride | undefined =
-      extraEffects.length > 0 || forceGuaranteedAffinity
-        ? { extraEffects, forceGuaranteedAffinity }
+      extraEffects.length > 0 || forceGuaranteedAffinity || forceGuaranteedPrecision
+        ? { extraEffects, forceGuaranteedAffinity, forceGuaranteedPrecision }
         : undefined
     const st = resolveState(frame, skill, resolveOverride, castFrame)
     const hitContext: HitContext = {
@@ -585,6 +589,7 @@ export function simulateTimeline(inputs: Inputs): Result {
     }
     const art = behavior.buildArt(hitInput, hitContext)
     if (st.forceCrit) art.guaranteedCrit = 1
+    if (forceGuaranteedPrecision) art.guaranteedPrecision = 1
     // `patchArt` runs AFTER the formula context is built and may read it.
     const artSink: EffectSink = {
       stat: () => { },

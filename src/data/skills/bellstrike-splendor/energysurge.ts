@@ -35,7 +35,7 @@ export const energySurge = defineSkill({
   ],
   castFrames: 51,
   castTag: CAST.energySurge,
-  triggersBuffs: [BUFF.swordSlashBonus],
+  triggersBuffs: [BUFF.qiImbalance, BUFF.swordSlashBonus],
   receives: [BUFF.battleAnthemChargedBonus, BUFF.swordMorphChargedBonus, BUFF.qiStruggleEnhancement, BUFF.swordQiAffinityEnhancement, BUFF.affinityDamageUpNameless, BUFF.swordSlashBonus],
   triggerable: true,
   createdAt: "2026-08-12T00:00:00.000Z",
