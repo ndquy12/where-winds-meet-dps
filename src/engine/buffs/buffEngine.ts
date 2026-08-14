@@ -461,14 +461,16 @@ export class BuffEngine {
       !this.isBuffActive(module.requiresActiveBuffOnTrigger, time)
     )
       return
+
+    const castDelay = module.buffAppliesOnCastEnd || props.buffAppliesOnCastEnd
+      ? (props.castTime ?? 1)
+      : 0
     if (module.cooldown) {
       const last = this.activeBuffs.get(module.id)
-      if (last && time - last.appliedAt < module.cooldown) return
+      if (last && time - (last.appliedAt - castDelay) < module.cooldown) return
     }
-    const applyTime =
-      module.buffAppliesOnCastEnd || props.buffAppliesOnCastEnd
-        ? time + (props.castTime ?? 1)
-        : time
+    const applyTime = time + castDelay
+
 
     if (!this.canGrantTrigger(module, applyTime)) return
 
