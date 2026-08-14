@@ -12,14 +12,14 @@ export const swordHeavyCharged2Hit = defineSkill({
   attributeAttack: "Bellstrike",
   hits: [
     hit(0, {
-      frame: 0,
+      frame: 89,
       physMultiplier: 1.3066,
       attributeMultiplier: 1.9598,
       physFixed: 361,
       attributeFixed: 197,
     }),
     hit(1, {
-      frame: 58,
+      frame: 117,
       physMultiplier: 1.5679,
       attributeMultiplier: 2.3518,
       physFixed: 433,

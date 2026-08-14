@@ -87,6 +87,7 @@ export const CAST = {
   swordHeavyCharged: "cast:swordHeavyCharged",
   swordHeavyCharged2Hit: "cast:swordHeavyCharged2Hit",
   swordHeavyChargedPrepull: "cast:swordHeavyChargedPrepull",
+  swordHeavyChargedStart: "cast:swordHeavyChargedStart",
   swordMartialQ: "cast:swordMartialQ",
   swordMartialQQ: "cast:swordMartialQQ",
   swordMartialQQ1HitCancel: "cast:swordMartialQQ1HitCancel",

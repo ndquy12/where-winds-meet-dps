@@ -9,6 +9,7 @@ export const SKILL = {
   swordSpecialDeflect: "bellstrikeSplendor-swordspecial-deflect",
   swordHeavyCharged: "bellstrikeSplendor-swordheavycharged",
   swordHeavyChargedPrepull: "bellstrikeSplendor-swordheavycharged-prepull",
+  swordHeavyChargedStart: "bellstrikeSplendor-swordheavycharged-start",
   swordHeavyCharged2Hit: "bellstrikeSplendor-swordheavycharged-2-hit",
   spearQ: "bellstrikeSplendor-spearq",
   spearQPrepull: "bellstrikeSplendor-spearq-prepull",

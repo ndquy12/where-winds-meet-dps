@@ -11,6 +11,7 @@ import { swordHeavyCharged } from "./swordheavycharged"
 import { swordHeavyChargedPrepull } from "./swordheavycharged-prepull"
 import { swordHeavyCharged2Hit } from "./swordheavycharged-2-hit"
 import { energySurge } from "./energysurge"
+import { swordHeavyChargedStart } from "./swordheavycharged-start"
 
 export { CLASS_ID } from "./ids"
 
@@ -25,6 +26,7 @@ export const SKILLS: Skill[] = [
   swordSpecialDeflect,
   swordHeavyCharged,
   swordHeavyChargedPrepull,
+  swordHeavyChargedStart,
   swordHeavyCharged2Hit,
   energySurge,
 ]

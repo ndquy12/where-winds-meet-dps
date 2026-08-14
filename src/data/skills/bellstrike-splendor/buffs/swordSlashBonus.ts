@@ -9,7 +9,7 @@ export const swordSlashBonus = defineClassBuff({
   triggeredBy: [
     CAST.swordHeavyCharged,
     CAST.swordHeavyCharged2Hit,
-    CAST.swordHeavyChargedPrepull,
+    CAST.swordHeavyChargedStart,
     CAST.energySurge,
     CAST.swordSpecial,
     CAST.swordSpecial2nd,

@@ -441,15 +441,15 @@ export class BuffEngine {
           !this.isBuffActive(module.requiresActiveBuffOnTrigger, time)
         )
           continue
+        const castTime = module.buffAppliesOnCastEnd || props.buffAppliesOnCastEnd ? (props.castTime ?? 1) : 0
         if (module.cooldown) {
           const last = this.activeBuffs.get(module.id)
-          if (last && time - last.appliedAt < module.cooldown) continue
+          if (module.name === "Long Wind") {
+            console.log("🚀 ~ BuffEngine ~ processSkillCast ~ applyTime:", module, time, last?.appliedAt, props.castTime)
+          }
+          if (last && time - (last.appliedAt - castTime) < module.cooldown) continue
         }
-        const applyTime =
-          module.buffAppliesOnCastEnd || props.buffAppliesOnCastEnd
-            ? time + (props.castTime ?? 1)
-            : time
-
+        const applyTime = time + castTime
         if (!this.canGrantTrigger(module, applyTime)) continue
 
         if (module.stacksPerHit && (props.hitCount ?? 1) > 1) {

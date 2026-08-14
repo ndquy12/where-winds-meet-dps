@@ -36,6 +36,7 @@ export const jadeware = defineBuff({
   ],
   duration: 10,
   cooldown: 12,
+  buffAppliesOnCastEnd: true,
   // The pre-conversion `BuffDef` rendered its own key names and rounding
   // (`directAffinity 0.075` → "+8%"), not the `StatKey`-derived generic form —
   // pin the Skill Editor text to that exact string rather than letting it

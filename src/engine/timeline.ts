@@ -600,13 +600,7 @@ export function simulateTimeline(inputs: Inputs): Result {
     for (const effect of behavior.patchArt(hitInput, hitContext)) applyEffect(artSink, effect)
     if (st.damageFactor !== 1) art.correction = (art.correction ?? 1) * st.damageFactor
     if (st.conditionalFinalCrit) art.conditionalFinalCrit = st.conditionalFinalCrit
-    const counters = {
-      qiExhausted: qiPhase === "exhausted" ? 1 : 0,
-      yiShuiLayer: stacksAt("yiShui", frame),
-      bengJieLayer: stacksAt("bengJie", frame),
-      lowQi: qiPhase === "below30" || qiPhase === "exhausted" ? 1 : 0,
-    }
-    const { expectedDamage } = computeSkillDamage(art, st.ctx, 1, counters)
+    const { expectedDamage } = computeSkillDamage(art, st.ctx, 1)
     const hitInWindow = inWindow(frame)
     if (hitInWindow) {
       totalDamage += expectedDamage
@@ -817,21 +811,9 @@ export function simulateTimeline(inputs: Inputs): Result {
       },
       damageAt: (frame, shape, scale) => {
         const st = resolveState(frame, dotSkill)
-        const qiPhase = buffEngine?.qiPhase(frame / FPS) ?? "normal"
-        const counters = {
-          qiExhausted: qiPhase === "exhausted" ? 1 : 0,
-          yiShuiLayer: stacksAt("yiShui", frame),
-          bengJieLayer: stacksAt("bengJie", frame),
-          lowQi: qiPhase === "low" || qiPhase === "exhausted" ? 1 : 0,
-        }
         return (
-          dotTickDamage(
-            debuffForTick,
-            st.ctx,
-            (a, c, ct) => computeSkillDamage(a, c, ct, counters),
-            st.forceCrit,
-            shape
-          ) * (scale ?? 1)
+          dotTickDamage(debuffForTick, st.ctx, computeSkillDamage, st.forceCrit, shape) *
+          (scale ?? 1)
         )
       },
     })) {
@@ -854,14 +836,7 @@ export function simulateTimeline(inputs: Inputs): Result {
       const st = resolveState(event.frame, event.skill)
       const art = { ...event.art } as Parameters<typeof computeSkillDamage>[0]
       if (st.forceCrit) art.guaranteedCrit = 1
-      const qiPhase = buffEngine?.qiPhase(event.frame / FPS) ?? "normal"
-      const counters = {
-        qiExhausted: qiPhase === "exhausted" ? 1 : 0,
-        yiShuiLayer: stacksAt("yiShui", event.frame),
-        bengJieLayer: stacksAt("bengJie", event.frame),
-        lowQi: qiPhase === "low" || qiPhase === "exhausted" ? 1 : 0,
-      }
-      const { expectedDamage } = computeSkillDamage(art, st.ctx, 1, counters)
+      const { expectedDamage } = computeSkillDamage(art, st.ctx, 1)
       totalDamage += expectedDamage
       add(
         event.name,

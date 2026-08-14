@@ -9,6 +9,7 @@ export const longWind = defineClassBuff({
   requires: { param: PARAM.mountainsMight },
   triggeredBy: [CAST.spearQ, CAST.spearQ0HitCancel, CAST.spearQPrepull],
   duration: 10,
+  cooldown: 12,
   buffAppliesOnCastEnd: true,
   effects: [stat("directAffinityRate", 0.03)],
 })
