@@ -1,7 +1,7 @@
 import { defineSkill, hit } from "../../../definitions/skills/skillDef"
 import { CLASS_ID, SKILL } from "./ids"
 import { CAST, WEAPON, ATTUNE, ATTACK, PROP } from "../ids"
-
+import { BUFF } from "../buffs/ids"
 export const energySurge = defineSkill({
   id: SKILL.energySurge,
   classId: CLASS_ID,
@@ -35,6 +35,8 @@ export const energySurge = defineSkill({
   ],
   castFrames: 51,
   castTag: CAST.energySurge,
+  triggersBuffs: [BUFF.swordSlashBonus],
+  receives: [BUFF.battleAnthemChargedBonus, BUFF.swordMorphChargedBonus, BUFF.qiStruggleEnhancement, BUFF.swordQiAffinityEnhancement],
   triggerable: true,
   createdAt: "2026-08-12T00:00:00.000Z",
   updatedAt: "2026-08-12T00:00:00.000Z",

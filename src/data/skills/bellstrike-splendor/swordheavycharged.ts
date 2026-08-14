@@ -1,7 +1,7 @@
 import { defineSkill, hit } from "../../../definitions/skills/skillDef"
 import { CLASS_ID, SKILL } from "./ids"
 import { CAST, WEAPON, ATTUNE } from "../ids"
-
+import { BUFF } from "../buffs/ids"
 export const swordHeavyCharged = defineSkill({
   id: SKILL.swordHeavyCharged,
   classId: CLASS_ID,
@@ -13,6 +13,8 @@ export const swordHeavyCharged = defineSkill({
   attributeAttack: "Bellstrike",
   castTag: CAST.swordHeavyCharged,
   castFrames: 140,
+  triggersBuffs: [BUFF.swordSlashBonus],
+  receives: [BUFF.battleAnthemChargedBonus, BUFF.swordMorphChargedBonus, BUFF.qiStruggleEnhancement, BUFF.swordQiAffinityEnhancement],
   triggerable: true,
   hits: [
     hit(0, {

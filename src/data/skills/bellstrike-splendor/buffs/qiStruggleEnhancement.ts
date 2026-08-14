@@ -6,7 +6,6 @@ import { stat } from "../../../../engine/effects/effect"
 export const qiStruggleEnhancement = defineClassBuff({
   id: BUFF.qiStruggleEnhancement,
   name: "Qi Struggle Enhancement",
-  triggeredBy: [],
   alwaysActive: true,
   duration: 9999,
   summary: "allDamageBoost +20% (Sword Special/Sword Charge)",

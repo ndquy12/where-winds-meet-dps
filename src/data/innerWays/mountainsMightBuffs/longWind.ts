@@ -1,13 +1,12 @@
 import { defineClassBuff } from "../../../definitions/skills/buffDef"
 import { BUFF, PARAM } from "../../skills/buffs/ids"
-import { CAST } from "../../skills/ids"
+
 import { stat } from "../../../engine/effects/effect"
 
 export const longWind = defineClassBuff({
   id: BUFF.mountainsMight,
   name: "Long Wind",
   requires: { param: PARAM.mountainsMight },
-  triggeredBy: [CAST.spearQ, CAST.spearQ0HitCancel, CAST.spearQPrepull],
   duration: 10,
   cooldown: 12,
   buffAppliesOnCastEnd: true,
