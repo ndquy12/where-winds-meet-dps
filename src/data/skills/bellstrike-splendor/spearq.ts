@@ -14,7 +14,7 @@ export const spearQ = defineSkill({
   castFrames: 42,
   castTag: CAST.spearQ,
   triggersBuffs: [BUFF.qiImbalance, BUFF.mountainsMight, BUFF.jadeware],
-  receives: [BUFF.affinityDamageUpSpear],
+  receives: [BUFF.affinityDamageUpNameless],
   triggerable: true,
   createdAt: "2026-08-12T00:00:00.000Z",
   updatedAt: "2026-08-12T00:00:00.000Z",

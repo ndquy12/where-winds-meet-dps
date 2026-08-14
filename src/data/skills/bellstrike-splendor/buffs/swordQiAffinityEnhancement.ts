@@ -9,6 +9,6 @@ export const swordQiAffinityEnhancement = defineClassBuff({
   duration: 9999,
   summary: "affinityDamageBoost up to +18% (at 1500 Max Phys) against targets with Qi <40% or in Qi Imbalance",
   effects: (ctx) => {
-    return ctx.self.reachesEvent ? [stat("affinityDamageBoost", 0.18)] : []
+    return ctx.self.reachesEvent && ctx.phase !== "normal" ? [stat("affinityDamageBoost", 0.18)] : []
   },
 })

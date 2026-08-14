@@ -3,7 +3,7 @@
 // `activeAfterBuffEnds.buffId` reference becomes a build error instead of a
 // silently-never-firing buff.
 export const BUFF = {
-  affinityDamageUpSpear: "affinityDamageUpSpear",
+  affinityDamageUpNameless: "affinityDamageUpNameless",
   battleAnthemChargedBonus: "battleAnthemChargedBonus",
   battleAnthemEnduranceConsume: "battleAnthemEnduranceConsume",
   bellstrikeUmbraBleedPen: "bellstrikeUmbraBleedPen",

@@ -4,7 +4,7 @@ import { withUniversalSkills } from "../../../definitions/skills/universalSkills
 import { DEBUFFS } from "../../skills/bellstrike-splendor/debuffs"
 import { qiImbalance } from "../../skills/bellstrike-splendor/buffs/qiImbalance"
 import { swordQiAffinityEnhancement } from "../../skills/bellstrike-splendor/buffs/swordQiAffinityEnhancement"
-import { affinityDamageUpSpear } from "../../skills/bellstrike-splendor/buffs/affinityDamageUpSpear"
+import { affinityDamageUpNameless } from "../../skills/bellstrike-splendor/buffs/affinityDamageUpNameless"
 import { swordSlashBonus } from "../../skills/bellstrike-splendor/buffs/swordSlashBonus"
 import { qiStruggleEnhancement } from "../../skills/bellstrike-splendor/buffs/qiStruggleEnhancement"
 import { rotationPoolFor } from "../../../definitions/rotations/registry"
@@ -36,7 +36,7 @@ export const bellstrikeSplendor = defineClass({
   classBuffDefs: [
     qiImbalance,
     swordQiAffinityEnhancement,
-    affinityDamageUpSpear,
+    affinityDamageUpNameless,
     swordSlashBonus,
     qiStruggleEnhancement,
   ],

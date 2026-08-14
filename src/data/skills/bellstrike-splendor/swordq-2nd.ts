@@ -14,6 +14,7 @@ export const swordQ2nd = defineSkill({
   castFrames: 26,
   castTag: CAST.swordQ2nd,
   triggersBuffs: [BUFF.jadeware],
+  receives: [BUFF.affinityDamageUpNameless],
   triggerable: true,
   createdAt: "2026-08-12T00:00:00.000Z",
   updatedAt: "2026-08-12T00:00:00.000Z",

@@ -247,7 +247,7 @@ const BELLSTRIKE_SPLENDOR_COLUMNS: WeaponColumnConfig[] = [
       },
       {
         name: "Affinity DMG UP",
-        lines: [{ kind: "mechanic", id: "affinityDamageUpSpear" }],
+        lines: [{ kind: "mechanic", id: "affinityDamageUpNameless" }],
       },
       {
         name: "Bellstrike Attribute UP",

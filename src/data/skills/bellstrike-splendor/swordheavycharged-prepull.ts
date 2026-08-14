@@ -13,7 +13,7 @@ export const swordHeavyChargedPrepull = defineSkill({
   attributeAttack: "Bellstrike",
   castTag: CAST.swordHeavyChargedPrepull,
   castFrames: 89,
-  receives: [BUFF.battleAnthemChargedBonus, BUFF.swordMorphChargedBonus, BUFF.qiStruggleEnhancement, BUFF.swordQiAffinityEnhancement],
+  receives: [BUFF.battleAnthemChargedBonus, BUFF.swordMorphChargedBonus, BUFF.qiStruggleEnhancement, BUFF.swordQiAffinityEnhancement, BUFF.affinityDamageUpNameless, BUFF.swordSlashBonus],
   triggerable: true,
   hits: [
     hit(0, {

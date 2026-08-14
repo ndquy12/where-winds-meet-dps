@@ -14,7 +14,7 @@ export const swordHeavyCharged2Hit = defineSkill({
   castFrames: 117,
   castTag: CAST.swordHeavyCharged2Hit,
   triggersBuffs: [BUFF.swordSlashBonus],
-  receives: [BUFF.battleAnthemChargedBonus, BUFF.swordMorphChargedBonus, BUFF.qiStruggleEnhancement, BUFF.swordQiAffinityEnhancement],
+  receives: [BUFF.battleAnthemChargedBonus, BUFF.swordMorphChargedBonus, BUFF.qiStruggleEnhancement, BUFF.swordQiAffinityEnhancement, BUFF.affinityDamageUpNameless, BUFF.swordSlashBonus],
   triggerable: true,
   hits: [
     hit(0, {

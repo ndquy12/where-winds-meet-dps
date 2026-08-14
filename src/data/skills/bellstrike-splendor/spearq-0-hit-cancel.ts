@@ -14,7 +14,7 @@ export const spearQ0HitCancel = defineSkill({
   castFrames: 6,
   castTag: CAST.spearQ0HitCancel,
   triggersBuffs: [BUFF.mountainsMight, BUFF.jadeware],
-  receives: [BUFF.affinityDamageUpSpear],
+  receives: [BUFF.affinityDamageUpNameless],
   triggerable: true,
   createdAt: "2026-08-12T00:00:00.000Z",
   updatedAt: "2026-08-12T00:00:00.000Z",

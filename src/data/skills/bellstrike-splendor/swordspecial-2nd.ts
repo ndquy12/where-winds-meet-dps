@@ -14,7 +14,7 @@ export const swordSpecial2nd = defineSkill({
   castFrames: 24,
   castTag: CAST.swordSpecial2nd,
   triggersBuffs: [BUFF.swordSlashBonus],
-  receives: [BUFF.qiStruggleEnhancement],
+  receives: [BUFF.qiStruggleEnhancement, BUFF.affinityDamageUpNameless, BUFF.swordSlashBonus],
   triggerable: true,
   createdAt: "2026-08-12T00:00:00.000Z",
   updatedAt: "2026-08-12T00:00:00.000Z",
