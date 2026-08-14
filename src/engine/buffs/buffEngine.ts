@@ -444,9 +444,6 @@ export class BuffEngine {
         const castTime = module.buffAppliesOnCastEnd || props.buffAppliesOnCastEnd ? (props.castTime ?? 1) : 0
         if (module.cooldown) {
           const last = this.activeBuffs.get(module.id)
-          if (module.name === "Long Wind") {
-            console.log("🚀 ~ BuffEngine ~ processSkillCast ~ applyTime:", module, time, last?.appliedAt, props.castTime)
-          }
           if (last && time - (last.appliedAt - castTime) < module.cooldown) continue
         }
         const applyTime = time + castTime
