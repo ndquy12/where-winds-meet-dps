@@ -1,15 +1,19 @@
 import { defineSkill, hit } from "../../../definitions/skills/skillDef"
 import { CLASS_ID, SKILL } from "./ids"
-import { CAST, WEAPON, ATTUNE, ATTACK, PROP } from "../ids"
+import { CAST, WEAPON, ATTUNE } from "../ids"
 
 export const swordHeavyCharged = defineSkill({
   id: SKILL.swordHeavyCharged,
   classId: CLASS_ID,
   name: "SwordHeavyCharged",
-  tags: [PROP.isCharged, WEAPON.sword, ATTACK.heavy, ATTUNE.swordCharged],
+  breakdownName: "SwordHeavyCharged",
+  tags: [WEAPON.sword, ATTUNE.swordCharged],
   skillType: "weapon",
   weaponOrAttribute: "Sword",
   attributeAttack: "Bellstrike",
+  castTag: CAST.swordHeavyCharged,
+  castFrames: 140,
+  triggerable: true,
   hits: [
     hit(0, {
       frame: 89,
@@ -33,9 +37,6 @@ export const swordHeavyCharged = defineSkill({
       attributeFixed: 276,
     }),
   ],
-  castFrames: 140,
-  castTag: CAST.swordHeavyCharged,
-  triggerable: true,
   createdAt: "2026-08-12T00:00:00.000Z",
   updatedAt: "2026-08-12T00:00:00.000Z",
 })

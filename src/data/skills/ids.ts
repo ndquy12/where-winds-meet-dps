@@ -81,10 +81,10 @@ export const CAST = {
   swordSpecial4Hit: "cast:swordSpecial4Hit",
   // Splendor
   swordQ: "cast:swordQ",
+  swordQ2nd: "cast:swordQ2nd",
   swordHeavyCharged: "cast:swordHeavyCharged",
   swordHeavyCharged2Hit: "cast:swordHeavyCharged2Hit",
   swordHeavyChargedPrepull: "cast:swordHeavyChargedPrepull",
-  swordHeavyChargedStart: "cast:swordHeavyChargedStart",
   swordSpecial: "cast:swordSpecial",
   swordSpecial2nd: "cast:swordSpecial2nd",
   swordSpecialDeflect: "cast:swordSpecialDeflect",
