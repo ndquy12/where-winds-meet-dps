@@ -24,7 +24,6 @@ interface KindState {
 const stateByKind = new Map<RequestKind, KindState>()
 const pool: Worker[] = []
 const workerByKind = new Map<RequestKind, Worker>()
-let lastAssignedReqId = 0
 
 function stateFor(kind: RequestKind): KindState {
   const existing = stateByKind.get(kind)
@@ -99,10 +98,6 @@ function abandonRequests(state: KindState): void {
   setPending(state, false)
 }
 
-<<<<<<< HEAD
-export function postToDpsWorker(unsent: UnsentRequest): void {
-  const request = { ...unsent, reqId: ++lastAssignedReqId } as WorkerRequest
-=======
 export function postToDpsWorker(request: WorkerRequest): void {
   const cacheKey = getCacheKey(request)
   const cached = responseCache.get(cacheKey)
@@ -116,7 +111,6 @@ export function postToDpsWorker(request: WorkerRequest): void {
 
   pendingCacheKeys.set(request.reqId, cacheKey)
 
->>>>>>> 1800a27 (feat: implement core buff engine with timeline tracking, dps worker, and skill processing logic)
   const state = stateFor(request.kind)
   state.queued = request
   state.latestReqId = request.reqId

@@ -10,7 +10,7 @@ export const BELLSTRIKE_SPLENDOR_ATTUNEMENTS: readonly AttunementOption[] = [
     max: 0.06,
     slots: ARMOR_SLOTS,
     classIds: ["bellstrikeSplendor"],
-    enginePath: "dingYinByTag.Sword Charge Boost",
+    enginePath: "classSpecificAttunement.swordCharged",
     affectsTag: "attune:swordCharged",
   },
 ]
