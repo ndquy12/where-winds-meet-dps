@@ -163,7 +163,7 @@ const BELLSTRIKE_COLUMNS: WeaponColumnConfig[] = [
     ],
   },
   {
-    weapon: "Nameless Spear",
+    weapon: "Heavenquaker Spear",
     cards: [
       {
         name: "Physical Attack UP",
@@ -654,69 +654,69 @@ export function TalentsTab({ inputs }: Props) {
             <span className={styles.classBuffsNote}>{t("Always on (class-tied)")}</span>
           </div>
 
-        {columns ? (
-          <div
-            className={styles.classBuffsColumns}
-            style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}
-          >
-            {columns.map(renderColumn)}
-          </div>
-        ) : (
-          <>
-            {talents.length === 0 && <div>{t("No stat buffs for this class yet.")}</div>}
+          {columns ? (
+            <div
+              className={styles.classBuffsColumns}
+              style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}
+            >
+              {columns.map(renderColumn)}
+            </div>
+          ) : (
+            <>
+              {talents.length === 0 && <div>{t("No stat buffs for this class yet.")}</div>}
 
-            {talents.length > 0 && (
-              <div className={styles.classBuffsList}>
-                {talents.map((row) => {
-                  const current = talentCurrent(row, sources)
-                  const capDisplay = RATE_SOURCES.has(row.scalesWith)
-                    ? row.scaleMax * 100
-                    : row.scaleMax
-                  return (
-                    <div key={row.id} className={styles.classBuffRow}>
-                      <div className={styles.classBuffHead}>
-                        <span className={styles.classBuffName}>{row.name}</span>
-                        <span className={styles.classBuffEffect}>
-                          {formatStatValue(row.stat, row.maxBonus)} {STAT_LABEL[row.stat]}
-                        </span>
-                        <span className={styles.classBuffCurrent}>
-                          {t("Current")}: {formatStatValue(row.stat, current)}
-                        </span>
+              {talents.length > 0 && (
+                <div className={styles.classBuffsList}>
+                  {talents.map((row) => {
+                    const current = talentCurrent(row, sources)
+                    const capDisplay = RATE_SOURCES.has(row.scalesWith)
+                      ? row.scaleMax * 100
+                      : row.scaleMax
+                    return (
+                      <div key={row.id} className={styles.classBuffRow}>
+                        <div className={styles.classBuffHead}>
+                          <span className={styles.classBuffName}>{row.name}</span>
+                          <span className={styles.classBuffEffect}>
+                            {formatStatValue(row.stat, row.maxBonus)} {STAT_LABEL[row.stat]}
+                          </span>
+                          <span className={styles.classBuffCurrent}>
+                            {t("Current")}: {formatStatValue(row.stat, current)}
+                          </span>
+                        </div>
+                        <div className={styles.classBuffAffects}>
+                          {t("Scales With")}: {SOURCE_LABEL[row.scalesWith]}
+                          {row.scaleMax > 0 ? ` (${t("Cap")}: ${capDisplay})` : ""}
+                        </div>
                       </div>
-                      <div className={styles.classBuffAffects}>
-                        {t("Scales With")}: {SOURCE_LABEL[row.scalesWith]}
-                        {row.scaleMax > 0 ? ` (${t("Cap")}: ${capDisplay})` : ""}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            )}
-          </>
-        )}
+                    )
+                  })}
+                </div>
+              )}
+            </>
+          )}
         </div>
 
         {classBuffs.length > 0 && (
-              <div className={styles.classBuffs}>
-                <div className="toolbar">
-                  <span className="toolbar-label">{t("Class Buffs")}</span>
-                  <span className={styles.classBuffsNote}>{t("Always on (class-tied)")}</span>
+          <div className={styles.classBuffs}>
+            <div className="toolbar">
+              <span className="toolbar-label">{t("Class Buffs")}</span>
+              <span className={styles.classBuffsNote}>{t("Always on (class-tied)")}</span>
+            </div>
+            <div className={styles.classBuffsList}>
+              {classBuffs.map((buff) => (
+                <div key={buff.id} className={styles.classBuffRow}>
+                  <div className={styles.classBuffHead}>
+                    <span className={styles.classBuffName}>{t(buff.name)}</span>
+                    <span className={styles.classBuffEffect}>{buff.effect}</span>
+                  </div>
+                  <div className={styles.classBuffAffects}>
+                    {t("Affects")}: {buff.affects}
+                  </div>
                 </div>
-                <div className={styles.classBuffsList}>
-                  {classBuffs.map((buff) => (
-                    <div key={buff.id} className={styles.classBuffRow}>
-                      <div className={styles.classBuffHead}>
-                        <span className={styles.classBuffName}>{t(buff.name)}</span>
-                        <span className={styles.classBuffEffect}>{buff.effect}</span>
-                      </div>
-                      <div className={styles.classBuffAffects}>
-                        {t("Affects")}: {buff.affects}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+              ))}
+            </div>
+          </div>
+        )}
 
         {activeInnerWays.length > 0 && (
           <div className={styles.classBuffs}>

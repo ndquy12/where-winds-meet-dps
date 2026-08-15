@@ -263,7 +263,7 @@ export function RotationEditorPanel({ inputs, onChange, result }: Props) {
       const nextIdx = idx + delta
       if (nextIdx < 0 || nextIdx >= rotation.steps.length) return rotation
       const nextSteps = rotation.steps.slice()
-      ;[nextSteps[idx], nextSteps[nextIdx]] = [nextSteps[nextIdx], nextSteps[idx]]
+        ;[nextSteps[idx], nextSteps[nextIdx]] = [nextSteps[nextIdx], nextSteps[idx]]
       return { ...rotation, steps: nextSteps }
     })
   }
