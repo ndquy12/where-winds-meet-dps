@@ -7,6 +7,7 @@ export const longWind = defineClassBuff({
   id: BUFF.mountainsMight,
   name: "Endless Gale",
   requires: { param: PARAM.mountainsMight },
+  affectsAll: true,
   duration: 10,
   cooldown: 12,
   buffAppliesOnCastEnd: true,
