@@ -5,6 +5,7 @@ export type { GearWordId } from "../data/stats/statLines"
 import type { Skill } from "./skill"
 import type { Buff, BuffStatEffect } from "./buff"
 import type { Debuff } from "./debuff"
+import type { DamageBreakdown } from "./formula"
 
 export const ATTRIBUTE_KEYS = ["Bellstrike", "Stonesplit", "Silkbind", "Bamboocut"] as const
 
@@ -345,6 +346,7 @@ export interface TimelineEvent {
   kind: "hit" | "dot"
   damage: number
   inWindow: boolean
+  breakdown?: DamageBreakdown | null
 }
 
 export interface BuffWindow {

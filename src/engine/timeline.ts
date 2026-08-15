@@ -27,7 +27,7 @@ import { buildBehaviors, type BuildView, type HitContext, type HitInput } from "
 import { applyEffect, type EffectSink } from "./effects/apply"
 import { grantsMinPhysCritBoostFor } from "../definitions/classes/registry"
 import { buildContext, effectiveRates } from "./panel"
-import { computeSkillDamage } from "./formula"
+import { computeSkillDamage, type DamageBreakdown } from "./formula"
 import { applyBuffEffects } from "./statRegistry"
 import { builtinSkillsForClass, builtinDebuffsForClass } from "./builtinLibrary"
 import { builtinBuffsForClass } from "./builtinBuffs"
@@ -50,6 +50,19 @@ type Ctx = ReturnType<typeof buildContext>
 
 function clamp(v: number, lo: number, hi: number): number {
   return Math.max(lo, Math.min(hi, v))
+}
+
+function scaleBreakdown(breakdown: DamageBreakdown | null, scale: number): DamageBreakdown | null {
+  if (!breakdown) return null
+  return {
+    ...breakdown,
+    graze: { ...breakdown.graze, damage: breakdown.graze.damage * scale },
+    normal: { ...breakdown.normal, damage: breakdown.normal.damage * scale },
+    crit: { ...breakdown.crit, damage: breakdown.crit.damage * scale },
+    affinity: { ...breakdown.affinity, damage: breakdown.affinity.damage * scale },
+    weightedDamage: breakdown.weightedDamage * scale,
+    finalDamage: breakdown.finalDamage * scale,
+  }
 }
 
 interface HitEvent {
@@ -602,7 +615,7 @@ export function simulateTimeline(inputs: Inputs): Result {
     for (const effect of behavior.patchArt(hitInput, hitContext)) applyEffect(artSink, effect)
     if (st.damageFactor !== 1) art.correction = (art.correction ?? 1) * st.damageFactor
     if (st.conditionalFinalCrit) art.conditionalFinalCrit = st.conditionalFinalCrit
-    const { expectedDamage } = computeSkillDamage(art, st.ctx, 1)
+    const { expectedDamage, breakdown } = computeSkillDamage(art, st.ctx, 1)
     const hitInWindow = inWindow(frame)
     if (hitInWindow) {
       totalDamage += expectedDamage
@@ -622,6 +635,7 @@ export function simulateTimeline(inputs: Inputs): Result {
       kind: "hit",
       damage: expectedDamage,
       inWindow: hitInWindow,
+      breakdown,
     })
 
     for (const trigger of hit.triggers) {
@@ -858,10 +872,9 @@ export function simulateTimeline(inputs: Inputs): Result {
 
   for (const entry of dotTickEntries) {
     const st = resolveState(entry.frame, entry.dotSkill)
-    const damage =
-      dotTickDamage(entry.debuffForTick, st.ctx, computeSkillDamage, st.forceCrit, entry.shape) *
-      (entry.scale ?? 1) *
-      entry.weight
+    const tickScale = (entry.scale ?? 1) * entry.weight
+    const tick = dotTickDamage(entry.debuffForTick, st.ctx, computeSkillDamage, st.forceCrit, entry.shape)
+    const damage = tick.damage * tickScale
     totalDamage += damage
     add(entry.dotName, entry.dotType, 1, damage, entry.dotBreakdownName)
     timeline.push({
@@ -872,6 +885,7 @@ export function simulateTimeline(inputs: Inputs): Result {
       kind: "dot",
       damage,
       inWindow: true,
+      breakdown: scaleBreakdown(tick.breakdown, tickScale),
     })
   }
 
@@ -880,7 +894,7 @@ export function simulateTimeline(inputs: Inputs): Result {
       const st = resolveState(event.frame, event.skill)
       const art = { ...event.art } as Parameters<typeof computeSkillDamage>[0]
       if (st.forceCrit) art.guaranteedCrit = 1
-      const { expectedDamage } = computeSkillDamage(art, st.ctx, 1)
+      const { expectedDamage, breakdown } = computeSkillDamage(art, st.ctx, 1)
       totalDamage += expectedDamage
       add(
         event.name,
@@ -897,6 +911,7 @@ export function simulateTimeline(inputs: Inputs): Result {
         kind: "hit",
         damage: expectedDamage,
         inWindow: true,
+        breakdown,
       })
     }
   }

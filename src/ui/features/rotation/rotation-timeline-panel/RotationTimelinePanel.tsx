@@ -1,13 +1,68 @@
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
+import { createPortal } from "react-dom"
 import type { Result, TimelineEvent } from "../../../../engine/types"
 import { breakdownNameOf } from "../../../../engine/skill"
+import type { DamageBreakdown } from "../../../../engine/formula"
 import { useI18n } from "../../../../i18n/i18nContext"
 import styles from "./RotationTimelinePanel.module.scss"
+
+function formatRate(value: number): string {
+  return `${(value * 100).toFixed(1)}%`
+}
+
+function formatDamage(value: number): string {
+  return Math.round(value).toLocaleString()
+}
+
+interface TooltipAnchor {
+  x: number
+  y: number
+  event: TimelineEvent
+  breakdown: DamageBreakdown
+}
+
+function HitFormulaTooltip({ anchor }: { anchor: TooltipAnchor }) {
+  const { t } = useI18n()
+  const { event, breakdown } = anchor
+  const outcomes: Array<[string, DamageBreakdown["normal"]]> = [
+    [t("Graze"), breakdown.graze],
+    [t("Normal"), breakdown.normal],
+    [t("Crit"), breakdown.crit],
+    [t("Affinity"), breakdown.affinity],
+  ]
+  return createPortal(
+    <div className={styles.hitTooltip} style={{ left: anchor.x, top: anchor.y - 4 }}>
+      <div className={styles.hitTooltipTitle}>
+        {t(event.skillName)} — {Math.max(0, event.timeSec).toFixed(2)}s
+      </div>
+      {outcomes.map(([label, outcome]) => (
+        <div key={label} className={styles.hitTooltipRow}>
+          {label} {formatRate(outcome.probability)} × {formatDamage(outcome.damage)}
+        </div>
+      ))}
+      <div className={styles.hitTooltipRow}>
+        {t("Weighted")} {formatDamage(breakdown.weightedDamage)}
+      </div>
+      <div className={styles.hitTooltipRow}>
+        × (1 + {t("Damage Boost")} {formatRate(breakdown.damageBoost)}) × {t("Correction")}{" "}
+        {breakdown.correction.toFixed(2)}
+        {breakdown.attuneBoost !== 0 &&
+          ` × (1 + ${t("Attune Boost")} ${formatRate(breakdown.attuneBoost)})`}
+        {breakdown.count !== 1 && ` × ${breakdown.count}`}
+      </div>
+      <div className={styles.hitTooltipTotal}>
+        = {formatDamage(breakdown.finalDamage)} {t("damage")}
+      </div>
+    </div>,
+    document.body,
+  )
+}
 
 export function RotationTimelinePanel({ result }: { result: Result }) {
   const { t } = useI18n()
   const duration = result.rotationDuration
   const events = result.timeline ?? []
+  const [tooltipAnchor, setTooltipAnchor] = useState<TooltipAnchor | null>(null)
 
   const eventsByLane = useMemo(() => {
     const laneOf = new Map(
@@ -72,7 +127,22 @@ export function RotationTimelinePanel({ result }: { result: Result }) {
                       (!event.inWindow ? ` ${styles.outOfWindow}` : "")
                     }
                     style={{ left: pct(event.timeSec) + "%" }}
-                    title={`${event.skillName} — ${Math.max(0, event.timeSec).toFixed(2)}s — ${Math.round(event.damage).toLocaleString()}`}
+                    title={
+                      event.breakdown
+                        ? undefined
+                        : `${event.skillName} — ${Math.max(0, event.timeSec).toFixed(2)}s — ${Math.round(event.damage).toLocaleString()}`
+                    }
+                    onMouseEnter={(e) => {
+                      if (!event.breakdown) return
+                      const rect = e.currentTarget.getBoundingClientRect()
+                      setTooltipAnchor({
+                        x: rect.left + rect.width / 2,
+                        y: rect.top,
+                        event,
+                        breakdown: event.breakdown,
+                      })
+                    }}
+                    onMouseLeave={() => setTooltipAnchor(null)}
                   />
                 ))}
               </div>
@@ -102,6 +172,7 @@ export function RotationTimelinePanel({ result }: { result: Result }) {
           </div>
         </div>
       </div>
+      {tooltipAnchor && <HitFormulaTooltip anchor={tooltipAnchor} />}
     </div>
   )
 }

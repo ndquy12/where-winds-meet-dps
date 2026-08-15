@@ -1,7 +1,7 @@
 import type { Debuff, DebuffDotSpec, DotStackShape } from "./debuff"
 import type { Skill } from "./skill"
 import type { StatusWindow } from "./ledger"
-import type { computeSkillDamage, FormulaContext } from "./formula"
+import type { computeSkillDamage, DamageBreakdown, FormulaContext } from "./formula"
 import { attuneTagOf, mysticCategoryOf } from "./buffs/tags"
 
 type ArtRow = Parameters<typeof computeSkillDamage>[0]
@@ -85,15 +85,20 @@ function tickArt(
   } as ArtRow
 }
 
+export interface DotTickDamage {
+  damage: number
+  breakdown: DamageBreakdown | null
+}
+
 export function dotTickDamage(
   debuff: Debuff,
   ctx: FormulaContext,
   compute: typeof computeSkillDamage,
   forceCrit = false,
   shape?: DotStackShape,
-): number {
+): DotTickDamage {
   const dot = debuff.dot
-  if (!dot) return 0
+  if (!dot) return { damage: 0, breakdown: null }
   const resolved = shape ?? {
     physMultiplier: dot.physMultiplier,
     physFixed: dot.physFixed,
@@ -101,7 +106,8 @@ export function dotTickDamage(
     attributeFixed: dot.attributeFixed,
   }
   const art = tickArt(dot, debuff.name, resolved, forceCrit)
-  return compute(art, ctx, Math.max(1, dot.count)).expectedDamage
+  const result = compute(art, ctx, Math.max(1, dot.count))
+  return { damage: result.expectedDamage, breakdown: result.breakdown }
 }
 
 // Overlapping windows are one continuous episode: a DoT refreshed mid-window

@@ -116,9 +116,28 @@ function setFormulaBonus(setId: string | null, field: keyof SetFormulaBonus): nu
   return typeof value === "number" ? value : 0
 }
 
+export interface DamageBreakdownOutcome {
+  probability: number
+  damage: number
+}
+
+export interface DamageBreakdown {
+  graze: DamageBreakdownOutcome
+  normal: DamageBreakdownOutcome
+  crit: DamageBreakdownOutcome
+  affinity: DamageBreakdownOutcome
+  weightedDamage: number
+  damageBoost: number
+  correction: number
+  attuneBoost: number
+  count: number
+  finalDamage: number
+}
+
 interface SkillResult {
   expectedDamage: number
   cells: Record<string, number>
+  breakdown: DamageBreakdown
 }
 
 export interface RotationCounters {
@@ -357,8 +376,23 @@ export function computeSkillDamage(
   const F_base = guaranteedNormal ? EF : guaranteedCrit ? EB : EH
   const F = F_base * (1 + H_total) * count * I_corr * (1 + E_attuneBoost) * dotMult
 
+  const boostMult = (1 + H_total) * I_corr * (1 + E_attuneBoost) * dotMult
+  const breakdown: DamageBreakdown = {
+    graze: { probability: AL, damage: DZ },
+    normal: { probability: AR, damage: EF },
+    crit: { probability: AN, damage: EB },
+    affinity: { probability: AP, damage: ED },
+    weightedDamage: F_base,
+    damageBoost: H_total,
+    correction: I_corr,
+    attuneBoost: E_attuneBoost,
+    count,
+    finalDamage: F_base * boostMult,
+  }
+
   return {
     expectedDamage: F,
+    breakdown,
     cells: {
       X,
       Y,

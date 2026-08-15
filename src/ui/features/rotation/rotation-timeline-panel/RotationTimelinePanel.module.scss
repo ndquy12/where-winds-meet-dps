@@ -97,7 +97,6 @@ $track-min-width: 720px;
   background: var(--color-bg);
   border: 1px solid var(--color-surface);
   border-radius: 2px;
-  overflow: hidden;
 }
 
 .timelineEvent {
@@ -106,7 +105,7 @@ $track-min-width: 720px;
   bottom: 1px;
   width: 2px;
   background: #6a9bd8;
-  transform: translateX(-1px);
+  transform: translateX(-50%);
 }
 
 .timelineEvent.dot {
@@ -115,6 +114,44 @@ $track-min-width: 720px;
 
 .timelineEvent.outOfWindow {
   opacity: 0.4;
+}
+
+.hitTooltip {
+  position: fixed;
+  transform: translate(-50%, -100%);
+  z-index: 20;
+  min-width: 200px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: #1c1c1c;
+  border: 1px solid #3a3a3a;
+  border-left: 3px solid rgba(106, 155, 216, 0.7);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  font-size: 0.78em;
+  font-variant-numeric: tabular-nums;
+  color: #ddd;
+  white-space: nowrap;
+  line-height: 1.5;
+  text-align: left;
+  pointer-events: none;
+}
+
+.hitTooltipTitle {
+  font-weight: 600;
+  color: var(--color-accent);
+  margin-bottom: 2px;
+}
+
+.hitTooltipRow {
+  color: #bbb;
+}
+
+.hitTooltipTotal {
+  margin-top: 2px;
+  padding-top: 2px;
+  border-top: 1px solid #3a3a3a;
+  font-weight: 600;
+  color: #ddd;
 }
 
 .timelineAxis {
