@@ -1,5 +1,6 @@
 import type {
   BuffWindow,
+  CastHitFormulaSnapshot,
   Inputs,
   Result,
   RotationCast,
@@ -27,11 +28,16 @@ import { buildBehaviors, type BuildView, type HitContext, type HitInput } from "
 import { applyEffect, type EffectSink } from "./effects/apply"
 import { grantsMinPhysCritBoostFor } from "../definitions/classes/registry"
 import { buildContext, effectiveRates } from "./panel"
-import { computeSkillDamage } from "./formula"
+import {
+  computeSkillDamage,
+  effectivePhysRange,
+  setFormulaBonus,
+  type DamageOutcomeBreakdown,
+} from "./formula"
 import { applyBuffEffects } from "./statRegistry"
 import { builtinSkillsForClass, builtinDebuffsForClass } from "./builtinLibrary"
 import { builtinBuffsForClass } from "./builtinBuffs"
-import { BuffEngine } from "./buffs/buffEngine"
+import { BuffEngine, type DamageEffectSource } from "./buffs/buffEngine"
 import type { ConditionalFinalCrit } from "./buffs/buffModule"
 import { PROP_TO_PROPERTY, type SkillProperties } from "./effects/context"
 import { buffDefsForClass, groupBuffDefs } from "./buffs/data"
@@ -46,10 +52,82 @@ export const FPS = 60
 // Guards against a runaway cast-skill trigger chain.
 const EVENT_CAP = 100_000
 
+// The three `combatSettings` toggles that land on `allDamageBoost` — exported
+// so a UI-facing source breakdown reads the same numbers rather than a second
+// copy that could drift from them.
+export const REVELRY_SCRIPT_DAMAGE_BOOST = 0.3
+export const QI_BREAK_DAMAGE_BOOST = 0.1
+export const HEALER_BUFF_DAMAGE_BOOST = 0.2
+export const HEALER_BUFF_EXHAUSTED_BONUS = 0.05
+
 type Ctx = ReturnType<typeof buildContext>
 
 function clamp(v: number, lo: number, hi: number): number {
   return Math.max(lo, Math.min(hi, v))
+}
+
+function attributeAttackBlock(ctx: Ctx, attribute: Ctx["primaryAttribute"]) {
+  switch (attribute) {
+    case "Bellstrike":
+      return ctx.bellstrike
+    case "Stonesplit":
+      return ctx.stonesplit
+    case "Silkbind":
+      return ctx.silkbind
+    default:
+      return ctx.bamboocut
+  }
+}
+
+function castHitFormulaSnapshot(
+  skillName: string,
+  frame: number,
+  ctx: Ctx,
+  qiPhase: string,
+  inWindow: boolean,
+  damage: number,
+  outcomes: DamageOutcomeBreakdown,
+  classBuffSources: DamageEffectSource[],
+): CastHitFormulaSnapshot {
+  const attrBlock = attributeAttackBlock(ctx, ctx.primaryAttribute)
+  const effectivePhys = effectivePhysRange(ctx.smallPhys, ctx.largePhys, ctx.food)
+  return {
+    skillName,
+    atTimeSec: frame / FPS,
+    qiPhase,
+    inWindow,
+    damage,
+    outcomes,
+    classBuffSources,
+    precisionRate: ctx.precisionPanel,
+    critRate: ctx.critPanel,
+    affinityRate: ctx.affinityPanel,
+    // A set's `formulaBonus` (critDamage/affinityDamage/directCrit) is read
+    // live inside `computeSkillDamage`, never written back onto `ctx` — add
+    // it here too, or this number would disagree with the one the kernel
+    // actually used for this hit.
+    directCritRate: ctx.directCritPanel + setFormulaBonus(ctx.set, "directCrit"),
+    directAffinityRate: ctx.directAffinityPanel,
+    critDamageBoost: ctx.critDmgBoostPanel + setFormulaBonus(ctx.set, "critDamage"),
+    affinityDamageBoost: ctx.affinityDmgBoostPanel + setFormulaBonus(ctx.set, "affinityDamage"),
+    physDamageBoost: ctx.physDmgBoostPanel,
+    attributeDamageBoost: ctx.attributeDmgBoostPanel,
+    sustainDamageBoost: ctx.sustainDmgBoostPanel,
+    generalDamageBoost: ctx.generalDamageBoost,
+    allDamageBoost: ctx.allDamageBoost ?? 0,
+    chargeBonus: ctx.chargeBonus,
+    effectiveMinPhysAttack: effectivePhys.min,
+    effectiveMaxPhysAttack: effectivePhys.max,
+    // `ctx.outerPen`/`attrBlock.pen` are on the kernel's internal 0–100 scale
+    // (`panel.ts`'s `pct()`) — divide back to a 0–1 fraction to match every
+    // other rate field here.
+    physPenetration: ctx.outerPen / 100,
+    effectiveDefense: ctx.effectiveDefense,
+    primaryAttribute: ctx.primaryAttribute,
+    primaryAttributeMin: attrBlock.min,
+    primaryAttributeMax: attrBlock.max,
+    primaryAttributePenetration: attrBlock.pen / 100,
+  }
 }
 
 interface HitEvent {
@@ -61,6 +139,11 @@ interface HitEvent {
   // by — not this hit's own frame, which may be well after it.
   castFrame: number
   stepStart: number
+  // The `laidSteps` index of the cast this hit's damage attributes to. A
+  // triggered sub-skill's hits carry the triggering event's stepIndex, not a
+  // fresh one — `stepStart` alone isn't unique across steps (two zero-length
+  // steps can share a start frame).
+  stepIndex: number
 }
 
 class EventQueue {
@@ -90,14 +173,14 @@ class EventQueue {
     if (this.heap.length > 0) {
       this.heap[0] = last
       let i = 0
-      for (; ;) {
+      for (;;) {
         const l = 2 * i + 1
         const r = 2 * i + 2
         let smallest = i
         if (l < this.heap.length && this.less(this.heap[l], this.heap[smallest])) smallest = l
         if (r < this.heap.length && this.less(this.heap[r], this.heap[smallest])) smallest = r
         if (smallest === i) break
-          ;[this.heap[i], this.heap[smallest]] = [this.heap[smallest], this.heap[i]]
+        ;[this.heap[i], this.heap[smallest]] = [this.heap[smallest], this.heap[i]]
         i = smallest
       }
     }
@@ -340,9 +423,9 @@ export function simulateTimeline(inputs: Inputs): Result {
 
   const qiBreakWindow = buffEngine
     ? (() => {
-      const w = buffEngine.qiBreakWindow()
-      return { startSec: w.start, endSec: w.end }
-    })()
+        const w = buffEngine.qiBreakWindow()
+        return { startSec: w.start, endSec: w.end }
+      })()
     : null
 
   const { precision, critRate, affinityRate } = effectiveRates(inputs)
@@ -382,6 +465,7 @@ export function simulateTimeline(inputs: Inputs): Result {
     forceCrit: boolean
     damageFactor: number
     conditionalFinalCrit: ConditionalFinalCrit | null
+    classBuffSources: DamageEffectSource[]
   } {
     const active = activeBuffsAt(frame)
     const sigParts: string[] = []
@@ -400,9 +484,11 @@ export function simulateTimeline(inputs: Inputs): Result {
     let forceCritFromBuff = false
     let damageFactor = 1
     let conditionalFinalCrit: ConditionalFinalCrit | null = null
+    let classBuffSources: DamageEffectSource[] = []
     if (buffEngine && skill) {
       const scoped = castScopedBuffs.get(castScopedKey(castFrame, skill.id)) ?? []
       const site = buffEngine.calculateDamageEffects(skill, frame / FPS, scoped)
+      classBuffSources = site.sources
       if (site.effects.length > 0) {
         for (const e of site.effects) effects.push(e)
         sig +=
@@ -442,24 +528,25 @@ export function simulateTimeline(inputs: Inputs): Result {
         (contribution.effects ?? []).map((e) => e.statKey + "=" + e.amount).join(",") +
         (contribution.context
           ? "|" +
-          Object.entries(contribution.context)
-            .map(([k, v]) => k + "=" + v)
-            .join(",")
+            Object.entries(contribution.context)
+              .map(([k, v]) => k + "=" + v)
+              .join(",")
           : "")
     }
     const combat = inputs.combatSettings
     if (combat?.revelryScript) {
-      effects.push({ statKey: "allDamageBoost", amount: 0.3 })
+      effects.push({ statKey: "allDamageBoost", amount: REVELRY_SCRIPT_DAMAGE_BOOST })
       sig += "~revelryScript"
     }
     if (buffEngine) {
       const qiPhaseHere = buffEngine.qiPhase(frame / FPS)
       if (combat?.qiBreak?.enabled && qiPhaseHere === "exhausted") {
-        effects.push({ statKey: "allDamageBoost", amount: 0.1 })
+        effects.push({ statKey: "allDamageBoost", amount: QI_BREAK_DAMAGE_BOOST })
         sig += "~qiBreakBoost"
       }
       if (combat?.healerBuff) {
-        const healerAmount = 0.2 + (qiPhaseHere === "exhausted" ? 0.05 : 0)
+        const healerAmount =
+          HEALER_BUFF_DAMAGE_BOOST + (qiPhaseHere === "exhausted" ? HEALER_BUFF_EXHAUSTED_BONUS : 0)
         effects.push({ statKey: "allDamageBoost", amount: healerAmount })
         sig += `~healerBuff:${healerAmount}`
       }
@@ -485,12 +572,18 @@ export function simulateTimeline(inputs: Inputs): Result {
       r = { inputs: effInputs, ctx }
       stateMemo.set(sig, r)
     }
-    return { ...r, forceCrit: forceCritFromBuff, damageFactor, conditionalFinalCrit }
+    return {
+      ...r,
+      forceCrit: forceCritFromBuff,
+      damageFactor,
+      conditionalFinalCrit,
+      classBuffSources,
+    }
   }
 
   const queue = new EventQueue()
   let seq = 0
-  for (const ls of laidSteps) {
+  for (const [stepIndex, ls] of laidSteps.entries()) {
     for (const hit of ls.performedHits) {
       queue.push({
         frame: ls.startFrame + hit.frame,
@@ -499,6 +592,7 @@ export function simulateTimeline(inputs: Inputs): Result {
         hit,
         castFrame: ls.startFrame,
         stepStart: ls.startFrame,
+        stepIndex,
       })
     }
   }
@@ -523,6 +617,9 @@ export function simulateTimeline(inputs: Inputs): Result {
 
   const timeline: TimelineEvent[] = []
 
+  const perCastDamage = new Map<number, { expectedDamage: number; hitCount: number }>()
+  const perCastHits = new Map<number, CastHitFormulaSnapshot[]>()
+
   let totalDamage = 0
   let processed = 0
   while (queue.size > 0) {
@@ -534,7 +631,7 @@ export function simulateTimeline(inputs: Inputs): Result {
     }
     const ev = queue.pop()!
     processed++
-    const { frame, skill, hit, castFrame, stepStart } = ev
+    const { frame, skill, hit, castFrame, stepStart, stepIndex } = ev
 
     const behavior = behaviorFor(skill)
     const hitInput = hitInputAt(skill, hit, frame)
@@ -563,10 +660,10 @@ export function simulateTimeline(inputs: Inputs): Result {
           )
         if (stacks !== undefined) recordStack(status.id, frame, stacks, stepStart)
       },
-      applyBuff: () => { },
-      consumeStacks: () => { },
-      artBonus: () => { },
-      damageMultiplier: () => { },
+      applyBuff: () => {},
+      consumeStacks: () => {},
+      artBonus: () => {},
+      damageMultiplier: () => {},
     }
     for (const effect of behavior.onHit?.(hitInput) ?? []) applyEffect(hitSink, effect)
     const qiPhase = buffEngine?.qiPhase(frame / FPS) ?? "normal"
@@ -587,11 +684,11 @@ export function simulateTimeline(inputs: Inputs): Result {
     if (forceGuaranteedPrecision) art.guaranteedPrecision = 1
     // `patchArt` runs AFTER the formula context is built and may read it.
     const artSink: EffectSink = {
-      stat: () => { },
-      forceOutcome: () => { },
-      applyBuff: () => { },
-      consumeStacks: () => { },
-      setStatus: () => { },
+      stat: () => {},
+      forceOutcome: () => {},
+      applyBuff: () => {},
+      consumeStacks: () => {},
+      setStatus: () => {},
       artBonus: (field, amount) => {
         art[field] = (art[field] ?? 0) + amount
       },
@@ -602,8 +699,21 @@ export function simulateTimeline(inputs: Inputs): Result {
     for (const effect of behavior.patchArt(hitInput, hitContext)) applyEffect(artSink, effect)
     if (st.damageFactor !== 1) art.correction = (art.correction ?? 1) * st.damageFactor
     if (st.conditionalFinalCrit) art.conditionalFinalCrit = st.conditionalFinalCrit
-    const { expectedDamage } = computeSkillDamage(art, st.ctx, 1)
+    const { expectedDamage, outcomes } = computeSkillDamage(art, st.ctx, 1)
     const hitInWindow = inWindow(frame)
+    const hitSnapshot = castHitFormulaSnapshot(
+      skill.name,
+      frame,
+      st.ctx,
+      qiPhase,
+      hitInWindow,
+      expectedDamage,
+      outcomes,
+      st.classBuffSources,
+    )
+    const hitSnapshots = perCastHits.get(stepIndex)
+    if (hitSnapshots) hitSnapshots.push(hitSnapshot)
+    else perCastHits.set(stepIndex, [hitSnapshot])
     if (hitInWindow) {
       totalDamage += expectedDamage
       add(
@@ -613,6 +723,13 @@ export function simulateTimeline(inputs: Inputs): Result {
         expectedDamage,
         breakdownNameOf(skill.breakdownName, skill.name),
       )
+      const castAcc = perCastDamage.get(stepIndex)
+      if (castAcc) {
+        castAcc.expectedDamage += expectedDamage
+        castAcc.hitCount += 1
+      } else {
+        perCastDamage.set(stepIndex, { expectedDamage, hitCount: 1 })
+      }
     }
     timeline.push({
       frame,
@@ -642,8 +759,8 @@ export function simulateTimeline(inputs: Inputs): Result {
         if (flagged && next >= maxStacks) {
           const retained =
             det.retainParam &&
-              buffEngine &&
-              buffEngine.paramTier(det.retainParam) >= (det.retainMinTier ?? 6)
+            buffEngine &&
+            buffEngine.paramTier(det.retainParam) >= (det.retainMinTier ?? 6)
               ? (det.retainParamStacks ?? det.retainStacks ?? 0)
               : (det.retainStacks ?? 0)
           recordStack(status.id, frame, clamp(retained, 0, maxStacks), stepStart)
@@ -657,6 +774,7 @@ export function simulateTimeline(inputs: Inputs): Result {
                 hit: subHit,
                 castFrame: frame,
                 stepStart,
+                stepIndex,
               })
             }
         }
@@ -702,6 +820,7 @@ export function simulateTimeline(inputs: Inputs): Result {
             hit: subHit,
             castFrame: frame,
             stepStart,
+            stepIndex,
           })
         }
       }
@@ -762,6 +881,7 @@ export function simulateTimeline(inputs: Inputs): Result {
       }
     }
 
+    const castDamage = perCastDamage.get(i)
     return {
       index: 0,
       stepId: ls.resolved.step.id,
@@ -771,6 +891,9 @@ export function simulateTimeline(inputs: Inputs): Result {
       inWindow: inWindow(ls.startFrame),
       prePull: ls.prePull,
       buffs,
+      expectedDamage: castDamage?.expectedDamage,
+      hitCount: castDamage?.hitCount,
+      hits: perCastHits.get(i),
     }
   })
   castsUnsorted.sort((a, b) => a.timeSec - b.timeSec)

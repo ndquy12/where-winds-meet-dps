@@ -56,3 +56,26 @@ describe("activeAfterBuffEnds — resistanceResolve (global) off rainwhisperShie
     ).toBeUndefined()
   })
 })
+
+describe("calculateDamageEffects — per-effect source attribution", () => {
+  const params = { artOfResistance: true, artOfResistanceTier: 6 }
+
+  it("names the def's own id, display name, statKey and amount for a live contribution", () => {
+    const engine = new BuffEngine(params, allBuffDefsDeduped(), groupBuffDefs())
+    engine.processSkillCast("cast:probe", 0, {}, false, [BUFF.rainwhisperShield])
+    const { sources } = engine.calculateDamageEffects(tagged("AnySkill"), 8)
+    expect(sources).toContainEqual({
+      statKey: "allDamageBoost",
+      amount: 0.1,
+      sourceId: BUFF.resistanceResolve,
+      sourceName: "Resistance Resolve",
+    })
+  })
+
+  it("carries no source when the def isn't active", () => {
+    const engine = new BuffEngine(params, allBuffDefsDeduped(), groupBuffDefs())
+    engine.processSkillCast("cast:probe", 0, {}, false, [BUFF.rainwhisperShield])
+    const { sources } = engine.calculateDamageEffects(tagged("AnySkill"), 20.1)
+    expect(sources.some((s) => s.sourceId === BUFF.resistanceResolve)).toBe(false)
+  })
+})

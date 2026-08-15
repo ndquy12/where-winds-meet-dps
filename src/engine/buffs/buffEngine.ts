@@ -47,6 +47,16 @@ interface HistoryEntry {
 
 export type { QiPhase }
 
+// One module's contribution to one stat — the per-(def, statKey) sibling of
+// `DamageEffectsResult.breakdown`, which only sums a def's effects together
+// regardless of which stat each one targeted.
+export interface DamageEffectSource {
+  statKey: StatKey
+  amount: number
+  sourceId: string
+  sourceName: string
+}
+
 export interface DamageEffectsResult {
   effects: { statKey: StatKey; amount: number }[]
   forceCrit: boolean
@@ -58,6 +68,7 @@ export interface DamageEffectsResult {
   // `tests/engine/buffEngineAdvanced.test.ts` and `mistwillow.test.ts` to pin
   // which def a contribution came from.
   breakdown: Record<string, number>
+  sources: DamageEffectSource[]
 }
 
 const DEFAULT_DURATION = 15
@@ -215,8 +226,8 @@ export class BuffEngine {
       const ctx = this.buildContext(time, { kind: "display" }, stacks, module)
       const effects: { statKey: StatKey; amount: number }[] = module
         ? resolveEffects(module, ctx).flatMap((effect) =>
-          effect.kind === "stat" ? [{ statKey: effect.statKey, amount: effect.amount }] : [],
-        )
+            effect.kind === "stat" ? [{ statKey: effect.statKey, amount: effect.amount }] : [],
+          )
         : []
       out.push({
         id,
@@ -321,12 +332,12 @@ export class BuffEngine {
       module,
     )
     const sink: EffectSink = {
-      stat: () => { },
-      forceOutcome: () => { },
-      consumeStacks: () => { },
-      artBonus: () => { },
-      damageMultiplier: () => { },
-      setStatus: () => { },
+      stat: () => {},
+      forceOutcome: () => {},
+      consumeStacks: () => {},
+      artBonus: () => {},
+      damageMultiplier: () => {},
+      setStatus: () => {},
       applyBuff: (id, stacks, durationSec) => {
         const target = this.definitions.get(id)
         if (target && !this.gateOk(target)) return
@@ -462,15 +473,13 @@ export class BuffEngine {
     )
       return
 
-    const castDelay = module.buffAppliesOnCastEnd || props.buffAppliesOnCastEnd
-      ? (props.castTime ?? 1)
-      : 0
+    const castDelay =
+      module.buffAppliesOnCastEnd || props.buffAppliesOnCastEnd ? (props.castTime ?? 1) : 0
     if (module.cooldown) {
       const last = this.activeBuffs.get(module.id)
       if (last && time - (last.appliedAt - castDelay) < module.cooldown) return
     }
     const applyTime = time + castDelay
-
 
     if (!this.canGrantTrigger(module, applyTime)) return
 
@@ -652,26 +661,36 @@ export class BuffEngine {
     const scopedBuffIds = new Set(castScopedBuffIds)
     const effects: { statKey: StatKey; amount: number }[] = []
     const breakdown: Record<string, number> = {}
+    const sources: DamageEffectSource[] = []
     let forceCrit = false
     let damageFactor = 1
     let conditionalFinalCrit: ConditionalFinalCrit | null = null
     let currentId = ""
+    const definitions = this.definitions
 
     const sink: EffectSink = {
       stat(statKey, amount) {
         effects.push({ statKey, amount })
         breakdown[currentId] = (breakdown[currentId] ?? 0) + amount
+        if (amount !== 0) {
+          sources.push({
+            statKey,
+            amount,
+            sourceId: currentId,
+            sourceName: definitions.get(currentId)?.name ?? currentId,
+          })
+        }
       },
       forceOutcome(outcome) {
         if (outcome === "crit") forceCrit = true
       },
-      applyBuff: () => { },
-      consumeStacks: () => { },
-      artBonus: () => { },
+      applyBuff: () => {},
+      consumeStacks: () => {},
+      artBonus: () => {},
       damageMultiplier(factor) {
         damageFactor *= factor
       },
-      setStatus: () => { },
+      setStatus: () => {},
     }
 
     for (const [id, module] of this.definitions) {
@@ -682,7 +701,7 @@ export class BuffEngine {
         scopedBuffIds.has(id) ||
         (module.perCastConsume
           ? this.consumeEvents.has(`${time}|${castTag}|${id}`) ||
-          this.phaseAlternativeHolds(module, time)
+            this.phaseAlternativeHolds(module, time)
           : module.activeAfterBuffEnds
             ? this.isActiveAfterBuffEndsActive(module, time)
             : this.isBuffActiveAtTime(id, time))
@@ -707,8 +726,14 @@ export class BuffEngine {
     if (mistwillow > 0) {
       effects.push({ statKey: "allDamageBoost", amount: mistwillow })
       breakdown.mistwillow = (breakdown.mistwillow ?? 0) + mistwillow
+      sources.push({
+        statKey: "allDamageBoost",
+        amount: mistwillow,
+        sourceId: "mistwillow",
+        sourceName: "Mistwillow",
+      })
     }
 
-    return { effects, forceCrit, damageFactor, conditionalFinalCrit, breakdown }
+    return { effects, forceCrit, damageFactor, conditionalFinalCrit, breakdown, sources }
   }
 }

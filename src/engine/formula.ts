@@ -110,15 +110,80 @@ export interface FormulaContext {
   hawkwingPhysBonus?: number
 }
 
-function setFormulaBonus(setId: string | null, field: keyof SetFormulaBonus): number {
+export function setFormulaBonus(setId: string | null, field: keyof SetFormulaBonus): number {
   if (!setId) return 0
   const value = SET_BY_ID[setId]?.formulaBonus?.[field]
   return typeof value === "number" ? value : 0
 }
 
+// The four rows the kernel blends into `expectedDamage` — a graze, a crit, an
+// affinity and a normal hit each have their own full damage value; the chance
+// fields are the weights `expectedDamage` sums them by. Every `*Damage` field
+// already carries the same damage-boost/correction/attune/dot multipliers
+// `expectedDamage` does, so `Σ chance × damage` reproduces it exactly outside
+// a `guaranteedCrit`/`guaranteedNormal` hit, where the forced row's chance is
+// 1 and its damage already equals `expectedDamage`.
+// One multiplicand in a `DamageEquationTerm`. `isPercent` says how it reads
+// and how it multiplies in: `false` is a raw multiplicand (an attack value,
+// or the skill's own N/O coefficient), `true` reads as a percent and
+// multiplies in as `(1 + value)` (a damage boost, a penetration fraction).
+export interface DamageFactor {
+  label: string
+  value: number
+  isPercent: boolean
+}
+
+// `factors` multiplied together (raw factors as themselves, percent factors
+// as `1 + value`) reproduces `result` exactly — this is a literal equation,
+// not a rounded summary, so every number in it is real and provable.
+export interface DamageEquationTerm {
+  factors: DamageFactor[]
+  result: number
+}
+
+// One attribute's own multiplier term. `usesMatchingMultiplier` is false
+// exactly when this attribute isn't the skill's own — the kernel still folds
+// it in, using the skill's phys multiplier instead of an attribute one. That
+// is a real, inherited quirk (see the `attrBlock` comment on why), not a bug
+// here: showing the actual multiplier used is what makes a nonzero
+// contribution from a "wrong" attribute legible instead of surprising.
+export interface AttributeEquationTerm extends DamageEquationTerm {
+  attribute: string
+  usesMatchingMultiplier: boolean
+}
+
+// Every additive piece that sums to one outcome's damage — a phys term (an
+// attack-value multiplier and, only when the skill has flat phys damage, a
+// flat term), an attribute-flat term shared across every attribute, and one
+// multiplier term per attribute that actually contributes (usually one or
+// two, never all four in practice). Sum every term's `result` to reproduce
+// the outcome's own `*Damage` value exactly.
+export interface DamageOutcomeEquation {
+  physAttack: DamageEquationTerm
+  physFlat: DamageEquationTerm | null
+  attributeFlat: DamageEquationTerm | null
+  attributeBlocks: AttributeEquationTerm[]
+}
+
+export interface DamageOutcomeBreakdown {
+  grazeChance: number
+  critChance: number
+  affinityChance: number
+  normalChance: number
+  grazeDamage: number
+  critDamage: number
+  affinityDamage: number
+  normalDamage: number
+  grazeEquation: DamageOutcomeEquation
+  critEquation: DamageOutcomeEquation
+  affinityEquation: DamageOutcomeEquation
+  normalEquation: DamageOutcomeEquation
+}
+
 interface SkillResult {
   expectedDamage: number
   cells: Record<string, number>
+  outcomes: DamageOutcomeBreakdown
 }
 
 export interface RotationCounters {
@@ -297,7 +362,23 @@ export function computeSkillDamage(
     const critMin = small * mult * penMul * (1 + dmgBoost) * (1 + X) * setMul
     const critMax = large * mult * penMul * (1 + dmgBoost) * (1 + X) * setMul
     const normMax = large * mult * (1 + dmgBoost) * penMul * setMul
-    return { graze, crit, aff, norm, critMin, critMax, normMax }
+    return {
+      graze,
+      crit,
+      aff,
+      norm,
+      critMin,
+      critMax,
+      normMax,
+      small,
+      avg,
+      large,
+      mult,
+      matches,
+      penMul,
+      dmgBoost,
+      setLowQiBonus,
+    }
   }
 
   const bell = attrBlock("Bellstrike", ctx.bellstrike, ctx.bellstrike.pen, 0)
@@ -355,10 +436,143 @@ export function computeSkillDamage(
   // Fixed-damage skills (e.g. Dragon Head) can trigger neither crit, affinity
   // nor abrasion — they always deal the normal row.
   const F_base = guaranteedNormal ? EF : guaranteedCrit ? EB : EH
-  const F = F_base * (1 + H_total) * count * I_corr * (1 + E_attuneBoost) * dotMult
+  // `count` is a formal parameter of computeSkillDamage but every call site in
+  // this codebase (src and tests) passes 1 — folded into `skillModifier`
+  // rather than given its own equation factor, since a factor that is always
+  // ×1.00 would be noise, not information.
+  const skillModifier = count * I_corr
+  const outcomeMultiplier = (1 + H_total) * skillModifier * (1 + E_attuneBoost) * dotMult
+  const F = F_base * outcomeMultiplier
+
+  function multiplyFactors(factors: readonly DamageFactor[]): number {
+    return factors.reduce((acc, f) => acc * (f.isPercent ? 1 + f.value : f.value), 1)
+  }
+
+  function buildTerm(
+    label: string,
+    magnitude: number,
+    multiplier: number | null,
+    multiplierLabel: string,
+    damageBoost: number,
+    penetration: number,
+    outcomeBoostLabel: string | null,
+    outcomeBoostValue: number,
+    extraFactors: readonly DamageFactor[] = [],
+  ): DamageEquationTerm {
+    const factors: DamageFactor[] = [{ label, value: magnitude, isPercent: false }]
+    if (multiplier !== null)
+      factors.push({ label: multiplierLabel, value: multiplier, isPercent: false })
+    factors.push({ label: "Damage Boost", value: damageBoost, isPercent: true })
+    factors.push({ label: "Penetration", value: penetration, isPercent: true })
+    factors.push(...extraFactors)
+    if (outcomeBoostLabel)
+      factors.push({ label: outcomeBoostLabel, value: outcomeBoostValue, isPercent: true })
+    // Named "Combined", not "General Damage Boost" — `H_total` also folds in
+    // `allDamageBoost`, `chargeBonus`, `sustainDmgBoostPanel` and others, each
+    // shown as its own row in the "Damage Boosts" step; reusing that row's
+    // name here would make this factor look narrower than it is.
+    factors.push({ label: "Combined Damage Boost", value: H_total, isPercent: true })
+    factors.push({ label: "Skill Modifier", value: skillModifier, isPercent: false })
+    if (art.attuneTag)
+      factors.push({ label: "Attune Boost", value: E_attuneBoost, isPercent: true })
+    if (isPersistent) factors.push({ label: "DoT Multiplier", value: dotMult, isPercent: false })
+    return { factors, result: multiplyFactors(factors) }
+  }
+
+  function buildAttributeBlocks(
+    attackValueOf: (block: ReturnType<typeof attrBlock>) => number,
+    outcomeBoostLabel: string | null,
+    outcomeBoostValue: number,
+  ): AttributeEquationTerm[] {
+    const blocks: [Attribute, ReturnType<typeof attrBlock>][] = [
+      ["Bellstrike", bell],
+      ["Stonesplit", stone],
+      ["Silkbind", silk],
+      ["Bamboocut", bamboo],
+    ]
+    return blocks
+      .map(([attribute, block]) => {
+        const term = buildTerm(
+          "Attack Value",
+          attackValueOf(block),
+          block.mult,
+          block.matches ? "Attribute Multiplier" : "Phys Multiplier (no match)",
+          block.dmgBoost,
+          block.penMul - 1,
+          outcomeBoostLabel,
+          outcomeBoostValue,
+          // Shown separately from `Damage Boost` even though it's the same
+          // set bonus — `attrBlock`'s own comment documents why the kernel
+          // applies it a second time here rather than folding it in once.
+          isLowQi
+            ? [{ label: "Low-Qi Set Bonus", value: block.setLowQiBonus, isPercent: true }]
+            : [],
+        )
+        return { ...term, attribute, usesMatchingMultiplier: block.matches }
+      })
+      .filter((term) => term.result !== 0)
+  }
+
+  function buildOutcomeEquation(
+    physAttackValue: number,
+    attributeAttackValueOf: (block: ReturnType<typeof attrBlock>) => number,
+    outcomeBoostLabel: string | null,
+    outcomeBoostValue: number,
+  ): DamageOutcomeEquation {
+    return {
+      physAttack: buildTerm(
+        "Attack Value",
+        physAttackValue,
+        N,
+        "Phys Multiplier",
+        AI,
+        AH,
+        outcomeBoostLabel,
+        outcomeBoostValue,
+      ),
+      physFlat:
+        P_eff !== 0
+          ? buildTerm("Flat Damage", P_eff, null, "", AI, AH, outcomeBoostLabel, outcomeBoostValue)
+          : null,
+      attributeFlat:
+        Q_eff !== 0
+          ? buildTerm(
+              "Flat Damage",
+              Q_eff,
+              null,
+              "",
+              BK,
+              BJpen,
+              outcomeBoostLabel,
+              outcomeBoostValue,
+            )
+          : null,
+      attributeBlocks: buildAttributeBlocks(
+        attributeAttackValueOf,
+        outcomeBoostLabel,
+        outcomeBoostValue,
+      ),
+    }
+  }
+
+  const outcomes: DamageOutcomeBreakdown = {
+    grazeChance: guaranteedNormal || guaranteedCrit ? 0 : AL,
+    critChance: guaranteedCrit ? 1 : guaranteedNormal ? 0 : AN,
+    affinityChance: guaranteedNormal || guaranteedCrit ? 0 : AP,
+    normalChance: guaranteedNormal ? 1 : guaranteedCrit ? 0 : AR,
+    grazeDamage: DZ * outcomeMultiplier,
+    critDamage: EB * outcomeMultiplier,
+    affinityDamage: ED * outcomeMultiplier,
+    normalDamage: EF * outcomeMultiplier,
+    grazeEquation: buildOutcomeEquation(AE, (b) => b.small, null, 0),
+    critEquation: buildOutcomeEquation(AF, (b) => b.avg, "Crit Damage Boost", X),
+    affinityEquation: buildOutcomeEquation(AG, (b) => b.large, "Affinity Damage Boost", Y),
+    normalEquation: buildOutcomeEquation(AF, (b) => b.avg, null, 0),
+  }
 
   return {
     expectedDamage: F,
+    outcomes,
     cells: {
       X,
       Y,

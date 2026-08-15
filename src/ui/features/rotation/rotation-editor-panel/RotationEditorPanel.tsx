@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import type { Inputs, Result, CastBuffTag, RotationCast } from "../../../../engine/types"
-import type { Buff, BuffStatEffect } from "../../../../engine/buff"
+import type { Inputs, Result, RotationCast } from "../../../../engine/types"
+import type { Buff } from "../../../../engine/buff"
 import type { Debuff } from "../../../../engine/debuff"
 import {
   makeRotation,
@@ -16,8 +16,8 @@ import { FPS } from "../../../../engine/timeline"
 import { isPrePullSkill, type Skill } from "../../../../engine/skill"
 import { builtinSkillsForClass, builtinRotationsForClass } from "../../../../engine/builtinLibrary"
 import { hiddenTimelineBuffIds } from "../../../../engine/buffs/catalog"
-import { STAT_DEF_BY_KEY } from "../../../../engine/statRegistry"
-import { buffChipHue, castBuffDisplayOrder, visibleCastBuffs } from "../buffChips"
+import { castBuffDisplayOrder, visibleCastBuffs } from "../buffChips"
+import { CastBuffTagChip } from "../cast-buff-tag-chip/CastBuffTagChip"
 import {
   inputsWithRotationOption,
   rotationOptions,
@@ -52,59 +52,6 @@ function stepCastFrames(step: RotationStep, skill: Skill | undefined): number {
   const performed = skill.hits.slice(0, hitCount)
   const maxFrame = performed.length > 0 ? Math.max(...performed.map((hit) => hit.frame)) : -1
   return skill.castFrames || maxFrame + 1
-}
-
-function effectsSummary(effects: BuffStatEffect[], t: (text: string) => string): string {
-  return effects
-    .filter((effect) => effect.amount !== 0)
-    .map((effect) => {
-      const def = STAT_DEF_BY_KEY[effect.statKey]
-      const label = def ? t(def.label) : effect.statKey
-      const sign = effect.amount >= 0 ? "+" : ""
-      const value =
-        def?.unit === "fraction"
-          ? `${sign}${(effect.amount * 100).toFixed(0)}%`
-          : `${sign}${effect.amount}`
-      return `${label} ${value}`
-    })
-    .join(", ")
-}
-
-function CastBuffTagChip({ tag }: { tag: CastBuffTag }) {
-  const { t } = useI18n()
-  const label = tag.maxStacks > 1 ? `${t(tag.name)} ${tag.stacks}/${tag.maxStacks}` : t(tag.name)
-  const eff = effectsSummary(tag.effects, t)
-  const style = { "--buff-hue": buffChipHue(tag.name, tag.id) } as React.CSSProperties
-  return (
-    <span className={styles.castBuffTag} style={style}>
-      {label}
-      <span className={styles.castBuffTooltip}>
-        <div>{t(tag.name)}</div>
-        {tag.maxStacks > 1 && (
-          <div>
-            {t("Stacks")}: {tag.stacks} / {tag.maxStacks}
-          </div>
-        )}
-        {tag.remainingSec != null && (
-          <div>
-            {t("Remaining")}: {tag.remainingSec.toFixed(1)}s
-          </div>
-        )}
-        {tag.dotIntervalSec != null && (
-          <div>
-            {t("DoT")} · {t("every")} {tag.dotIntervalSec.toFixed(1)}s
-          </div>
-        )}
-        {eff && <div>{eff}</div>}
-        {tag.requires && (
-          <div>
-            {t("requires")} {tag.requires}
-          </div>
-        )}
-        {tag.description && <div>{tag.description}</div>}
-      </span>
-    </span>
-  )
 }
 
 export function RotationEditorPanel({ inputs, onChange, result }: Props) {

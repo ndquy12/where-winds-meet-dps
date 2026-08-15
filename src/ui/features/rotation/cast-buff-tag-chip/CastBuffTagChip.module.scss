@@ -1,0 +1,39 @@
+.castBuffTag {
+  --buff-hue: 42;
+  display: inline-block;
+  position: relative;
+  margin: 1px 4px 1px 0;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: hsla(var(--buff-hue), 60%, 42%, 0.2);
+  border: 1px solid hsla(var(--buff-hue), 55%, 58%, 0.45);
+  font-size: 0.78em;
+  color: hsl(var(--buff-hue), 65%, 74%);
+  cursor: default;
+  white-space: nowrap;
+}
+
+.castBuffTooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 0;
+  z-index: 20;
+  min-width: 160px;
+  max-width: 280px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: #1c1c1c;
+  border: 1px solid #3a3a3a;
+  border-left: 3px solid hsla(var(--buff-hue), 55%, 58%, 0.7);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  font-size: 0.82em;
+  color: #ddd;
+  white-space: normal;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.castBuffTag:hover .castBuffTooltip {
+  display: block;
+}

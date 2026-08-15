@@ -1,0 +1,270 @@
+@use "breakpoints";
+
+.formulaTimelinePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hitItem {
+  border-bottom: 1px solid var(--color-surface-raised);
+  padding-bottom: 4px;
+}
+
+.hitItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.hitItemHeader {
+  display: grid;
+  grid-template-columns: 44px 64px minmax(96px, 1fr) 90px 110px minmax(160px, 1.8fr) 16px;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  padding: 5px 8px;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.hitItemHeader:hover {
+  background: var(--color-bg);
+}
+
+.idx {
+  font-variant-numeric: tabular-nums;
+  color: #666;
+  text-align: right;
+  font-size: 0.82em;
+}
+
+.time {
+  color: var(--color-text-muted);
+  font-size: 0.85em;
+  font-variant-numeric: tabular-nums;
+}
+
+.skillName {
+  color: #ddd;
+  font-size: 0.88em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hitNumber {
+  color: var(--color-text-muted);
+}
+
+.prepull {
+  margin-left: 6px;
+  font-size: 0.85em;
+  color: #ccc;
+}
+
+.damage {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.88em;
+}
+
+.damageLabel {
+  font-size: 0.7em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+
+.buffsCell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: center;
+}
+
+.disclosure {
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.stepBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 8px;
+}
+
+.qiPhase {
+  color: var(--color-accent);
+  font-size: 0.85em;
+}
+
+.sectionLabel {
+  font-size: 0.68em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-top: 4px;
+}
+
+.compositionTable {
+  display: flex;
+  flex-direction: column;
+}
+
+.compositionRow {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 4px;
+  border-bottom: 1px solid var(--color-surface-raised);
+  font-size: 0.82em;
+}
+
+.compositionRow:last-child {
+  border-bottom: none;
+}
+
+.compositionRow.compositionZero {
+  opacity: 0.45;
+}
+
+.compositionMain {
+  display: grid;
+  grid-template-columns: 70px 44px 14px 70px;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.compositionLabel {
+  color: #ccc;
+}
+
+.compositionChance {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--color-text-muted);
+}
+
+.compositionArrow {
+  color: var(--color-text-faint);
+  text-align: center;
+}
+
+.compositionDamage {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.compositionExplain {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-left: 2px;
+}
+
+.compositionDependsOn {
+  font-size: 0.88em;
+  color: var(--color-text-faint);
+}
+
+.equationTerm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 0.82em;
+}
+
+.equationTermLabel {
+  color: #ccc;
+  font-weight: 600;
+}
+
+.equationFactors {
+  display: inline;
+  color: var(--color-text-faint);
+}
+
+.equationFactor {
+  white-space: nowrap;
+}
+
+.equationOperator {
+  color: var(--color-text-muted);
+}
+
+.equationResult {
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+  margin-left: 4px;
+}
+
+.formulaTable {
+  display: flex;
+  flex-direction: column;
+}
+
+.formulaRow {
+  display: grid;
+  grid-template-columns: 160px 70px 1fr;
+  gap: 10px;
+  align-items: baseline;
+  padding: 3px 4px;
+  border-bottom: 1px solid var(--color-surface-raised);
+}
+
+.formulaRow:last-child {
+  border-bottom: none;
+}
+
+.formulaRow.changed {
+  border-left: 2px solid hsla(42, 55%, 58%, 0.7);
+  background: hsla(42, 60%, 42%, 0.1);
+}
+
+.formulaLabel {
+  font-size: 0.76em;
+  color: var(--color-text-muted);
+}
+
+.formulaValue {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.82em;
+  text-align: right;
+}
+
+.formulaSources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+
+.formulaSource {
+  font-size: 0.72em;
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@include breakpoints.below(breakpoints.$bp-720) {
+  .hitItemHeader {
+    grid-template-columns: 1fr;
+  }
+  .stepBlock {
+    padding-left: 12px;
+  }
+  .formulaRow {
+    grid-template-columns: 1fr;
+  }
+  .compositionMain {
+    grid-template-columns: 70px 44px 14px 1fr;
+  }
+}

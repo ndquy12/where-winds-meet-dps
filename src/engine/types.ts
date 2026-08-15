@@ -5,6 +5,8 @@ export type { GearWordId } from "../data/stats/statLines"
 import type { Skill } from "./skill"
 import type { Buff, BuffStatEffect } from "./buff"
 import type { Debuff } from "./debuff"
+import type { DamageOutcomeBreakdown } from "./formula"
+import type { DamageEffectSource } from "./buffs/buffEngine"
 
 export const ATTRIBUTE_KEYS = ["Bellstrike", "Stonesplit", "Silkbind", "Bamboocut"] as const
 
@@ -314,6 +316,12 @@ export interface CastBuffTag {
   requires?: string
   description?: string
   remainingSec?: number
+  // True for a tag sourced from BuffEngine (a class-buff-system module) rather
+  // than the StatusLedger. Its `effects` are a display-only re-evaluation for
+  // the chip tooltip, not the per-hit amount `classBuffSources` reports —
+  // formula-source attribution must read the latter and skip these, or a
+  // class buff's contribution is double-counted in the shown source list.
+  engineSourced?: boolean
 }
 
 export interface RotationCast {
@@ -325,6 +333,62 @@ export interface RotationCast {
   inWindow: boolean
   prePull: boolean
   buffs: CastBuffTag[]
+  // Direct hits attributed to this cast and any sub-skill it triggered.
+  // Excludes DoT ticks and mechanic extra-events, which the engine attributes
+  // to their own debuff/mechanic row, not the applying cast.
+  expectedDamage?: number
+  hitCount?: number
+  // One entry per hit event attributed to this cast (its own hits, plus any
+  // sub-skill it triggered), in the order they resolved — a multi-hit skill's
+  // formula can move mid-cast, so a single per-cast snapshot would silently
+  // show hit 1's numbers for every hit.
+  hits?: CastHitFormulaSnapshot[]
+}
+
+// The effective (yellow, post-resistance) damage-kernel inputs in force when
+// one hit resolved. Never the kernel's own single-letter cells
+// (docs/CALCULATION.md § "The formula chain" — those are opaque by design),
+// always these named fields.
+export interface CastFormulaSnapshot {
+  precisionRate: number
+  critRate: number
+  affinityRate: number
+  directCritRate: number
+  directAffinityRate: number
+  critDamageBoost: number
+  affinityDamageBoost: number
+  physDamageBoost: number
+  attributeDamageBoost: number
+  sustainDamageBoost: number
+  generalDamageBoost: number
+  // The engine-boundary channel — revelry script, Qi Break, healer buff, and
+  // an inner way's `allDamageBonus` scalar — kept apart from
+  // `generalDamageBoost` because the kernel sums the two as separate terms.
+  allDamageBoost: number
+  chargeBonus: number
+  effectiveMinPhysAttack: number
+  effectiveMaxPhysAttack: number
+  physPenetration: number
+  effectiveDefense: number
+  primaryAttribute: string
+  primaryAttributeMin: number
+  primaryAttributeMax: number
+  primaryAttributePenetration: number
+}
+
+export interface CastHitFormulaSnapshot extends CastFormulaSnapshot {
+  skillName: string
+  atTimeSec: number
+  qiPhase: string
+  inWindow: boolean
+  damage: number
+  outcomes: DamageOutcomeBreakdown
+  // Class-buff-system modules (`defineClassBuff`, an inner way's own
+  // `buffDefs`) active on this hit — the one contributor category with no
+  // other UI representation: not `RotationCast.buffs` (that's the editor
+  // system's ledger-backed Buff/Debuff), not a talent/oddity/set/inner-way
+  // panel stat, and not a mechanic's own display chip.
+  classBuffSources: DamageEffectSource[]
 }
 
 export interface SkillTickResult {

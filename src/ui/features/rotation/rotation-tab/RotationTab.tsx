@@ -8,6 +8,7 @@ import { RotationOptionsPanel } from "../rotation-options-panel/RotationOptionsP
 import { RotationBreakdownPanel } from "../rotation-breakdown-panel/RotationBreakdownPanel"
 import { RotationDpsGraphPanel } from "../rotation-dps-graph-panel/RotationDpsGraphPanel"
 import { RotationTimelinePanel } from "../rotation-timeline-panel/RotationTimelinePanel"
+import { RotationFormulaTimelinePanel } from "../rotation-formula-timeline-panel/RotationFormulaTimelinePanel"
 import styles from "./RotationTab.module.scss"
 
 export function RotationTab({
@@ -22,7 +23,7 @@ export function RotationTab({
   result: Result
 }) {
   const { t } = useI18n()
-  const [sub, setSub] = useState<"overview" | "editor">("overview")
+  const [sub, setSub] = useState<"overview" | "editor" | "formulaTimeline">("overview")
   return (
     <>
       <SubTabs
@@ -31,6 +32,7 @@ export function RotationTab({
         tabs={[
           { key: "overview", label: t("Overview") },
           { key: "editor", label: t("Rotation Editor") },
+          { key: "formulaTimeline", label: t("Formula Timeline") },
         ]}
       />
       <SubTabPanel>
@@ -63,6 +65,12 @@ export function RotationTab({
         )}
         {sub === "editor" && (
           <RotationEditorPanel inputs={inputs} onChange={onChange} result={result} />
+        )}
+        {sub === "formulaTimeline" && (
+          <div className="panel">
+            <h2>{t("Formula Timeline")}</h2>
+            <RotationFormulaTimelinePanel result={result} inputs={inputs} />
+          </div>
         )}
       </SubTabPanel>
     </>
