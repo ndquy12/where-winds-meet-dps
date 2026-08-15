@@ -215,8 +215,8 @@ export class BuffEngine {
       const ctx = this.buildContext(time, { kind: "display" }, stacks, module)
       const effects: { statKey: StatKey; amount: number }[] = module
         ? resolveEffects(module, ctx).flatMap((effect) =>
-            effect.kind === "stat" ? [{ statKey: effect.statKey, amount: effect.amount }] : [],
-          )
+          effect.kind === "stat" ? [{ statKey: effect.statKey, amount: effect.amount }] : [],
+        )
         : []
       out.push({
         id,
@@ -321,12 +321,12 @@ export class BuffEngine {
       module,
     )
     const sink: EffectSink = {
-      stat: () => {},
-      forceOutcome: () => {},
-      consumeStacks: () => {},
-      artBonus: () => {},
-      damageMultiplier: () => {},
-      setStatus: () => {},
+      stat: () => { },
+      forceOutcome: () => { },
+      consumeStacks: () => { },
+      artBonus: () => { },
+      damageMultiplier: () => { },
+      setStatus: () => { },
       applyBuff: (id, stacks, durationSec) => {
         const target = this.definitions.get(id)
         if (target && !this.gateOk(target)) return
@@ -461,14 +461,16 @@ export class BuffEngine {
       !this.isBuffActive(module.requiresActiveBuffOnTrigger, time)
     )
       return
+
+    const castDelay = module.buffAppliesOnCastEnd || props.buffAppliesOnCastEnd
+      ? (props.castTime ?? 1)
+      : 0
     if (module.cooldown) {
       const last = this.activeBuffs.get(module.id)
-      if (last && time - last.appliedAt < module.cooldown) return
+      if (last && time - (last.appliedAt - castDelay) < module.cooldown) return
     }
-    const applyTime =
-      module.buffAppliesOnCastEnd || props.buffAppliesOnCastEnd
-        ? time + (props.castTime ?? 1)
-        : time
+    const applyTime = time + castDelay
+
 
     if (!this.canGrantTrigger(module, applyTime)) return
 
@@ -663,13 +665,13 @@ export class BuffEngine {
       forceOutcome(outcome) {
         if (outcome === "crit") forceCrit = true
       },
-      applyBuff: () => {},
-      consumeStacks: () => {},
-      artBonus: () => {},
+      applyBuff: () => { },
+      consumeStacks: () => { },
+      artBonus: () => { },
       damageMultiplier(factor) {
         damageFactor *= factor
       },
-      setStatus: () => {},
+      setStatus: () => { },
     }
 
     for (const [id, module] of this.definitions) {
@@ -680,7 +682,7 @@ export class BuffEngine {
         scopedBuffIds.has(id) ||
         (module.perCastConsume
           ? this.consumeEvents.has(`${time}|${castTag}|${id}`) ||
-            this.phaseAlternativeHolds(module, time)
+          this.phaseAlternativeHolds(module, time)
           : module.activeAfterBuffEnds
             ? this.isActiveAfterBuffEndsActive(module, time)
             : this.isBuffActiveAtTime(id, time))

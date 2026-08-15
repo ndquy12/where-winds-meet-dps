@@ -90,14 +90,14 @@ class EventQueue {
     if (this.heap.length > 0) {
       this.heap[0] = last
       let i = 0
-      for (;;) {
+      for (; ;) {
         const l = 2 * i + 1
         const r = 2 * i + 2
         let smallest = i
         if (l < this.heap.length && this.less(this.heap[l], this.heap[smallest])) smallest = l
         if (r < this.heap.length && this.less(this.heap[r], this.heap[smallest])) smallest = r
         if (smallest === i) break
-        ;[this.heap[i], this.heap[smallest]] = [this.heap[smallest], this.heap[i]]
+          ;[this.heap[i], this.heap[smallest]] = [this.heap[smallest], this.heap[i]]
         i = smallest
       }
     }
@@ -340,9 +340,9 @@ export function simulateTimeline(inputs: Inputs): Result {
 
   const qiBreakWindow = buffEngine
     ? (() => {
-        const w = buffEngine.qiBreakWindow()
-        return { startSec: w.start, endSec: w.end }
-      })()
+      const w = buffEngine.qiBreakWindow()
+      return { startSec: w.start, endSec: w.end }
+    })()
     : null
 
   const { precision, critRate, affinityRate } = effectiveRates(inputs)
@@ -370,6 +370,7 @@ export function simulateTimeline(inputs: Inputs): Result {
   interface ResolveOverride {
     extraEffects?: BuffStatEffect[]
     forceGuaranteedAffinity?: boolean
+    forceGuaranteedPrecision?: boolean
   }
   const stateMemo = new Map<string, Resolved>()
   function resolveState(
@@ -441,9 +442,9 @@ export function simulateTimeline(inputs: Inputs): Result {
         (contribution.effects ?? []).map((e) => e.statKey + "=" + e.amount).join(",") +
         (contribution.context
           ? "|" +
-            Object.entries(contribution.context)
-              .map(([k, v]) => k + "=" + v)
-              .join(",")
+          Object.entries(contribution.context)
+            .map(([k, v]) => k + "=" + v)
+            .join(",")
           : "")
     }
     const combat = inputs.combatSettings
@@ -539,12 +540,15 @@ export function simulateTimeline(inputs: Inputs): Result {
     const hitInput = hitInputAt(skill, hit, frame)
     const extraEffects: BuffStatEffect[] = []
     let forceGuaranteedAffinity = false
+    let forceGuaranteedPrecision = false
+    
     // `onHit`/`claimStatEffects` run BEFORE the formula context is built, so
     // only the effect kinds that can change that context are live here.
     const hitSink: EffectSink = {
       stat: (statKey, amount) => extraEffects.push({ statKey, amount }),
       forceOutcome: (outcome) => {
         if (outcome === "affinity") forceGuaranteedAffinity = true
+        if (outcome === "precision") forceGuaranteedPrecision = true
       },
       setStatus: (id, stacks, permanent, durationFrames) => {
         const status = statusById.get(id)
@@ -559,17 +563,17 @@ export function simulateTimeline(inputs: Inputs): Result {
           )
         if (stacks !== undefined) recordStack(status.id, frame, stacks, stepStart)
       },
-      applyBuff: () => {},
-      consumeStacks: () => {},
-      artBonus: () => {},
-      damageMultiplier: () => {},
+      applyBuff: () => { },
+      consumeStacks: () => { },
+      artBonus: () => { },
+      damageMultiplier: () => { },
     }
     for (const effect of behavior.onHit?.(hitInput) ?? []) applyEffect(hitSink, effect)
     const qiPhase = buffEngine?.qiPhase(frame / FPS) ?? "normal"
     for (const effect of behavior.claimStatEffects(hitInput, qiPhase)) applyEffect(hitSink, effect)
     const resolveOverride: ResolveOverride | undefined =
-      extraEffects.length > 0 || forceGuaranteedAffinity
-        ? { extraEffects, forceGuaranteedAffinity }
+      extraEffects.length > 0 || forceGuaranteedAffinity || forceGuaranteedPrecision
+        ? { extraEffects, forceGuaranteedAffinity, forceGuaranteedPrecision }
         : undefined
     const st = resolveState(frame, skill, resolveOverride, castFrame)
     const hitContext: HitContext = {
@@ -580,13 +584,14 @@ export function simulateTimeline(inputs: Inputs): Result {
     }
     const art = behavior.buildArt(hitInput, hitContext)
     if (st.forceCrit) art.guaranteedCrit = 1
+    if (forceGuaranteedPrecision) art.guaranteedPrecision = 1
     // `patchArt` runs AFTER the formula context is built and may read it.
     const artSink: EffectSink = {
-      stat: () => {},
-      forceOutcome: () => {},
-      applyBuff: () => {},
-      consumeStacks: () => {},
-      setStatus: () => {},
+      stat: () => { },
+      forceOutcome: () => { },
+      applyBuff: () => { },
+      consumeStacks: () => { },
+      setStatus: () => { },
       artBonus: (field, amount) => {
         art[field] = (art[field] ?? 0) + amount
       },
@@ -637,8 +642,8 @@ export function simulateTimeline(inputs: Inputs): Result {
         if (flagged && next >= maxStacks) {
           const retained =
             det.retainParam &&
-            buffEngine &&
-            buffEngine.paramTier(det.retainParam) >= (det.retainMinTier ?? 6)
+              buffEngine &&
+              buffEngine.paramTier(det.retainParam) >= (det.retainMinTier ?? 6)
               ? (det.retainParamStacks ?? det.retainStacks ?? 0)
               : (det.retainStacks ?? 0)
           recordStack(status.id, frame, clamp(retained, 0, maxStacks), stepStart)

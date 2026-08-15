@@ -173,6 +173,7 @@ export type AttributeName = "power" | "agility" | "momentum"
 
 export type ScalingSource =
   | AttributeName
+  | "affinityRate"
   | "phys.min"
   | "phys.max"
   | "phys.penetration"

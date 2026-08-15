@@ -15,7 +15,7 @@ export const fluteOfTheTidesPrepull = defineSkill({
   attributeAttack: "",
   castTag: CAST.fluteOfTheTidesPrepull,
   triggersBuffs: [BUFF.fluteBoost],
-  castFrames: 0,
+  castFrames: 81,
   triggerable: true,
   hits: [
     hit(0, {

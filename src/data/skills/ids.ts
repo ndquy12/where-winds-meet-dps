@@ -79,6 +79,18 @@ export const CAST = {
   swordRChargeFollowUp1HitCancel: "cast:swordRChargeFollowUp1HitCancel",
   swordSpecial3Hit: "cast:swordSpecial3Hit",
   swordSpecial4Hit: "cast:swordSpecial4Hit",
+  // Splendor
+  swordQ: "cast:swordQ",
+  swordQ2nd: "cast:swordQ2nd",
+  swordHeavyCharged: "cast:swordHeavyCharged",
+  swordHeavyCharged2Hit: "cast:swordHeavyCharged2Hit",
+  swordHeavyChargedPrepull: "cast:swordHeavyChargedPrepull",
+  swordSpecial: "cast:swordSpecial",
+  swordSpecial2nd: "cast:swordSpecial2nd",
+  swordSpecialDeflect: "cast:swordSpecialDeflect",
+  spearQ0HitCancel: "cast:spearQ0HitCancel",
+  spearQPrepull: "cast:spearQPrepull",
+  energySurge: "cast:energySurge",
   toadCancel: "cast:toadCancel",
 } as const
 
