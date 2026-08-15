@@ -16,6 +16,8 @@ export const affinityDamageUpNameless = defineClassBuff({
   effects: (ctx) => {
     return ctx.self.reachesEvent && ctx.status.isActive(BUFF.mountainsMight)
       ? [stat("affinityDamageBoost", 0.18)]
-      : []
+      // Below 60% Endurance is not tracked by the engine
+      // So the buff is modeled as only half effective when Long Wind is not active
+      : [stat("affinityDamageBoost", 0.18 * 0.5)]
   },
 })
