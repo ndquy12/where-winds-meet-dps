@@ -9,7 +9,7 @@ export type ArtBonusField = "extraCritRate" | "extraPhysPenetration"
 
 export type Effect =
   | { kind: "stat"; statKey: StatKey; amount: number }
-  | { kind: "forceOutcome"; outcome: "crit" | "affinity" }
+  | { kind: "forceOutcome"; outcome: "precision" | "crit" | "affinity" }
   | { kind: "applyBuff"; id: string; stacks?: number; durationSec?: number }
   | { kind: "consumeStacks"; id: string; count: number }
   | { kind: "artBonus"; field: ArtBonusField; amount: number }
@@ -23,7 +23,7 @@ export type Effect =
 // so returning the wrong kind from a behaviour is a compile error, not a
 // silently dropped effect.
 export type HitEffect =
-  Extract<Effect, { kind: "stat" | "setStatus" }> | { kind: "forceOutcome"; outcome: "affinity" }
+  Extract<Effect, { kind: "stat" | "setStatus" }> | { kind: "forceOutcome"; outcome: "affinity" | "precision" }
 
 // The subset `SkillBehavior.patchArt` may return — after the formula context
 // is built.
@@ -33,7 +33,7 @@ export function stat(statKey: StatKey, amount: number): Extract<Effect, { kind: 
   return { kind: "stat", statKey, amount }
 }
 
-export function forceOutcome<Outcome extends "crit" | "affinity">(
+export function forceOutcome<Outcome extends "crit" | "affinity" | "precision">(
   outcome: Outcome,
 ): { kind: "forceOutcome"; outcome: Outcome } {
   return { kind: "forceOutcome", outcome }

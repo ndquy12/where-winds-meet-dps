@@ -3,6 +3,7 @@ import type { AttunementOption } from "../../engine/attunements"
 import { GENERAL_SLOTS } from "./attunementSlots"
 import { BELLSTRIKE_UMBRA_ATTUNEMENTS } from "./bellstrike-umbra/attunements"
 import { STONESPLIT_STRENGTH_ATTUNEMENTS } from "./stonesplit-strength/attunements"
+import { BELLSTRIKE_SPLENDOR_ATTUNEMENTS } from "./bellstrike-splendor/attunements"
 
 const EVERY_CLASS_OPTIONS = [
   {
@@ -39,4 +40,5 @@ export const ATTUNEMENT_OPTIONS = [
   ...EVERY_CLASS_OPTIONS,
   ...BELLSTRIKE_UMBRA_ATTUNEMENTS,
   ...STONESPLIT_STRENGTH_ATTUNEMENTS,
+  ...BELLSTRIKE_SPLENDOR_ATTUNEMENTS,
 ] as const satisfies readonly AttunementOption[]

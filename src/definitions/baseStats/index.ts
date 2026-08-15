@@ -306,6 +306,7 @@ export function buildScalingSources(
     power: totals.power,
     agility: totals.agility,
     momentum: totals.momentum,
+    affinityRate: inputs.affinityRate,
     "phys.min": inputs.phys.min,
     "phys.max": inputs.phys.max,
     "phys.penetration": inputs.phys.penetration,

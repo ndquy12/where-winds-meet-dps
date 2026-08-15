@@ -188,6 +188,7 @@ export type ScalingSource =
   | "bamboocut.min"
   | "bamboocut.max"
   | "bamboocut.penetration"
+  | "affinityRate"
 
 export interface MartialArtsTalent {
   id: string

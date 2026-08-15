@@ -2786,5 +2786,267 @@
       }
     ],
     "defaultRotationId": "builtin-stonesplitStrength-tilla-dummy-rotation"
+  },
+  "bellstrikeSplendor": {
+    "rotations": [
+      {
+        "id": "builtin-bellstrikeSplendor-reduced",
+        "name": "75 Wave, 2 Flute, 1 Frog",
+        "classId": "bellstrikeSplendor",
+        "steps": [
+          {
+            "id": "st-msge0us3-627f4s-3",
+            "skillId": "bellstrikeSplendor-spearq-prepull",
+            "hitCount": 1,
+            "prePull": false
+          },
+          {
+            "id": "st-msge0z0f-ioy59n-4",
+            "skillId": "bellstrikeSplendor-deflect-cancel-prepull",
+            "hitCount": 1,
+            "prePull": false
+          },
+          {
+            "id": "st-msge14ik-guvn51-5",
+            "skillId": "bellstrikeSplendor-flute-of-the-tides-prepull",
+            "hitCount": 1,
+            "prePull": false
+          },
+          {
+            "id": "st-msge16aw-y3r4rl-6",
+            "skillId": "bellstrikeSplendor-deflect-cancel-prepull",
+            "hitCount": 1,
+            "prePull": false
+          },
+          {
+            "id": "st-mssvepk9-xgni0c-6",
+            "skillId": "bellstrikeSplendor-swordheavycharged-prepull",
+            "hitCount": 1,
+            "prePull": false
+          },
+          {
+            "id": "st-msge19as-7twqrl-7",
+            "skillId": "bellstrikeSplendor-swordheavycharged-start",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge1cdw-599xea-8",
+            "skillId": "bellstrikeSplendor-swordq",
+            "hitCount": 1,
+            "prePull": false
+          },
+          {
+            "id": "st-msge1kde-a69z45-9",
+            "skillId": "bellstrikeSplendor-energysurge",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge1x1e-0rs7m5-a",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge22qz-726igt-b",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge2aga-6u4t13-c",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge2t6t-meoabz-d",
+            "skillId": "bellstrikeSplendor-spearq-0-hit-cancel",
+            "hitCount": 1,
+            "prePull": false
+          },
+          {
+            "id": "st-msge2zrd-6lzhd5-e",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge34wk-j46cr1-f",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge37jw-vdjvva-g",
+            "skillId": "bellstrikeSplendor-swordq",
+            "hitCount": 1,
+            "prePull": false
+          },
+          {
+            "id": "st-msge3at2-z3xq4k-h",
+            "skillId": "bellstrikeSplendor-energysurge",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge3gh7-x53wqo-i",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge3kzp-yyvppb-j",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge3my2-df8irn-k",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge3po8-3ganzh-l",
+            "skillId": "bellstrikeSplendor-spearq",
+            "hitCount": 1,
+            "prePull": false
+          },
+          {
+            "id": "st-msge45vl-qs3asa-m",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge4fyj-67hj6l-n",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge5h5f-50h3r2-o",
+            "skillId": "bellstrikeSplendor-toad-cancel",
+            "hitCount": 2,
+            "prePull": false
+          },
+          {
+            "id": "st-msge5mkb-omv8cj-p",
+            "skillId": "bellstrikeSplendor-energysurge",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge5pfk-b2nt7v-q",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge5s1i-awcjz0-r",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge5uer-72lvcq-s",
+            "skillId": "bellstrikeSplendor-spearq",
+            "hitCount": 1,
+            "prePull": false
+          },
+          {
+            "id": "st-msge5xzw-7wzbin-t",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge6065-wqhrqe-u",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-mssvg8rc-af5hde-8",
+            "skillId": "bellstrikeSplendor-deflect-cancel",
+            "hitCount": 1,
+            "prePull": false
+          },
+          {
+            "id": "st-msge6nwb-5cyfmj-x",
+            "skillId": "bellstrikeSplendor-flute-of-the-tides-full",
+            "hitCount": 2,
+            "prePull": false
+          },
+          {
+            "id": "st-msge776r-tmbezb-10",
+            "skillId": "bellstrikeSplendor-swordq",
+            "hitCount": 1,
+            "prePull": false
+          },
+          {
+            "id": "st-msge79ol-dbnxzw-11",
+            "skillId": "bellstrikeSplendor-energysurge",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-mssvcw8b-s278fg-1",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-mssvd7r5-vwk0ot-2",
+            "skillId": "bellstrikeSplendor-spearq",
+            "hitCount": 1,
+            "prePull": false
+          },
+          {
+            "id": "st-msge7frk-6aki49-13",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge8nv0-l8mv68-15",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge8q27-7pk6xs-16",
+            "skillId": "bellstrikeSplendor-energysurge",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-msge8nhm-kn8w18-14",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-mssvdj4b-605eh7-3",
+            "skillId": "bellstrikeSplendor-swordheavycharged",
+            "hitCount": 3,
+            "prePull": false
+          },
+          {
+            "id": "st-mssvf5kq-ly53g0-7",
+            "skillId": "bellstrikeSplendor-soaring",
+            "hitCount": 2,
+            "prePull": false
+          }
+        ],
+        "permanentBuffIds": [],
+        "prePullHitsCount": false,
+        "createdAt": "2026-08-05T17:55:22.785Z",
+        "updatedAt": "2026-08-14T10:03:13.905Z"
+      }
+    ],
+    "defaultRotationId": "builtin-bellstrikeSplendor-reduced"
   }
 }

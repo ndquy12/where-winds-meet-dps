@@ -1,0 +1,21 @@
+import { defineSkill, hit } from "../../../definitions/skills/skillDef"
+import { CLASS_ID, SKILL } from "./ids"
+import { CAST, WEAPON, ATTUNE } from "../ids"
+import { BUFF } from "../buffs/ids"
+export const swordQ = defineSkill({
+  id: SKILL.swordQ,
+  classId: CLASS_ID,
+  name: "SwordQ",
+  tags: [WEAPON.sword, ATTUNE.swordQ],
+  skillType: "weapon",
+  weaponOrAttribute: "Sword",
+  attributeAttack: "Bellstrike",
+  hits: [hit(0, { frame: 0, physMultiplier: 1.0253, attributeMultiplier: 1.5380, physFixed: 283, attributeFixed: 154 })],
+  castFrames: 26,
+  castTag: CAST.swordQ,
+  triggersBuffs: [BUFF.qiImbalance, BUFF.jadeware],
+  receives: [BUFF.affinityDamageUpNameless],
+  triggerable: true,
+  createdAt: "2026-08-12T00:00:00.000Z",
+  updatedAt: "2026-08-12T00:00:00.000Z",
+})

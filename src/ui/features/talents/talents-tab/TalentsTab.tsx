@@ -83,6 +83,7 @@ const SOURCE_LABEL: Record<ScalingSource, string> = {
   "bamboocut.min": "Min Bamboocut",
   "bamboocut.max": "Max Bamboocut",
   "bamboocut.penetration": "Bamboocut Penetration",
+  affinityRate: "Affinity Rate",
 }
 
 function formatStatValue(stat: TalentStat, value: number): string {
@@ -183,6 +184,86 @@ const CLASS_TALENT_COLUMNS: Record<string, WeaponColumnConfig[]> = {
               text: "+98 Min / +196 Max Bellstrike Attack (always)",
             },
             { kind: "talent", skill: "Attribute Damage Scale", label: "Attribute Damage Boost" },
+          ],
+        },
+      ],
+    },
+  ],
+  bellstrikeSplendor: [
+    {
+      weapon: "Nameless Sword",
+      cards: [
+        {
+          name: "Qi Struggle Enhancement",
+          lines: [{ kind: "mechanic", id: "qiStruggleEnhancement" }],
+        },
+        {
+          name: "Physical Attack UP",
+          lines: [{ kind: "talent", skill: "Physical Attack UP" }],
+        },
+        {
+          name: "Sword Qi Affinity Enhancement",
+          lines: [{ kind: "mechanic", id: "swordQiAffinityEnhancement" }],
+        },
+        {
+          name: "Bellstrike Attribute UP",
+          lines: [
+            {
+              kind: "talentFlatText",
+              skills: ["Min Bellstrike Attack", "Max Bellstrike Attack"],
+              text: "+98 Min / +196 Max Bellstrike Attack (always)",
+            },
+            { kind: "talent", skill: "Bellstrike Penetration Scale" },
+          ],
+        },
+        {
+          name: "Attr. Attack DMG UP",
+          lines: [
+            {
+              kind: "static",
+              text: "Bellstrike Attack deals 50% bonus damage.",
+              subNote:
+                "Already applied in the damage formula (elevated attribute multiplier) — not a stat this tab contributes.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      weapon: "Nameless Spear",
+      cards: [
+        {
+          name: "Max Endurance UP",
+          lines: [{ kind: "talent", skill: "Max Endurance UP" }],
+        },
+        {
+          name: "Affinity Rate UP",
+          lines: [{ kind: "talent", skill: "Affinity Rate UP" }],
+        },
+        {
+          name: "Affinity DMG UP",
+          lines: [{ kind: "mechanic", id: "affinityDamageUpNameless" }],
+        },
+        {
+          name: "Bellstrike Attribute UP",
+          lines: [
+            {
+              kind: "talentFlatText",
+              skills: ["Min Bellstrike Attack", "Max Bellstrike Attack"],
+              text: "+98 Min / +196 Max Bellstrike Attack (always)",
+            },
+            { kind: "talent", skill: "Bellstrike Attribute UP" },
+          ],
+        },
+        {
+          name: "Attr. Attack DMG UP",
+          lines: [
+            {
+              kind: "static",
+              text: "Bellstrike Attack deals 50% bonus damage.",
+              subNote:
+                "Already applied in the damage formula (elevated attribute multiplier) — not a stat this tab contributes.",
+            },
           ],
         },
       ],

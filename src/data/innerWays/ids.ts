@@ -3,12 +3,15 @@
 // `MindMethodSlot.id`; renaming a value here changes what a saved profile
 // resolves to (see `docs/MIGRATIONS.md`).
 export const INNER_WAY_ID = {
+  battleAnthem: "battleAnthem",
   bitterSeason: "bitterSeason",
   frostCladNight: "frostCladNight",
   insightfulStrike: "insightfulStrike",
   moraleChant: "moraleChant",
+  mountainsMight: "mountainsMight",
   steadfastDevotion: "steadfastDevotion",
   swordHorizon: "swordHorizon",
+  swordMorph: "swordMorph",
   throatPierce: "throatPierce",
   wolfchasersArt: "wolfchasersArt",
 } as const
@@ -29,6 +32,7 @@ export const INNER_WAY_NODE = {
   bitterSeasonStrongerDefenseReduction: "bitterSeasonStrongerDefenseReduction",
   bitterSeasonImprovedProcChance: "bitterSeasonImprovedProcChance",
   bitterSeasonMaxStackPenetration: "bitterSeasonMaxStackPenetration",
+  swordMorphChargedBonus: "swordMorphChargedBonus",
 } as const
 
 export type InnerWayNode = (typeof INNER_WAY_NODE)[keyof typeof INNER_WAY_NODE]
