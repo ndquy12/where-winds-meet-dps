@@ -2,9 +2,9 @@ import { defineClassBuff } from "../../../../definitions/skills/buffDef"
 import { BUFF } from "../../buffs/ids"
 import { stat } from "../../../../engine/effects/effect"
 
-export const swordSlashBonus = defineClassBuff({
-  id: BUFF.swordSlashBonus,
-  name: "Sword Slash Bonus",
+export const swordSlashDamageBoost = defineClassBuff({
+  id: BUFF.swordSlashDamageBoost,
+  name: "Sword Slash Damage Boost",
   duration: 8,
   maxStacks: 3,
   stacksPerHit: true,

@@ -13,8 +13,8 @@ export const swordHeavyCharged2Hit = defineSkill({
   attributeAttack: "Bellstrike",
   castFrames: 117,
   castTag: CAST.swordHeavyCharged2Hit,
-  triggersBuffs: [BUFF.swordSlashBonus],
-  receives: [BUFF.battleAnthemChargedBonus, BUFF.swordMorphChargedBonus, BUFF.qiStruggleEnhancement, BUFF.swordQiAffinityEnhancement, BUFF.affinityDamageUpNameless, BUFF.swordSlashBonus],
+  triggersBuffs: [BUFF.swordSlashDamageBoost],
+  receives: [BUFF.battleAnthemChargedBonus, BUFF.swordMorphChargedBonus, BUFF.qiStruggleEnhancement, BUFF.swordQiAffinityEnhancement, BUFF.affinityDamageUpNameless, BUFF.swordSlashDamageBoost],
   triggerable: true,
   hits: [
     hit(0, {

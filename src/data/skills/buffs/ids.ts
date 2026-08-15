@@ -39,7 +39,7 @@ export const BUFF = {
   revelryScript: "revelryScript",
   soulShaken: "soulShaken",
   surgingWaves: "surgingWaves",
-  swordSlashBonus: "swordSlashBonus",
+  swordSlashDamageBoost: "swordSlashBonus",
   vulnerabilityTeammate: "vulnerabilityTeammate",
   wineGu: "wineGu",
 } as const

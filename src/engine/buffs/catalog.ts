@@ -31,7 +31,7 @@ function moduleAffectsSummary(module: BuffModule, skills: readonly Skill[]): str
       skills.filter((skill) => skill.receives?.includes(module.id)).map((skill) => skill.name),
     ),
   ]
-  return names.length > 0 ? names.join("/") : "nothing"
+  return names.length > 0 ? names.join(" / ") : "nothing"
 }
 
 function skillsInScope(classId: string | undefined, inputs: Inputs | undefined): Skill[] {
