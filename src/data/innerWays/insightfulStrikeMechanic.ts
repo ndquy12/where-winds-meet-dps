@@ -66,9 +66,9 @@ export function insightfulStrikeMechanic(): TimelineMechanic<State> {
       const effects =
         activeProb > 0
           ? EFFECTS.map((effect) => ({
-              statKey: effect.statKey,
-              amount: effect.amount * activeProb,
-            }))
+            statKey: effect.statKey,
+            amount: effect.amount * activeProb,
+          }))
           : []
       const scaled =
         state.tier6 && skill && DOT_MULT_ROLES.some((role) => skill.tags?.includes(role))

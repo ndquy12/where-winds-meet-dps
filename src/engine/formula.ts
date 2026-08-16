@@ -251,29 +251,29 @@ export function computeSkillDamage(
   const V = isTianGong
     ? 0
     : Math.min(ctx.critPanel, 0.8) +
-      ctx.directCritPanel +
-      setFormulaBonus(ctx.set, "directCrit") +
-      num(art.extraCritRate)
+    ctx.directCritPanel +
+    setFormulaBonus(ctx.set, "directCrit") +
+    num(art.extraCritRate)
 
   const isLowQi = counters.lowQi === 1
   const W = isTianGong
     ? 0
     : Math.min(ctx.affinityPanel + num(art.extraAffinityRate) / (1 + rateRes), 0.4) +
-      ctx.directAffinityPanel +
-      (isLowQi ? setFormulaBonus(ctx.set, "lowQiDirectAffinityRate") : 0)
+    ctx.directAffinityPanel +
+    (isLowQi ? setFormulaBonus(ctx.set, "lowQiDirectAffinityRate") : 0)
 
   const setFalcon = ctx.hawkwingPhysBonus ?? setFormulaBonus(ctx.set, "physBoost")
   const effectivePhys = effectivePhysRange(ctx.smallPhys, ctx.largePhys, ctx.food)
   const AE =
     (effectivePhys.min + num(art.minPhysFlatBonus)) *
-      (1 + num(art.minPhysPctBonus)) *
-      (1 + setFalcon) -
+    (1 + num(art.minPhysPctBonus)) *
+    (1 + setFalcon) -
     ctx.effectiveDefense
 
   const AG_raw =
     (effectivePhys.max + num(art.maxPhysFlatBonus)) *
-      (1 + num(art.maxPhysPctBonus)) *
-      (1 + setFalcon) -
+    (1 + num(art.maxPhysPctBonus)) *
+    (1 + setFalcon) -
     ctx.effectiveDefense
   const AG = Math.max(AG_raw, AE)
 
@@ -330,7 +330,7 @@ export function computeSkillDamage(
           : ctx.bamboocut.pen
   const BJ = attrPen
   const BK = ctx.attributeDmgBoostPanel
-  const BL = 1
+  const BL = 1.5
   const BJpen = penFrac(BJ, attrPenRes)
   const BM = BG * (1 + BJpen) * (1 + BK) * BL
   const BO = BH * (1 + X) * (1 + BJpen) * (1 + BK) * BL
@@ -343,8 +343,8 @@ export function computeSkillDamage(
 
   function attrBlock(attribute: Attribute, block: AttackBlock, pen: number, extraSkillPen: number) {
     const matches = BU === attribute && isWeapon
-    const small = block.min + (matches ? ctx.attributePrimaryBonus : 0)
-    const large = Math.max(block.max + (matches ? ctx.attributePrimaryBonus : 0), small)
+    const small = block.min
+    const large = Math.max(block.max, small)
     const avg = (small + large) / 2
     const penBoost = pen + extraSkillPen
     // The Swallowcall low-qi bonus is read twice — see `data/sets/swallowcall.ts`.
@@ -423,7 +423,7 @@ export function computeSkillDamage(
     num(art.extraDamageBoost) +
     (isPersistent
       ? ctx.sustainDmgBoostPanel +
-        (ctx.dotDamageMultiplier === undefined ? (ctx.dotDamageBoost ?? 0) : 0)
+      (ctx.dotDamageMultiplier === undefined ? (ctx.dotDamageBoost ?? 0) : 0)
       : 0)
 
   // A scoped stat, in the same family as `weaponBoosts` / `mysticTypeBoosts`
@@ -537,15 +537,15 @@ export function computeSkillDamage(
       attributeFlat:
         Q_eff !== 0
           ? buildTerm(
-              "Flat Damage",
-              Q_eff,
-              null,
-              "",
-              BK,
-              BJpen,
-              outcomeBoostLabel,
-              outcomeBoostValue,
-            )
+            "Flat Damage",
+            Q_eff,
+            null,
+            "",
+            BK,
+            BJpen,
+            outcomeBoostLabel,
+            outcomeBoostValue,
+          )
           : null,
       attributeBlocks: buildAttributeBlocks(
         attributeAttackValueOf,

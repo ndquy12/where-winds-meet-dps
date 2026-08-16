@@ -29,7 +29,7 @@ export const bellstrikeSplendor = defineClass({
     "bitterSeason",
   ],
   classSpecificAttunements: ["swordCharged"],
-  weapons: ["Sword", "Spear"],
+  weapons: ["namelessSword", "namelessSpear"],
   critBoostWeaponTypes: [],
   skills: withUniversalSkills(CLASS_ID, "Bellstrike", SKILLS),
   debuffs: DEBUFFS,

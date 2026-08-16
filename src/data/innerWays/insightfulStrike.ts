@@ -17,7 +17,7 @@ export const insightfulStrike = defineInnerWay({
   },
   scalars: {
     dotDamageBoost: 0.1,
-    allDamageBonus: 0.015,
+    // allDamageBonus: 0.015,
   },
   tiers: {
     6: {
