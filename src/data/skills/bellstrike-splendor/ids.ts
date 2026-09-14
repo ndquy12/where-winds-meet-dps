@@ -2,6 +2,7 @@ export const SKILL = {
   swordHeavyCharged: "bellstrikeSplendor-swordheavycharged",
   swordHeavyChargedPrepull: "bellstrikeSplendor-swordheavycharged-prepull",
   swordHeavyCharged2Hit: "bellstrikeSplendor-swordheavycharged-2-hit",
+  swordHeavyChargedStart: "bellstrikeSplendor-swordheavycharged-start",
   energySurge: "bellstrikeSplendor-energysurge",
   swordq: "bellstrikeSplendor-swordq",
   swordq2nd: "bellstrikeSplendor-swordq-2nd",

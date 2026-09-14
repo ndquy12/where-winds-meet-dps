@@ -1,5 +1,5 @@
 import { defineClassBuff } from "../../../../definitions/skills/buffDef"
-import { BUFF, PARAM } from "../../buffs/ids"
+import { BUFF } from "../../buffs/ids"
 import { stat } from "../../../../engine/effects/effect"
 
 // The endurance half of the Nameless Spear talent `endlessGale` carries the
@@ -18,11 +18,11 @@ import { stat } from "../../../../engine/effects/effect"
 export const belowSixtyEndurance = defineClassBuff({
   id: BUFF.belowSixtyEndurance,
   name: "Below 60% Endurance",
-  requires: { param: PARAM.lowEndurance },
+  // requires: { param: PARAM.lowEndurance },
   affectsAll: true,
   alwaysActive: true,
   duration: 9999,
   summary: "affinityDmg +18%, except while Endless Gale already grants it",
   effects: (ctx) =>
-    ctx.status.isActive(BUFF.endlessGale) ? [] : [stat("affinityDamageBoost", 0.18)],
+    ctx.status.isActive(BUFF.endlessGale) ? [] : [stat("affinityDamageBoost", 0.18 * 0.6)],
 })

@@ -15,6 +15,6 @@ export const swordSlashDamageBoost = defineClassBuff({
   summary: "+8.0% all/stack, +10.0% while Exhausted",
   effects: (ctx) =>
     ctx.self.stacks > 0
-      ? [stat("allDamageBoost", (ctx.phase === "exhausted" ? 0.1 : 0.08) * ctx.self.stacks)]
+      ? [stat("allDamageBoost", (ctx.phase === "exhausted" ? 0.1 : 0.1) * ctx.self.stacks)]
       : [],
 })

@@ -13,6 +13,7 @@ export const endlessGale = defineClassBuff({
   name: "Endless Gale",
   affectsAll: true,
   duration: (ctx) => (ctx.build.param(PARAM.mountainsMight) ? 10 : 8),
+  cooldown: 12,
   buffAppliesOnCastEnd: true,
   summary: "affinityDmg +18%",
   effects: [stat("affinityDamageBoost", 0.18)],

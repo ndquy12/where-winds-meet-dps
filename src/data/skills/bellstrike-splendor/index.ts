@@ -5,6 +5,7 @@ import { spearqPrepull } from "./spearq-prepull"
 import { swordHeavyCharged } from "./swordheavycharged"
 import { swordHeavyCharged2Hit } from "./swordheavycharged-2-hit"
 import { swordHeavyChargedPrepull } from "./swordheavycharged-prepull"
+import { swordHeavyChargedStart } from "./swordheavycharged-start"
 import { swordq } from "./swordq"
 import { swordq2nd } from "./swordq-2nd"
 import { swordSpecial } from "./swordspecial"
@@ -16,6 +17,7 @@ export const CLASS_ID = "bellstrikeSplendor"
 export const SKILLS = [
   swordHeavyCharged,
   swordHeavyChargedPrepull,
+  swordHeavyChargedStart,
   swordHeavyCharged2Hit,
   energySurge,
   swordq,

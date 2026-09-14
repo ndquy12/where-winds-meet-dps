@@ -1,6 +1,6 @@
 import { defineClassBuff } from "../../../../definitions/skills/buffDef"
 import { BUFF } from "../../buffs/ids"
-import { damageMultiplier, stat } from "../../../../engine/effects/effect"
+import { stat } from "../../../../engine/effects/effect"
 
 // "Increases all Qi damage taken by 10% for 15 seconds. Increases HP damage
 // taken by 10%, and Bellstrike damage taken is increased by an additional 10%
@@ -22,5 +22,5 @@ export const qiImbalance = defineClassBuff({
   buffAppliesOnCastEnd: true,
   summary: "+10% HP damage and +10% Bellstrike damage taken while Exhausted",
   effects: (ctx) =>
-    ctx.phase === "exhausted" ? [damageMultiplier(1.1), stat("attributeDamageBoost", 0.1)] : [],
+    ctx.phase === "exhausted" ? [stat("affinityDamageBoost", 0.08), stat("attributeDamageBoost", 0.08)] : [],
 })

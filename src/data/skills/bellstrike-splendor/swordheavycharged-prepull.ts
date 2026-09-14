@@ -1,12 +1,10 @@
-import { defineSkill, hit } from "../../../definitions/skills/skillDef"
-import { ATTACK, ATTUNE, CAST, PROP, WEAPON } from "../ids"
+import { defineSkill } from "../../../definitions/skills/skillDef"
 import { BUFF } from "../buffs/ids"
+import { ATTACK, ATTUNE, CAST, PROP, WEAPON } from "../ids"
 import { SKILL } from "./ids"
 import { NAMELESS_SWORD_RECEIVES } from "./receives"
 
-// The reference export gives one row for all three waves here, unlike the full
-// cast. Splitting it by the full cast's ratios would invent a distribution
-// nothing measures.
+// This use for charged time prepull. No hits
 export const swordHeavyChargedPrepull = defineSkill({
   id: SKILL.swordHeavyChargedPrepull,
   classId: "bellstrikeSplendor",
@@ -31,29 +29,7 @@ export const swordHeavyChargedPrepull = defineSkill({
   ],
   castFrames: 51,
   triggerable: true,
-  hits: [
-    hit(0, {
-      frame: 0,
-      physMultiplier: 1.5674,
-      attributeMultiplier: 2.3511,
-      physFixed: 314.6666666666667,
-      attributeFixed: 179,
-    }),
-    hit(1, {
-      frame: 17,
-      physMultiplier: 1.5674,
-      attributeMultiplier: 2.3511,
-      physFixed: 314.6666666666667,
-      attributeFixed: 179,
-    }),
-    hit(2, {
-      frame: 34,
-      physMultiplier: 1.5674,
-      attributeMultiplier: 2.3511,
-      physFixed: 314.6666666666667,
-      attributeFixed: 179,
-    }),
-  ],
+  hits: [],
   createdAt: "2026-08-15T00:00:00.000Z",
   updatedAt: "2026-08-15T00:00:00.000Z",
 })

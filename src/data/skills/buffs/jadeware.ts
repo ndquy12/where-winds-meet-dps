@@ -19,6 +19,7 @@ export const jadeware = defineBuff({
   name: "Jadeware",
   requires: { set: jadewareSet.siteKey },
   affectsAll: true,
+  buffAppliesOnCastEnd: true,
   duration: 10,
   cooldown: 12,
   summary: "affinityDmg +10% for the whole window, directAffinity +7.5% — low-Qi targets only",
