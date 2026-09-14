@@ -20,6 +20,7 @@ const MERGED_CATEGORIES: Record<string, string> = {
   Stonesplit: "Attack & Attribute",
   Silkbind: "Attack & Attribute",
   Bamboocut: "Attack & Attribute",
+  Void: "Attack & Attribute",
   "Martial Boosts": "Martial & Target Boosts",
   "Target-Type Boosts": "Martial & Target Boosts",
 }
