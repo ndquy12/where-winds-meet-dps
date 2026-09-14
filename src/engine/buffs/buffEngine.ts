@@ -571,16 +571,19 @@ export class BuffEngine {
       return
     if (this.triggerOnlyExtends(module, props) && !this.isBuffActiveAtTime(module.id, time)) return
 
-    const castDelay =
-      module.buffAppliesOnCastEnd || props.buffAppliesOnCastEnd ? (props.castTime ?? 1) : 0
     if (module.cooldown) {
-      const last = this.activeBuffs.get(module.id)
-      if (last && time - (last.appliedAt - castDelay) < module.cooldown) return
+      const last = this.lastTriggerAt.get(module.id)
+      if (last !== undefined && time - last < module.cooldown) return
     }
-
-    const applyTime = time + castDelay
+    const applyTime =
+      module.buffAppliesOnCastEnd || props.buffAppliesOnCastEnd
+        ? time + (props.castTime ?? 1)
+        : time
 
     if (!this.canGrantTrigger(module, applyTime)) return
+    const markTriggered = () => {
+      if (module.cooldown) this.lastTriggerAt.set(module.id, time)
+    }
 
     if (module.stacksPerHit && (props.hitCount ?? 1) > 1) {
       const hitCount = props.hitCount ?? 1
@@ -591,18 +594,25 @@ export class BuffEngine {
           const hitTime = applyTime + i * step
           if (!this.canGrantStack(module, hitTime)) continue
           this.applyBuff(module.id, hitTime, null, 1)
+          markTriggered()
         }
       } else {
         let granted = 0
         for (let i = 0; i < hitCount; i++) if (this.canGrantStack(module, applyTime)) granted++
-        if (granted > 0) this.applyBuff(module.id, applyTime, null, granted)
+        if (granted > 0) {
+          this.applyBuff(module.id, applyTime, null, granted)
+          markTriggered()
+        }
       }
       return
     }
 
     const requiresActive = this.requiresBuffActiveGate(module, applyTime)
     if (requiresActive !== null) {
-      if (requiresActive) this.applyBuff(module.id, applyTime, null, 1)
+      if (requiresActive) {
+        this.applyBuff(module.id, applyTime, null, 1)
+        markTriggered()
+      }
       return
     }
 
@@ -617,8 +627,10 @@ export class BuffEngine {
       for (let i = 0; i < perCast; i++) if (this.canGrantStack(module, applyTime)) granted++
       if (granted <= 0) return
       this.applyBuff(module.id, applyTime, duration, granted)
+      markTriggered()
     } else {
       this.applyBuff(module.id, applyTime, duration, perCast)
+      markTriggered()
     }
   }
 

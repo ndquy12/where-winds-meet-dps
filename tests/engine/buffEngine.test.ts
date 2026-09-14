@@ -279,6 +279,24 @@ describe("BuffEngine — triggerDeclaredBuffs (the DoT-tick trigger path)", () =
     expect(engine.isBuffActiveAtTime("coolingTick", 6)).toBe(false)
   })
 
+  it("gates a buffAppliesOnCastEnd cooldown on cast-start time, unaffected by castTime", () => {
+    const modules: BuffModule[] = [
+      {
+        id: "lowQiWindow",
+        name: "Low Qi Window",
+        duration: 10,
+        cooldown: 12,
+        buffAppliesOnCastEnd: true,
+        affectsAll: true,
+        effects: [stat("allDamageBoost", 0.1)],
+      },
+    ]
+    const engine = new BuffEngine({}, modules)
+    engine.processSkillCast("cast:probe", 1, { castTime: 1 }, false, ["lowQiWindow"])
+    engine.processSkillCast("cast:probe", 13, { castTime: 0.2 }, false, ["lowQiWindow"])
+    expect(engine.isBuffActiveAtTime("lowQiWindow", 13.2)).toBe(true)
+  })
+
   it("does not run per-cast consume — a pool a cast would spend stays untouched", () => {
     const pool: BuffModule = {
       id: "tickPool",

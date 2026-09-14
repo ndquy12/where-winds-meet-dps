@@ -6,6 +6,7 @@ import { useConfirm } from "../../../components/confirm-dialog/confirmContext"
 import { SubTabs } from "../../../components/sub-tabs/SubTabs"
 import { SubTabPanel } from "../../../components/sub-tabs/SubTabPanel"
 import { GearSlotTiles } from "../gear-slot-tiles/GearSlotTiles"
+import { EquippedTunementsPanel } from "../equipped-tunements-panel/EquippedTunementsPanel"
 import { GearAnalysisPanel } from "../gear-analysis-panel/GearAnalysisPanel"
 import { GearDetailsPanel } from "../gear-details-panel/GearDetailsPanel"
 import { GearInventoryPanel } from "../gear-inventory-panel/GearInventoryPanel"
@@ -206,6 +207,7 @@ export function GearTab({ inputs, engineInputs, onChange, currentDps }: Props) {
           dpsDeltas={equippedDeltas.deltas}
           dpsDeltasPending={equippedDeltas.isPending}
         />
+        <EquippedTunementsPanel inventory={inventory} equipped={equipped} />
       </div>
 
       <div className={styles.gearSplit}>

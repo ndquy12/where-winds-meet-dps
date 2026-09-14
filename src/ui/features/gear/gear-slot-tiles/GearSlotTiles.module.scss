@@ -4,6 +4,7 @@
   display: grid;
   grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: 6px;
+  margin-bottom: 6px;
 }
 
 .gearTile {
@@ -69,6 +70,7 @@
 .gearTile.rarityLegendary.isSelected {
   border-left-color: var(--color-rarity-legendary);
 }
+
 .gearTile.rarityEpic,
 .gearTile.rarityEpic:hover,
 .gearTile.rarityEpic.isSelected {
@@ -131,12 +133,15 @@
 .gearTileStat:global(.is-positive) .gearTileStatValue {
   color: var(--color-positive);
 }
+
 .gearTileStat:global(.is-negative) .gearTileStatValue {
   color: var(--color-negative);
 }
+
 .gearTileStat:global(.is-zero) .gearTileStatValue {
   color: var(--color-text-muted);
 }
+
 .gearTileStat:global(.is-pending) .gearTileStatValue {
   color: var(--color-text-faint);
 }

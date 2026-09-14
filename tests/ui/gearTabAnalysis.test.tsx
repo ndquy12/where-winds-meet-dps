@@ -173,6 +173,20 @@ describe("GearTab column layout", () => {
   })
 })
 
+describe("GearTab equipped tunement counts", () => {
+  it("tallies each tunement across every equipped piece, ignoring the bench", () => {
+    renderTab()
+
+    const crit = screen.getByText("Critical Rate").parentElement!
+    const power = screen.getByText("Power").parentElement!
+
+    // weapon + helm are equipped (each rolls crit + power); "spare" sits
+    // unequipped on the bench and must not be counted.
+    expect(within(crit).getByText("2")).toBeInTheDocument()
+    expect(within(power).getByText("2")).toBeInTheDocument()
+  })
+})
+
 describe("GearTab gear buttons", () => {
   it("keeps import and create together in the equipped head, on either subtab", () => {
     renderTab()
