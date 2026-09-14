@@ -5,18 +5,16 @@ Rules for `src/ui/**`, the app shell, and the DPS worker. An engine pass is a fu
 
 ## The rules
 
-1. **At most ONE synchronous engine pass per input change** — the baseline pass
-   that feeds the DPS header. Anything that runs the engine more than once per
-   change (ranking sweeps, per-piece deltas, tile variants, retunement and
-   word-max analyses) goes through the shared worker client: add a request kind
-   and a compute function there, and drive it from a hook shaped like the
-   existing ones — subscribe on mount and unsubscribe on unmount, and an empty
-   result **derived at the hook's return** from a module-level constant, never
+1. **No engine pass runs synchronously on the main thread**, not even the
+   baseline pass that feeds the DPS header. Every pass, including that one,
+   goes through the shared worker client: add a request kind and a compute
+   function there, and drive it from a hook shaped like the existing ones —
+   subscribe on mount and unsubscribe on unmount, and an empty result
+   **derived at the hook's return** from a module-level constant, never
    written back by a `setState` inside an effect. A hook's initial value is its
    kind's retained response, read in the `useState` initializer and projected by
    the same function its listener uses — never replayed into state from an
-   effect. **Never** run the engine in a render-path memo outside that one
-   baseline pass.
+   effect. **Never** run the engine in a render-path memo.
 2. **The client assigns request ids; a hook never numbers its own requests.**
    Superseded responses are recognised by id against document-lifetime state, so
    a counter that restarts — as any per-mount counter does on a route revisit —
@@ -54,18 +52,24 @@ Rules for `src/ui/**`, the app shell, and the DPS worker. An engine pass is a fu
    drops the _delivery_, never the work. Retention tracks its own newest-answer
    mark, so a superseded or out-of-order response can never overwrite a newer
    one with an older one.
-7. **Mount worker hooks where the results are consumed**, not in the app shell, so
+7. **Inside the worker, every deterministic engine pass goes through the
+   worker-local memo, never the raw engine call.** It is keyed by a signature of
+   the same inputs and options passed to the pass, bounded, and never shared
+   across pooled workers — each is a separate JS context. A pass is exempt only
+   when its result depends on something outside the signature, such as a seed
+   that changes every call.
+8. **Mount worker hooks where the results are consumed**, not in the app shell, so
    a tab that does not show the data does not pay for the sweep. The exception is
    a kind that only ever posts on an explicit user action and must outlive the tab
    that started it: the shell owns that hook and passes its state down, which is
    what keeps the run off the unsubscribe abort in rule 5.
-8. **While a recompute is in flight, show last-known values** with a subtle
+9. **While a recompute is in flight, show last-known values** with a subtle
    opacity dim. Never unmount or flash the UI. Take the flag from the client,
    which counts a kind pending from the moment a request is owed rather than when
    the debounce fires — so a sustained drag dims throughout — and never mirror it
    into hook state. The dim says _this panel_ is stale; the shell also reports the
    set of pending kinds in one place, so a sweep is never silent.
-9. **Split a sweep whose fast answer the user is looking at.** A kind that
+10. **Split a sweep whose fast answer the user is looking at.** A kind that
    recomputes a whole collection to fill one small always-visible readout gets a
    second kind scoped to that readout, computed by the same function over the
    narrower id set so the two can never disagree, and a parity test that says so.
@@ -78,14 +82,14 @@ Rules for `src/ui/**`, the app shell, and the DPS worker. An engine pass is a fu
    the axis the compute function shares state along, so a shard is never slower
    per item than the whole sweep was, and a parity test states that the split
    answers what the whole answered.
-10. **While a shell-owned run is in flight, no control may change engine inputs.**
+11. **While a shell-owned run is in flight, no control may change engine inputs.**
    Disable the whole route panel through one `fieldset`, disable the shell
    controls that write inputs, and have every shell writer refuse the write —
    the disabled markup is the affordance, the refusal is the invariant. Release
    both the moment the run stops, however it stopped.
-11. **Never serialize large state per render.** Memoize on the value that actually
+12. **Never serialize large state per render.** Memoize on the value that actually
     changed.
-12. **A kind that reports progress reports it on its own message kind**, routed
+13. **A kind that reports progress reports it on its own message kind**, routed
     ahead of the response channel and never through it — that channel retires a
     request id on first delivery, so progress sent down it swallows both the later
     progress and the real result. Progress never clears the pending flag, and

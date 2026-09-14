@@ -1,14 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import {
-  HashRouter,
-  NavLink,
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom"
-import { runEngine } from "../engine/dps"
+import { HashRouter, NavLink, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom"
 import { applyArmorSet, applyBowSet } from "../engine/panel"
 import { withCustomContent } from "../engine/customContent"
 import { withDerivedStats } from "../engine/derivedInputs"
@@ -25,6 +16,7 @@ import { ProfilePanel } from "../ui/features/profile/profile-panel/ProfilePanel"
 import { GearTab } from "../ui/features/gear/gear-tab/GearTab"
 import { TalentsOdditiesTab } from "../ui/features/talents/talents-oddities-tab/TalentsOdditiesTab"
 import { SkillsTab } from "../ui/features/skills/skills-tab/SkillsTab"
+import { useBaselineResult } from "../ui/hooks/useBaselineResult"
 import { useGraduationRate } from "../ui/hooks/useGraduationRate"
 import { useParseSimulation, type ParseSimulationRequest } from "../ui/hooks/useParseSimulation"
 import { SimulationToast, SIMULATION_PATH } from "../ui/layout/simulation-toast/SimulationToast"
@@ -135,7 +127,7 @@ function AppInner() {
     return applyBowSet(applyArmorSet(derived))
   }, [configuredInputs])
 
-  const result = useMemo(() => runEngine(engineInputs), [engineInputs])
+  const { result, isPending: resultPending } = useBaselineResult(configuredInputs)
   const graduation = useGraduationRate(configuredInputs, result.dps)
   const headerResult = useMemo(
     () => ({ ...result, graduationRate: graduation.rate }),
@@ -364,6 +356,7 @@ function AppInner() {
         <MetricsCard
           result={headerResult}
           className={styles.headerMetrics}
+          pending={resultPending}
           graduationPending={graduation.isPending}
           theoreticalDps={graduation.theoreticalDps}
           onGraduationClick={() => setGraduationDialogOpen(true)}

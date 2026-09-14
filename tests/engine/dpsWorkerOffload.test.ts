@@ -2,6 +2,8 @@
 // `Worker` in vitest/jsdom.
 import { describe, expect, it } from "vitest"
 import {
+  cachedRunEngine,
+  computeBaseline,
   computeDpsDeltas,
   computeEquippedDeltas,
   computeGearAnalysisRequest,
@@ -41,6 +43,33 @@ const umbraInputs = { ...defaultInputs, classId: "bellstrikeUmbra" }
 function dpsFor(variant = umbraInputs) {
   return runEngine(applyBowSet(applyArmorSet(withDerivedStats(variant)))).dps
 }
+
+describe("cachedRunEngine", () => {
+  it("returns the same Result reference for repeated calls with equal inputs", () => {
+    const first = cachedRunEngine({ ...umbraInputs })
+    const second = cachedRunEngine({ ...umbraInputs })
+
+    expect(second).toBe(first)
+  })
+
+  it("returns a fresh Result when inputs differ", () => {
+    const first = cachedRunEngine({ ...umbraInputs })
+    const second = cachedRunEngine({ ...umbraInputs, set: "bellstrikeSet" })
+
+    expect(second).not.toBe(first)
+  })
+})
+
+describe("computeBaseline", () => {
+  it("matches the direct derive-and-run pipeline", () => {
+    const expected = runEngine(applyBowSet(applyArmorSet(withDerivedStats(umbraInputs))))
+
+    const response = computeBaseline({ reqId: 9, inputs: umbraInputs })
+
+    expect(response.reqId).toBe(9)
+    expect(response.result).toEqual(expected)
+  })
+})
 
 describe("computeRankingRequest", () => {
   it("matches computeRanking(inputs, baselineDps) for the same inputs", () => {

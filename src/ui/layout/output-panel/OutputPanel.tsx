@@ -8,6 +8,7 @@ import styles from "./OutputPanel.module.scss"
 interface MetricsCardProps {
   result: Result
   className?: string
+  pending?: boolean
   graduationPending?: boolean
   theoreticalDps?: number | null
   onGraduationClick?: () => void
@@ -41,6 +42,7 @@ function OpenIcon() {
 export function MetricsCard({
   result,
   className,
+  pending = false,
   graduationPending = false,
   theoreticalDps = null,
   onGraduationClick,
@@ -61,7 +63,13 @@ export function MetricsCard({
       : `${t("layout.outputPanel.currentDpsDividedByThe")}: ${formatNumber(theoreticalDps, 2)} DPS`
   const durationText = `${formatNumber(result.rotationDuration, 2)}s`
   return (
-    <div className={styles.metricsCard + (className ? ` ${className}` : "")}>
+    <div
+      className={
+        styles.metricsCard +
+        (className ? ` ${className}` : "") +
+        (pending ? ` ${styles.pending}` : "")
+      }
+    >
       <div className={styles.dps}>
         <span className={styles.label}>{t("common.dps")}</span>
         <span className={styles.value}>{formatNumber(result.dps, 2)}</span>

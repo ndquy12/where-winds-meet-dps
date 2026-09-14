@@ -43,6 +43,7 @@ import { GEAR_SLOTS } from "./types"
 import type {
   Arsenal,
   BowSet,
+  EngineRunOptions,
   GearPiece,
   GearSlot,
   GearWordId,
@@ -53,6 +54,26 @@ import type {
 } from "./types"
 
 const OUTCOME_KEYS: readonly HitOutcome[] = ["abrasion", "normal", "crit", "affinity"]
+
+const RUN_ENGINE_CACHE_ENTRIES = 64
+const runEngineCache = new Map<string, Result>()
+
+export function cachedRunEngine(inputs: Inputs, options?: EngineRunOptions): Result {
+  const key = `${JSON.stringify(inputs)} ${JSON.stringify(options ?? null)}`
+  const hit = runEngineCache.get(key)
+  if (hit) {
+    runEngineCache.delete(key)
+    runEngineCache.set(key, hit)
+    return hit
+  }
+  const result = runEngine(inputs, options)
+  runEngineCache.set(key, result)
+  if (runEngineCache.size > RUN_ENGINE_CACHE_ENTRIES) {
+    const oldest = runEngineCache.keys().next().value
+    if (oldest !== undefined) runEngineCache.delete(oldest)
+  }
+  return result
+}
 
 export interface DpsDelta {
   current: number
@@ -87,7 +108,7 @@ export interface EquippedDeltasWorkerResponse {
 
 function dpsForSwap(unequippedBaseline: Inputs, candidate: GearPiece): number {
   const next = applyPieceContribution(unequippedBaseline, candidate, +1)
-  return runEngine(next).dps
+  return cachedRunEngine(next).dps
 }
 
 function equippedPieceIds(inputs: Inputs, slots: readonly GearSlot[]): string[] {
@@ -207,7 +228,7 @@ function retunementDpsHelpers(inputs: Inputs, piece: GearPiece) {
     const words = from.words.map((existing, index) =>
       index === slotIndex ? { word, value, retuned: true } : existing,
     ) as GearPiece["words"]
-    return runEngine(applyPieceContribution(slotEmpty, { ...from, words }, +1)).dps
+    return cachedRunEngine(applyPieceContribution(slotEmpty, { ...from, words }, +1)).dps
   }
 
   return { equipDps, relayedPiece, relayedDps, dpsWithWord }
@@ -384,7 +405,7 @@ function dpsWithAttunement(
   value: number,
 ): number {
   const swapped: GearPiece = { ...original, attunement: optionId, attunementValue: value }
-  return runEngine(applyPieceContribution(slotEmpty, swapped, +1)).dps
+  return cachedRunEngine(applyPieceContribution(slotEmpty, swapped, +1)).dps
 }
 
 function computeReattunement(req: ReattunementWorkerRequest): ReattunementWorkerResponse {
@@ -416,7 +437,7 @@ function computeReattunement(req: ReattunementWorkerRequest): ReattunementWorker
   }
 
   const slotEmpty = inputsWithSlotEmpty(inputs, piece.slot)
-  const equipDps = runEngine(applyPieceContribution(slotEmpty, piece, +1)).dps
+  const equipDps = cachedRunEngine(applyPieceContribution(slotEmpty, piece, +1)).dps
 
   const weightedPool = reattunementPool(inputs.classId, piece.slot, piece.level)
   const drawables = weightedPool
@@ -515,7 +536,7 @@ function computeWordMax(req: WordMaxWorkerRequest): WordMaxWorkerResponse {
   const specByWord = new Map(specs.map((s) => [s.word, s] as const))
 
   const slotEmpty = inputsWithSlotEmpty(inputs, piece.slot)
-  const equipDps = runEngine(applyPieceContribution(slotEmpty, piece, +1)).dps
+  const equipDps = cachedRunEngine(applyPieceContribution(slotEmpty, piece, +1)).dps
 
   const rows: WordMaxRow[] = piece.words.map((w, slotIndex) => {
     if (!w.word) {
@@ -530,7 +551,7 @@ function computeWordMax(req: WordMaxWorkerRequest): WordMaxWorkerResponse {
       i === slotIndex ? { ...cur, value: capValue } : cur,
     ) as GearPiece["words"]
     const swapped: GearPiece = { ...piece, words: swappedWords }
-    const dps = runEngine(applyPieceContribution(slotEmpty, swapped, +1)).dps
+    const dps = cachedRunEngine(applyPieceContribution(slotEmpty, swapped, +1)).dps
     return {
       slotIndex,
       capValue,
@@ -599,7 +620,7 @@ export interface RotationDpsWorkerResponse {
 function computeRotationDps(req: RotationDpsWorkerRequest): RotationDpsWorkerResponse {
   const dpsByOptionId: Record<string, number> = {}
   for (const { optionId, rotation } of req.options) {
-    dpsByOptionId[optionId] = runEngine({
+    dpsByOptionId[optionId] = cachedRunEngine({
       ...req.inputs,
       activeCustomRotation: rotation,
       selectedBuiltinRotationId: null,
@@ -835,7 +856,23 @@ export interface GraduationWorkerResponse {
 
 function dpsFor(inputs: Inputs): number {
   const derived = withDerivedStats(inputs)
-  return runEngine(applyBowSet(applyArmorSet(derived))).dps
+  return cachedRunEngine(applyBowSet(applyArmorSet(derived))).dps
+}
+
+export interface BaselineWorkerRequest {
+  reqId: number
+  inputs: Inputs
+}
+
+export interface BaselineWorkerResponse {
+  reqId: number
+  result: Result
+}
+
+function computeBaseline(req: BaselineWorkerRequest): BaselineWorkerResponse {
+  const derived = withDerivedStats(req.inputs)
+  const result = cachedRunEngine(applyBowSet(applyArmorSet(derived)))
+  return { reqId: req.reqId, result }
 }
 
 function computeSetTiles(req: SetTilesWorkerRequest): SetTilesWorkerResponse {
@@ -902,6 +939,7 @@ export type WorkerRequest =
   | ({ kind: "parseSimulationCancel" } & ParseSimulationCancelRequest)
   | ({ kind: "parseRunDetail" } & ParseRunDetailWorkerRequest)
   | ({ kind: "graduation" } & GraduationWorkerRequest)
+  | ({ kind: "baseline" } & BaselineWorkerRequest)
 
 export type WorkerResponse =
   | ({ kind: "dpsDeltas" } & DpsWorkerResponse)
@@ -918,6 +956,7 @@ export type WorkerResponse =
   | ({ kind: "parseSimulationProgress" } & ParseSimulationProgressResponse)
   | ({ kind: "parseRunDetail" } & ParseRunDetailWorkerResponse)
   | ({ kind: "graduation" } & GraduationWorkerResponse)
+  | ({ kind: "baseline" } & BaselineWorkerResponse)
 
 const cancelledReqIds = new Set<number>()
 
@@ -973,9 +1012,12 @@ self.onmessage = (e: MessageEvent<WorkerRequest>) => {
       cancelledReqIds.delete(req.reqId)
       ;(self as unknown as Worker).postMessage({ kind: "parseSimulation", ...res })
     })
-  } else {
+  } else if (req.kind === "graduation") {
     const res = computeGraduation(req)
     ;(self as unknown as Worker).postMessage({ kind: "graduation", ...res })
+  } else {
+    const res = computeBaseline(req)
+    ;(self as unknown as Worker).postMessage({ kind: "baseline", ...res })
   }
 }
 
@@ -993,4 +1035,5 @@ export {
   computeParseSimulation,
   computeParseRunDetail,
   computeGraduation,
+  computeBaseline,
 }
