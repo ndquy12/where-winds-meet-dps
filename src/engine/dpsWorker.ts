@@ -1015,7 +1015,7 @@ self.onmessage = (e: MessageEvent<WorkerRequest>) => {
   } else if (req.kind === "graduation") {
     const res = computeGraduation(req)
     ;(self as unknown as Worker).postMessage({ kind: "graduation", ...res })
-  } else {
+  } else if (req.kind === "baseline") {
     const res = computeBaseline(req)
     ;(self as unknown as Worker).postMessage({ kind: "baseline", ...res })
   }
