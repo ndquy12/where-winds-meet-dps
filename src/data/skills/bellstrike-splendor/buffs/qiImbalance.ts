@@ -22,5 +22,7 @@ export const qiImbalance = defineClassBuff({
   buffAppliesOnCastEnd: true,
   summary: "+10% HP damage and +10% Bellstrike damage taken while Exhausted",
   effects: (ctx) =>
-    ctx.phase === "exhausted" ? [stat("affinityDamageBoost", 0.08), stat("attributeDamageBoost", 0.08)] : [],
+    ctx.phase === "exhausted"
+      ? [stat("allDamageBoost", 0.08), stat("attributeDamageBoost", 0.08)]
+      : [],
 })
